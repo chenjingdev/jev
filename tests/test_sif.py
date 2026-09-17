@@ -13,8 +13,14 @@ from typesafe_sdk import (
     NoulAnswer,
     Score,
     ScoreAnswer,
+    TypeSafeAPIConnectionError,
     TypeSafeAPITimeoutError,
+    TypeSafeAuthenticationError,
+    TypeSafeBadRequestError,
+    TypeSafeError,
+    TypeSafeInternalServerError,
     TypeSafeRateLimitError,
+    TypeSafeUnprocessableEntityError,
 )
 
 import sif
@@ -29,6 +35,13 @@ def rate_limited() -> TypeSafeRateLimitError:
 def timed_out() -> TypeSafeAPITimeoutError:
     """A real timeout the way the SDK raises it."""
     return TypeSafeAPITimeoutError(10.0)
+
+
+def no_api_key() -> TypeSafeError:
+    """What the SDK raises when TYPESAFE_API_KEY is unset: the bare base class."""
+    return TypeSafeError(
+        "No API key was provided. Pass api_key or set the TYPESAFE_API_KEY environment variable."
+    )
 
 
 class FakeUsage:
@@ -315,6 +328,59 @@ def test_without_a_default_the_error_propagates(isolate, monkeypatch):
         sif.switch("x", ["a", "b"])
     with pytest.raises(TypeSafeRateLimitError):
         sif.score("x", ["lo", "hi"], "how")
+
+
+def test_a_missing_api_key_raises_even_with_a_default(isolate, monkeypatch):
+    """A broken key is a configuration error; a default would only hide it."""
+    install(monkeypatch, no_api_key())
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.check("x", "q", default=0.0)
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.true("x", "q", default=False)
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.switch("x", ["a", "b"], default="a")
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.score("x", ["lo", "hi"], "how", default=1.0)
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.decide("x", ["a", "b"], default="a")
+
+
+def test_a_missing_key_raises_from_client_construction_too(isolate, monkeypatch):
+    """The real failure path: the client itself refuses to be built."""
+    monkeypatch.delenv("TYPESAFE_API_KEY", raising=False)
+    core.reset()
+    with pytest.raises(TypeSafeError, match="No API key"):
+        sif.check("키 없는 상태", "q", default=0.0)
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        TypeSafeAuthenticationError(401, {"error": "bad key"}, httpx2.Headers()),
+        TypeSafeBadRequestError(400, {"error": "bad request"}, httpx2.Headers()),
+        TypeSafeUnprocessableEntityError(422, {"error": "unprocessable"}, httpx2.Headers()),
+    ],
+    ids=["401", "400", "422"],
+)
+def test_configuration_errors_ignore_the_default(isolate, monkeypatch, error):
+    install(monkeypatch, error)
+    with pytest.raises(type(error)):
+        sif.check("x", "q", default=0.0)
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        TypeSafeAPITimeoutError(10.0),
+        TypeSafeRateLimitError(429, {"error": "slow down"}, httpx2.Headers()),
+        TypeSafeInternalServerError(529, {"error": "overloaded"}, httpx2.Headers()),
+        TypeSafeAPIConnectionError("connection reset"),
+    ],
+    ids=["timeout", "429", "529", "connection"],
+)
+def test_transient_errors_use_the_default(isolate, monkeypatch, error):
+    install(monkeypatch, error)
+    assert sif.check("x", "q", default=0.25) == 0.25
 
 
 def test_ask_always_propagates(isolate, monkeypatch):

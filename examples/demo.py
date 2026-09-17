@@ -1,6 +1,6 @@
 """Run the four sif verbs against the real Jev API on one Korean support message.
 
-    PATH="$HOME/.local/bin:$PATH" op run \
+    op run \
       --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
       -- uv run python examples/demo.py
 

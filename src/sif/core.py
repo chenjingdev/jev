@@ -18,8 +18,11 @@ from typesafe_sdk import (
     NoulAnswer,
     Score,
     ScoreAnswer,
+    TypeSafeAuthenticationError,
+    TypeSafeBadRequestError,
     TypeSafeClient,
     TypeSafeError,
+    TypeSafeUnprocessableEntityError,
 )
 from typesafe_sdk.constants import DEFAULT_MODEL
 
@@ -51,6 +54,24 @@ _KEY = "answer"
 DEFAULT_SWITCH_INSTRUCTIONS = "Which option best describes the input?"
 
 _UNSET: Any = object()
+
+#: Errors a `default` must never paper over: the request is wrong, not unlucky.
+#: Retrying or falling back would only hide a broken key or a malformed question.
+_FATAL_ERRORS = (
+    TypeSafeAuthenticationError,
+    TypeSafeBadRequestError,
+    TypeSafeUnprocessableEntityError,
+)
+
+
+def _is_fatal(error: TypeSafeError) -> bool:
+    """True for configuration errors, false for transient API failures.
+
+    The SDK raises a bare `TypeSafeError` only for client-side mistakes - a missing
+    API key, an unencodable body, a malformed question. Everything that can be
+    blamed on the network or the service is a subclass.
+    """
+    return isinstance(error, _FATAL_ERRORS) or type(error) is TypeSafeError
 
 
 # --------------------------------------------------------------------------- config
@@ -349,11 +370,14 @@ def _run(state: State, questions: Mapping[str, Noul | Choice | Score]) -> dict[s
 
 
 def _one(state: State, question: Noul | Choice | Score, extract: Any, default: Any) -> Any:
-    """Run a single question, falling back to `default` when the API fails."""
+    """Run a single question, falling back to `default` when the API fails.
+
+    Configuration errors (see `_is_fatal`) are raised even when a default is set.
+    """
     try:
         answers = _run(state, {_KEY: question})
     except TypeSafeError as error:
-        if default is None:
+        if default is None or _is_fatal(error):
             raise
         logger.warning("sif: %s: %s - falling back to %r", type(error).__name__, error, default)
         return default
