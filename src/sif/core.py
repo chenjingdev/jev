@@ -314,13 +314,15 @@ def _run(state: State, questions: Mapping[str, Noul | Choice | Score]) -> dict[s
     if cache is not None and key is not None:
         hit = cache.get(key)
         if hit is not None:
-            answers = {name: _answer_from_raw(raw) for name, raw in hit.items()}
+            raw_hit, answered_by = hit
+            answers = {name: _answer_from_raw(raw) for name, raw in raw_hit.items()}
             if call_log is not None:
                 call_log.write(
                     model=model,
+                    model_resolved=answered_by,
                     state_hash=state_hash(state),
                     questions=payload,
-                    answers=hit,
+                    answers=raw_hit,
                     usage=None,
                     latency_ms=(time.perf_counter() - started) * 1000,
                     cached=True,
@@ -354,11 +356,13 @@ def _run(state: State, questions: Mapping[str, Noul | Choice | Score]) -> dict[s
         if usage is not None
         else None
     )
+    resolved = getattr(response, "model", None) or model
     if cache is not None and key is not None:
-        cache.set(key, model, raw, time.time())
+        cache.set(key, resolved, raw, time.time())
     if call_log is not None:
         call_log.write(
-            model=getattr(response, "model", model),
+            model=model,
+            model_resolved=resolved,
             state_hash=state_hash(state),
             questions=payload,
             answers=raw,

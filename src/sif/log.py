@@ -24,6 +24,7 @@ class CallLog:
         *,
         model: str,
         state_hash: str,
+        model_resolved: str | None = None,
         questions: dict[str, Any],
         answers: dict[str, Any],
         usage: dict[str, Any] | None,
@@ -31,10 +32,15 @@ class CallLog:
         cached: bool,
         error: str | None = None,
     ) -> None:
-        """Append one call record; never raises into the caller's code path."""
+        """Append one call record; never raises into the caller's code path.
+
+        `model` is what was asked for and matches the cache key; `model_resolved`
+        is the version that answered. Both are recorded on cache hits too.
+        """
         record = {
             "ts": time.time(),
             "model": model,
+            "model_resolved": model_resolved,
             "state_hash": state_hash,
             "questions": questions,
             "answers": answers,

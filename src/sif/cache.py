@@ -52,19 +52,25 @@ class Cache:
         self._conn.execute(_SCHEMA)
         self._conn.commit()
 
-    def get(self, key: str) -> dict[str, Any] | None:
-        """Return the cached raw answers for `key`, or None on a miss."""
+    def get(self, key: str) -> tuple[dict[str, Any], str] | None:
+        """Return (raw answers, answering model) for `key`, or None on a miss."""
         with self._lock:
-            row = self._conn.execute("SELECT answers FROM answers WHERE key = ?", (key,)).fetchone()
+            row = self._conn.execute(
+                "SELECT answers, model FROM answers WHERE key = ?", (key,)
+            ).fetchone()
         if row is None:
             return None
         try:
-            return json.loads(row[0])
+            return json.loads(row[0]), row[1]
         except json.JSONDecodeError:
             return None
 
     def set(self, key: str, model: str, answers: dict[str, Any], created: float) -> None:
-        """Store raw answers under `key`, replacing any previous entry."""
+        """Store raw answers under `key`, replacing any previous entry.
+
+        `model` is the model that actually answered (e.g. "jev-1.13.0"), not the
+        alias that was requested, so a cache hit can still report the version.
+        """
         payload = json.dumps(answers, ensure_ascii=False)
         with self._lock:
             self._conn.execute(

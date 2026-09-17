@@ -438,4 +438,17 @@ def test_configure_model_changes_the_cache_key(isolate, monkeypatch):
     monkeypatch.setattr(core, "_get_client", lambda: client)
     sif.check("x", "q")
     assert len(client.calls) == 2
-    assert log_lines(isolate)[-1]["model"] == "jev-latest"
+    record = log_lines(isolate)[-1]
+    assert record["model"] == "jev", "the log records what was asked for"
+    assert record["model_resolved"] == "jev-latest", "and what actually answered"
+
+
+def test_the_answering_model_survives_a_cache_hit(isolate, monkeypatch):
+    """`jev-latest` is an alias; the log must keep the version that answered."""
+    install(monkeypatch, FakeResponse({"answer": NoulAnswer(noul=0.5)}, model="jev-1.13.0"))
+    sif.check("x", "q")
+    sif.check("x", "q")
+    live, cached = log_lines(isolate)
+    assert cached["cached"] is True
+    assert (live["model"], cached["model"]) == ("jev-latest", "jev-latest")
+    assert (live["model_resolved"], cached["model_resolved"]) == ("jev-1.13.0", "jev-1.13.0")

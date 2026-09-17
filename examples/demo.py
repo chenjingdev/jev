@@ -39,13 +39,18 @@ def log_position() -> int:
 
 
 def new_records(since: int) -> tuple[list[dict], int]:
-    """Records appended to the call log since byte offset `since`."""
+    """Records appended to the call log since byte offset `since`.
+
+    The log is sliced as bytes, not text: it holds Korean, and one character
+    there is three bytes, so a character offset would land mid-record.
+    """
     path = Path(DEFAULT_PATH)
     if not path.exists():
         return [], since
-    text = path.read_text(encoding="utf-8")[since:]
-    records = [json.loads(line) for line in text.splitlines() if line.strip()]
-    return records, path.stat().st_size
+    raw = path.read_bytes()
+    chunk = raw[since:].decode("utf-8")
+    records = [json.loads(line) for line in chunk.splitlines() if line.strip()]
+    return records, len(raw)
 
 
 def report(label: str, value: object, records: list[dict]) -> None:
