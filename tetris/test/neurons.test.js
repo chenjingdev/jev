@@ -113,8 +113,8 @@ test("Appendix B constants and the palette are exported verbatim", () => {
   );
   assert.equal(LABELS_KO.survive, "생존");
   assert.equal(LABELS_KO.clean, "정리");
-  assert.equal(LABELS_KO.build, "빌드");
-  assert.equal(LABELS_KO.cash, "현금");
+  assert.equal(LABELS_KO.build, "쌓기");
+  assert.equal(LABELS_KO.cash, "지우기");
   assert.equal(LABELS_KO.spin, "스핀");
   assert.equal(LABELS_KO.default, "기본");
 });
@@ -644,7 +644,7 @@ test("ghostsFrom: colour, alpha, label, rings, vetoed and chosen flags; field gh
   assert.equal(g1.p, 1);
   assert.equal(g1.alpha, MAX_GHOST_ALPHA);
   assert.equal(g1.label, "100%");
-  assert.equal(g1.tag, "빌드·기본 · 선택");
+  assert.equal(g1.tag, "쌓기·기본 · 선택");
   assert.deepEqual(g1.rings, [HUES.build, HUES.default]);
   assert.equal(g1.cells, cands[1].cells);
   assert.equal(g1.dashed, false);

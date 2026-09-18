@@ -31,8 +31,8 @@ export const HUES = Object.freeze({
 export const LABELS_KO = Object.freeze({
   survive: "생존",
   clean: "정리",
-  build: "빌드",
-  cash: "현금",
+  build: "쌓기",
+  cash: "지우기",
   spin: "스핀",
   default: "기본",
   veto: "거부",
