@@ -299,6 +299,42 @@
     statsEl.innerHTML = `<span><b>${n}</b> functions</span><span><b>${hot}</b> hot</span><span><b>${changedTotal}</b> changed</span><span><b>${requests}</b> requests</span>` + (lastBatchMs != null ? `<span><b>${(lastBatchMs / 1000).toFixed(1)}s</b></span>` : '');
   }
 
+  // ---- demo mode: ?demo=1 replays a scripted take inside the page (typing is
+  // simulated character by character into the real editor, saves are real).
+  const DEMO = [
+    ["return low <= value <= high", "return low <= value < high"],
+    ["except ValueError:\n        return default", "except:\n        pass"],
+    ["tags=None):\n    tags = [] if tags is None else list(tags)\n", "tags=[]):\n"],
+    ['"SELECT * FROM users WHERE name = ?", (name,)', 'f"SELECT * FROM users WHERE name = \'{name}\'"'],
+    ["return low <= value < high", "return low <= value <= high"],
+  ];
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function fireInput() { src.dispatchEvent(new Event('input', { bubbles: true })); }
+  async function demoStep(needle, text) {
+    const a = src.value.indexOf(needle); if (a < 0) throw new Error('needle not found: ' + needle);
+    src.focus(); src.setSelectionRange(a, a + needle.length); renderOverlay();
+    const line = src.value.slice(0, a).split('\n').length - 1;
+    src.scrollTop = Math.max(0, line * LH - src.getBoundingClientRect().height / 2 + 12);
+    await wait(700);
+    src.setRangeText('', a, a + needle.length, 'end'); fireInput(); renderOverlay();
+    await wait(250);
+    for (const ch of text) { src.setRangeText(ch, src.selectionStart, src.selectionStart, 'end'); fireInput(); renderOverlay(); await wait(70); }
+    await wait(500);
+    await save();
+  }
+  async function runDemo() {
+    await wait(3000);
+    for (const [needle, text] of DEMO) { await demoStep(needle, text); await wait(3000); }
+    await wait(2500);
+    document.title = 'demo done';
+  }
+  if (new URLSearchParams(location.search).get('demo')) {
+    document.getElementById('sound').style.display = 'none';
+    const ready = setInterval(() => {
+      if (rows.size >= 1 && src.value.length > 100 && ![...rows.values()].some(e => e.data.status !== 'done')) { clearInterval(ready); runDemo(); }
+    }, 300);
+  }
+
   const es = new EventSource('/events');
   es.onopen = () => { document.getElementById('watching').textContent = '감시 중'; };
   es.onerror = () => { document.getElementById('watching').textContent = '연결 끊김'; };

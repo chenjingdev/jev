@@ -74,7 +74,7 @@ op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/crede
 
 피드백은 겹겹이: 편집 중인 줄 배경, 빨간 커서, 상단 "타이핑 중/저장됨 → Jev", 저장 순간 편집기 테두리 번쩍, 판정이 오면 **편집기 안에서 그 함수 구간이 빨갛게 물들고**(고쳐서 내려가면 초록으로 잠깐), 오른쪽엔 줄이 튀고 숫자가 0.23→0.96으로 카운트업.
 
-`demo.mp4`는 `record.mjs`(ego-browser 스크립트)로 찍었다. 화면 녹화가 아니라 CDP screencast로 페이지 프레임만 뽑아 `assemble.sh`가 30fps mp4로 조립하므로 데스크톱에 뭐가 떠 있든 안 찍힌다. 재촬영: 서버를 `SIF_CACHE=0`으로 띄우고(카운터가 진짜 요청·지연을 보이도록) `demo.py`를 깨끗한 상태로 둔 뒤 `ego-browser nodejs < bug-hunter/record.mjs && bash bug-hunter/assemble.sh`. 연출 순서는 `record.mjs` 아래쪽 `replace(...)` 줄들.
+`demo.mp4`는 페이지의 데모 모드로 찍었다. `?demo=1`로 열면 페이지가 스스로 편집기에 글자를 하나씩(70ms) 넣고 ⌘S에 해당하는 저장을 호출한다(저장과 판정은 진짜). `record.sh`가 크롬리스 Chrome 창을 메인 화면에 띄우고 macOS `screencapture -v`로 그 영역만 30fps 녹화한 뒤 트리밍·인코딩한다. CDP screencast로 프레임을 뽑는 방식은 프레임 간격이 고르지 않아 끊겨 보여서 버렸다. 재촬영: 서버를 `SIF_CACHE=0`으로 띄우고 `demo.py`를 깨끗한 상태로 둔 뒤 `bug-hunter/record.sh`. 연출 순서는 `panel.html`의 `DEMO` 배열.
 
 ## 쌍둥이 샘플 결과
 

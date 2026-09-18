@@ -229,15 +229,16 @@ def make_handler(board: Board, watcher: Watcher):
             self.wfile.write(body)
 
         def do_GET(self) -> None:  # noqa: N802
-            if self.path in ("/", "/index.html"):
+            path = self.path.split("?", 1)[0]
+            if path in ("/", "/index.html"):
                 self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
-            elif self.path == "/api/smells":
+            elif path == "/api/smells":
                 payload = {"smells": {k: v[0] for k, v in hunter.SMELLS.items()}, "severity": list(hunter.SEVERITY), "threshold": board.threshold}
                 self._send(200, json.dumps(payload, ensure_ascii=False).encode(), "application/json; charset=utf-8")
-            elif self.path == "/api/files":
+            elif path == "/api/files":
                 files = [{"file": watcher.display(f), "text": f.read_text(encoding="utf-8")} for f in watcher.files()]
                 self._send(200, json.dumps({"files": files}, ensure_ascii=False).encode(), "application/json; charset=utf-8")
-            elif self.path == "/events":
+            elif path == "/events":
                 self.stream()
             else:
                 self._send(404, b"not found", "text/plain")
