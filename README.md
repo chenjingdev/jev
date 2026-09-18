@@ -17,6 +17,7 @@ Jev로 하는 실험은 전부 이 저장소에 모은다. 라이브러리 하�
 | `experiments/<이름>/` | 측정 실험 하나당 폴더. 스크립트 + 결과 + `README.md`(질문·방법·수치). `branches`, `limits`, `hangul`, `chess`. |
 | `tetris/` | Jev가 플레이하는 테트리스 (Node). 자체 `README.md`와 `docs/neurons-spec.md`. |
 | `guardrail/` | 튜닙 Safety Check를 흉내낸 한국어 유해성 가드레일 (Python). 문장 → 카테고리 12개 확률 + 심각도 4단계. 자체 `README.md`. |
+| `bug-hunter/` | Python 함수를 주루룩 먹이면 버그 냄새 10개 확률 + 심각도로 위험한 순서로 정렬하는 버그헌터. 자체 `README.md`. |
 
 새 데모 프로젝트는 `tetris/`처럼 루트에 폴더 하나로, 새 측정 실험은 `experiments/` 아래에 둔다.
 키는 어디서든 1Password 참조(`op run`)로만 주입하고 디스크에 쓰지 않는다.

@@ -31,7 +31,7 @@ def render_table(verdicts: list[hunter.Verdict]) -> str:
         where = f"{v.function.location} {v.function.name}"
         smells = ", ".join(v.labels) or "-"
         lines.append(
-            f"{v.risk:5.2f}  {v.severity_label:<4} {where:<{width}}  {hunter.KINDS[v.kind]:<8} {smells}  {bar}"
+            f"{v.risk:5.2f}  {v.severity_label:<4} {where:<{width}}  {hunter.KIND_NAMES[v.kind]:<8} {smells}  {bar}"
         )
     return "\n".join(lines)
 
@@ -43,7 +43,7 @@ def render_detail(verdict: hunter.Verdict) -> str:
         f"함수     : {v.function.location} {v.function.name}",
         f"위험     : {v.risk:.2f}  ({' + '.join(v.labels) or '냄새 없음'})",
         f"심각도   : {v.severity_label} ({v.severity:.2f}/3, confidence {v.severity_confidence:.2f})",
-        f"유력 종류: {hunter.KINDS[v.kind]} (confidence {v.kind_confidence:.2f})",
+        f"유력 종류: {hunter.KIND_NAMES[v.kind]} (confidence {v.kind_confidence:.2f})",
     ]
     for smell, (name, _) in hunter.SMELLS.items():
         p = v.probabilities[smell]

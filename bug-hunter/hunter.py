@@ -50,7 +50,7 @@ SMELLS: dict[str, tuple[str, str]] = {
     ),
     "mutable_default": (
         "가변 기본값",
-        "이 함수는 list·dict·set 같은 가변 객체를 기본 인자로 쓰거나, 호출 사이에 공유되는 상태를 변경한다",
+        "이 함수는 list·dict·set 같은 가변 객체를 인자 기본값(def f(x=[]))으로 쓰고 그것을 변경하거나 돌려준다",
     ),
     "wrong_return": (
         "반환 불일치",
@@ -79,11 +79,15 @@ SEVERITY_INSTRUCTIONS = (
     "심각: 흔한 입력에서 잘못된 결과나 예외. 치명: 데이터 손상, 보안 구멍, 무한 루프."
 )
 
-#: Choice options for the single most likely bug kind.
+#: Choice options for the single most likely bug kind. Options carry the full
+#: proposition as their description: the branches experiment found a Choice
+#: gets weaker when options are bare names.
 KINDS: dict[str, str] = {
-    "none": "버그가 보이지 않음",
-    **{smell: name for smell, (name, _) in SMELLS.items()},
+    "none": "버그가 보이지 않는다. 함수가 의도대로 동작한다",
+    **{smell: text for smell, (_, text) in SMELLS.items()},
 }
+#: Kind id -> short Korean name for display.
+KIND_NAMES: dict[str, str] = {"none": "없음", **{smell: name for smell, (name, _) in SMELLS.items()}}
 KIND_INSTRUCTIONS = "이 함수에서 가장 가능성이 높은 버그 종류 하나"
 
 #: A smell counts as detected at or above this probability.
@@ -166,7 +170,7 @@ class Verdict:
             "severity_score": self.severity,
             "severity_confidence": self.severity_confidence,
             "kind": self.kind,
-            "kind_label": KINDS[self.kind],
+            "kind_label": KIND_NAMES[self.kind],
             "kind_confidence": self.kind_confidence,
             "probabilities": self.probabilities,
         }
