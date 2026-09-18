@@ -14,6 +14,7 @@ The API key lives only in this process; the page listens on /events (SSE).
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import json
 import os
@@ -40,6 +41,18 @@ def _digest(source: str) -> str:
     return hashlib.sha1(source.encode("utf-8")).hexdigest()[:12]
 
 
+def _changed_lines(previous: str | None, current: str) -> list[int]:
+    """0-based line numbers in `current` that are new or edited since `previous`."""
+    if previous is None:
+        return []
+    matcher = difflib.SequenceMatcher(a=previous.splitlines(), b=current.splitlines())
+    out: list[int] = []
+    for tag, _, _, j1, j2 in matcher.get_opcodes():
+        if tag != "equal":
+            out.extend(range(j1, j2))
+    return out
+
+
 class Board:
     """Current verdict per function plus a fan-out of events to open pages."""
 
@@ -48,6 +61,7 @@ class Board:
         self.lock = threading.Lock()
         self.verdicts: dict[str, dict] = {}  # id -> verdict dict (+ status)
         self.digests: dict[str, str] = {}  # id -> source digest
+        self.sources: dict[str, str] = {}  # id -> last judged source, for the diff
         self.listeners: list[queue.Queue] = []
         self.requests = 0
         self.started = time.time()
@@ -84,21 +98,29 @@ class Board:
 
     def pending(self, function: hunter.Function) -> None:
         fid = f"{function.file}::{function.name}"
-        row = {"id": fid, "file": function.file, "function": function.name, "lineno": function.lineno, "status": "pending"}
         with self.lock:
-            previous = self.verdicts.get(fid)
-            if previous:
-                row = {**previous, "lineno": function.lineno, "status": "pending"}
+            previous = self.verdicts.get(fid) or {"id": fid, "file": function.file, "function": function.name}
+            row = {
+                **previous,
+                "lineno": function.lineno,
+                "source": function.source,
+                "changed_lines": _changed_lines(self.sources.get(fid), function.source),
+                "status": "pending",
+            }
             self.verdicts[fid] = row
         self.emit({"type": "pending", "function": row})
 
     def settle(self, function: hunter.Function, verdict: hunter.Verdict | None, error: str | None) -> None:
         fid = f"{function.file}::{function.name}"
-        if verdict is not None:
-            row = {**verdict.as_dict(), "id": fid, "status": "done"}
-        else:
-            row = {"id": fid, "file": function.file, "function": function.name, "lineno": function.lineno, "status": "error", "error": error}
         with self.lock:
+            changed = _changed_lines(self.sources.get(fid), function.source)
+            self.sources[fid] = function.source
+            if verdict is not None:
+                row = {**verdict.as_dict(), "id": fid, "status": "done"}
+            else:
+                row = {"id": fid, "file": function.file, "function": function.name, "lineno": function.lineno, "status": "error", "error": error}
+            row["source"] = function.source
+            row["changed_lines"] = changed
             self.verdicts[fid] = row
             self.requests += 1
         self.emit({"type": "verdict", "function": row})
@@ -107,6 +129,7 @@ class Board:
         with self.lock:
             self.verdicts.pop(fid, None)
             self.digests.pop(fid, None)
+            self.sources.pop(fid, None)
         self.emit({"type": "removed", "id": fid})
 
     def syntax_error(self, file: str, message: str) -> None:
