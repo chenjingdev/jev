@@ -87,6 +87,11 @@
   body.clean .card-stats .stat .k { font-size: 9.5px; }
   body.clean .card-stats .stat.optional { display: none; }
   body.clean .card-stats h2 { display: none; }
+  body.clean .card-props h2 { display: none; }
+  body.clean .card-props { padding: 10px 14px; }
+  body.clean .hero .v { font-size: 20px; }
+  body.clean .hero > div { padding: 6px 10px; }
+  body.clean #thought { display: none; }
   body.clean .card-stats { padding-top: 10px; }
 
   /* Synapse lines from the cortex circles to the ghosts on the board (drawn by app.js). */
@@ -129,13 +134,19 @@
   .queue-wrap .next-k { position: absolute; top: 8px; left: 0; right: 0; text-align: center;
     color: var(--muted); font-size: 10px; letter-spacing: .12em; line-height: 1; }
 
-  .below-board { display: flex; gap: 14px; align-items: center; padding: 10px 14px; }
-  .phase { flex: 1; color: var(--muted); font-size: 12px; min-width: 0; }
-  .phase b { color: var(--text); font-weight: 700; display: block; font-size: 15px; }
+  .below-board { display: flex; gap: 14px; align-items: center; padding: 8px 14px; }
+  .phase { flex: 1; color: var(--muted); font-size: 12px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .phase b { color: var(--text); font-weight: 700; font-size: 14px; margin-right: 10px; }
 
-  /* ---- cortex card ---- */
+  /* ---- cortex card: the one card that gives way. In the single-column panel it takes the
+     height left over after the fixed cards, and the SVG scales to fit inside it, so the panel
+     always ends exactly where the board ends. ---- */
   .card-cortex { display: flex; flex-direction: column; }
-  #cortex { display: block; width: 100%; height: auto; aspect-ratio: 400 / 330; overflow: visible; }
+  body.clean .col-side > .card-cortex { flex: 1 1 auto; min-height: 0; }
+  .card-cortex .svgbox { display: flex; justify-content: center; }
+  body.clean .card-cortex .svgbox { flex: 1 1 auto; min-height: 0; }
+  #cortex { display: block; width: 100%; max-width: 372px; height: auto; aspect-ratio: 400 / 390; overflow: visible; }
+  body.clean #cortex { height: 100%; width: auto; max-width: 100%; max-height: 100%; }
   #verdictLine {
     min-height: 16px; margin-top: 2px; font-size: 10.5px; color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -307,16 +318,16 @@
         <canvas id="queue"></canvas>
       </div>
     </div>
+  </section>
+
+  <!-- 상태 · 피질 · 제안 · 통계 · 컨트롤 -->
+  <section class="col col-side">
     <div class="card below-board">
       <div class="phase"><b id="phaseName">대기</b><span id="phaseNote">시작하는 중…</span></div>
     </div>
-  </section>
-
-  <!-- 피질 · 제안 · 통계 · 컨트롤 -->
-  <section class="col col-side">
     <div class="card card-cortex">
       <h2>피질</h2>
-      <svg id="cortex" viewBox="0 0 400 390" width="100%" aria-label="피질: 감각, 의도 뉴런, 제안, 판정"></svg>
+      <div class="svgbox"><svg id="cortex" viewBox="0 0 400 390" aria-label="피질: 감각, 의도 뉴런, 제안, 판정"></svg></div>
       <div id="verdictLine" class="mono"></div>
       <div id="timeline"></div>
       <div id="thought" class="mono"></div>

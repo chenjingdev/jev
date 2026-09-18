@@ -149,7 +149,7 @@ function cellSizeForViewport() {
   const vh = window.innerHeight || document.documentElement.clientHeight || 0;
   // The queue strip beside the board is QUEUE_CELLS cells wide plus its gap.
   if (vw <= NARROW_PX) return Math.max(8, Math.min(30, Math.floor((vw - 32 - 12) / (COLS + QUEUE_CELLS))));
-  const byHeight = Math.floor((vh - 176) / ROWS); // header + caption card + paddings
+  const byHeight = Math.floor((vh - 104) / ROWS); // header + paddings; nothing sits under the board now
   const byWidth = Math.floor((vw - 48 - 24 - 24) / ((COLS + QUEUE_CELLS) * 2)); // two equal halves + gaps
   return Math.max(8, Math.min(44, byHeight, byWidth));
 }
