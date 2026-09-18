@@ -44,7 +44,7 @@ async function replace(needle, text) {
     t.dispatchEvent(new Event('scroll'));
   });
   await sleep(250);
-  await p.keyboard.type(text, { delay: 30 });
+  await p.keyboard.type(text, { delay: 70 });
   await sleep(500);
   await p.keyboard.press("Meta+s");
 }
