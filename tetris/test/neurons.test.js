@@ -96,8 +96,8 @@ test("Appendix B constants and the palette are exported verbatim", () => {
   assert.equal(W_DEFAULT, 0.5);
   assert.equal(FORK_GAP, 0.15);
   assert.equal(NEARLY_FULL, 8);
-  assert.equal(GHOST_MS, 600);
-  assert.equal(WIRE_HOLD_MS, 500);
+  assert.equal(GHOST_MS, 450);
+  assert.equal(WIRE_HOLD_MS, 350);
   assert.equal(COUNTUP_MS, 200);
   assert.equal(FADE_MS, 220);
   assert.equal(MAX_GHOST_ALPHA, 0.55);

@@ -684,7 +684,7 @@ document.querySelector(".col-side")?.addEventListener("scroll", () => {
 // Board→neuron lines were dropped: they read as decoration and hid the layer order. The
 // cortex card now animates the request sequence itself; ghosts keep their backer pills.
 const SYNAPSES = false;
-const LAYER_HOLD_MS = 320; // let a layer's result sit before the next request wakes the next band
+const LAYER_HOLD_MS = 280; // minimum time a lit band stays before the next one; requests overlap it
 
 function drawSynapses(animate) {
   if (!SYNAPSES) return;
@@ -1385,11 +1385,8 @@ async function playPiece(gen) {
     "motor",
     `${firedText} 발화 · 위험 선호 ${intent.appetite.toFixed(1)}/3` + (intent.forced ? " · 생존 강제" : "") + (intent.stayed ? " · 계획 유지" : ""),
   );
-  showCortex("motor", null);
-  await sleep(LAYER_HOLD_MS);
-  if (G.gen !== gen) return false;
   showCortex("motor", "motor");
-  const r2 = await askJev(gen, "/api/motor", {
+  const [r2] = await Promise.all([askJev(gen, "/api/motor", {
     intent,
     boardAscii,
     surface: G.surface,
@@ -1399,7 +1396,7 @@ async function playPiece(gen) {
     queue,
     tspinAvailableNow,
     candidates: kept.map((c) => ({ id: c.id, summary: G.summaries.get(c.id), boardAfterAscii: boardToAscii(c.boardAfter) })),
-  });
+  }), sleep(LAYER_HOLD_MS)]); // the request rides inside the band's minimum display time
   if (!r2 || G.gen !== gen) return false;
   G.cortex.tR2 = performance.now();
   const r2Ms = addUsage(r2, "r2");
@@ -1433,9 +1430,6 @@ async function playPiece(gen) {
     .map((n) => `${lab(n)} ${props.picks[n]}`)
     .join(" · ");
   setPhase("arbitrate", `${picksText} → 제안 ${props.proposals.length}개`);
-  showCortex("arbitrate", null);
-  await sleep(LAYER_HOLD_MS);
-  if (G.gen !== gen) return false;
   showCortex("arbitrate", "arbitrate");
 
   // ---- R3: arbitrate, coach and hold in one request. The wires hold at least WIRE_HOLD_MS.

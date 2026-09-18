@@ -615,8 +615,8 @@ memoryNext = { previous_intent: ledBy ∈ INTENTS ? ledBy : null, hold: hold.val
 | `W_DEFAULT` | 0.5 | 습관 뉴런의 E 가중치 (표시·동률 전용) |
 | `FORK_GAP` | 0.15 | FORK 배지: 상위 두 활성 차이 |
 | `NEARLY_FULL` | 8 | `rows_nearly_full` 기준 채운 칸 수 |
-| `GHOST_MS` | 600 | 판정 공개 후 홀드 (현행 800에서 하향) |
-| `WIRE_HOLD_MS` | 500 | R2 와이어 최소 유지 |
+| `GHOST_MS` | 450 | 판정 공개 후 홀드 |
+| `WIRE_HOLD_MS` | 350 | R2 와이어 최소 유지 (R3 요청과 겹침) |
 | `COUNTUP_MS` | 200 | % 라벨 카운트업 |
 | `FADE_MS` | 220 | 고스트·시냅스 페이드 (현행) |
 | `MAX_GHOST_ALPHA / MIN_GHOST_ALPHA / GHOST_LABEL_MIN_P / THINKING_ALPHA` | 0.55 / 0.14 / 0.03 / 0.18 | 현행 유지 |
