@@ -171,7 +171,23 @@ function applySizes() {
   // on tall screens too; the cortex card absorbs the difference.
   const col = document.querySelector(".col-board");
   if (col) document.documentElement.style.setProperty("--col-h", Math.round(col.getBoundingClientRect().height) + "px");
+  // Recording mode: the cortex card gets a fixed height instead of absorbing whatever the
+  // proposals card leaves over, so a 1-vs-3 proposal turn does not rescale the cortex and
+  // shift the whole panel. Space is reserved for MAX_PROP_ROWS proposals; more scroll.
+  if (col && document.body.classList.contains("clean")) {
+    const h = (sel) => document.querySelector(sel)?.getBoundingClientRect().height ?? 0;
+    const props = document.querySelector(".card-props");
+    const cs = props && getComputedStyle(props);
+    const propsH = props ? PROPS_RESERVE + ["paddingTop", "paddingBottom", "borderTopWidth", "borderBottomWidth"].reduce((a, k) => a + parseFloat(cs[k]), 0) : 0;
+    const gaps = 3 * 12;
+    const cortexH = Math.round(col.getBoundingClientRect().height - h(".below-board") - h(".card-stats") - propsH - gaps);
+    document.documentElement.style.setProperty("--cortex-h", cortexH + "px");
+  } else {
+    document.documentElement.style.removeProperty("--cortex-h");
+  }
 }
+const MAX_PROP_ROWS = 3;
+const PROPS_RESERVE = MAX_PROP_ROWS * 41 + (MAX_PROP_ROWS - 1) * 6; // .prop height + #props gap
 applySizes();
 
 // ---------------------------------------------------------------- game state

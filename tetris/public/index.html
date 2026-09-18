@@ -88,7 +88,9 @@
   body.clean .card-stats .stat.optional { display: none; }
   body.clean .card-stats h2 { display: none; }
   body.clean .card-props h2 { display: none; }
-  body.clean .card-props { padding: 10px 14px; }
+  body.clean .card-props { padding: 10px 14px; flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  body.clean #props { min-height: 135px; }
+  body.clean .col-side > .card-cortex { flex: 0 0 auto; height: var(--cortex-h, auto); box-sizing: border-box; }
   body.clean .hero .v { font-size: 20px; }
   body.clean .hero > div { padding: 6px 10px; }
   body.clean #thought { display: none; }
@@ -138,11 +140,12 @@
   .phase { flex: 1; color: var(--muted); font-size: 12px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .phase b { color: var(--text); font-weight: 700; font-size: 14px; margin-right: 10px; }
 
-  /* ---- cortex card: the one card that gives way. In the single-column panel it takes the
-     height left over after the fixed cards, and the SVG scales to fit inside it, so the panel
-     always ends exactly where the board ends. ---- */
+  /* ---- cortex card: in the single-column panel its height is fixed by app.js (--cortex-h:
+     the column height minus the other cards, with room for three proposals) and the SVG
+     scales to fit inside it, so the panel ends where the board ends and nothing moves when
+     the proposal count changes. ---- */
   .card-cortex { display: flex; flex-direction: column; }
-  body.clean .col-side > .card-cortex { flex: 1 1 auto; min-height: 0; }
+  body.clean .col-side > .card-cortex { min-height: 0; }
   .card-cortex .svgbox { display: flex; justify-content: center; }
   body.clean .card-cortex .svgbox { flex: 1 1 auto; min-height: 0; }
   #cortex { display: block; width: 100%; max-width: 372px; height: auto; aspect-ratio: 400 / 390; overflow: visible; }
