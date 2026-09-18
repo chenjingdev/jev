@@ -167,8 +167,13 @@ class Watcher(threading.Thread):
                 self.scan(file)
             time.sleep(POLL_SECONDS)
 
+    @staticmethod
+    def display(file: Path) -> str:
+        """The name the panel and the verdicts use for a file."""
+        return os.path.relpath(file) if not file.is_absolute() or file.is_relative_to(Path.cwd()) else str(file)
+
     def scan(self, file: Path) -> None:
-        name = os.path.relpath(file) if not file.is_absolute() or file.is_relative_to(Path.cwd()) else str(file)
+        name = self.display(file)
         try:
             functions = hunter.extract_functions(file.read_text(encoding="utf-8"), name)
         except SyntaxError as error:
@@ -201,7 +206,7 @@ class Watcher(threading.Thread):
         self.board.settle(function, verdict, None)
 
 
-def make_handler(board: Board):
+def make_handler(board: Board, watcher: Watcher):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002 - keep the terminal quiet
             pass
@@ -219,10 +224,32 @@ def make_handler(board: Board):
             elif self.path == "/api/smells":
                 payload = {"smells": {k: v[0] for k, v in hunter.SMELLS.items()}, "severity": list(hunter.SEVERITY), "threshold": board.threshold}
                 self._send(200, json.dumps(payload, ensure_ascii=False).encode(), "application/json; charset=utf-8")
+            elif self.path == "/api/files":
+                files = [{"file": watcher.display(f), "text": f.read_text(encoding="utf-8")} for f in watcher.files()]
+                self._send(200, json.dumps({"files": files}, ensure_ascii=False).encode(), "application/json; charset=utf-8")
             elif self.path == "/events":
                 self.stream()
             else:
                 self._send(404, b"not found", "text/plain")
+
+        def do_POST(self) -> None:  # noqa: N802
+            """Write a watched file from the in-page editor; the watcher picks it up."""
+            if self.path != "/api/save":
+                self._send(404, b"not found", "text/plain")
+                return
+            length = int(self.headers.get("Content-Length", "0"))
+            try:
+                body = json.loads(self.rfile.read(length) or b"{}")
+                file, text = str(body["file"]), str(body["text"])
+            except (ValueError, KeyError):
+                self._send(400, b"bad json", "text/plain")
+                return
+            target = next((f for f in watcher.files() if watcher.display(f) == file), None)
+            if target is None:
+                self._send(403, b"not a watched file", "text/plain")
+                return
+            target.write_text(text, encoding="utf-8")
+            self._send(200, b"{}", "application/json")
 
         def stream(self) -> None:
             self.send_response(200)
@@ -260,8 +287,9 @@ def main() -> int:
         return 1
 
     board = Board(threshold=args.threshold)
-    Watcher(args.paths, board).start()
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(board))
+    watcher = Watcher(args.paths, board)
+    watcher.start()
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(board, watcher))
     print(f"버그헌터 감시 중: {' '.join(args.paths)}\n패널: http://localhost:{args.port}", flush=True)
     try:
         server.serve_forever()

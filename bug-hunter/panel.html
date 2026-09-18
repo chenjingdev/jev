@@ -14,113 +14,144 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; }
-  body.flash::before { content: ""; position: fixed; inset: 0; background: var(--flash); pointer-events: none; animation: blink .12s ease-out forwards; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; overflow: hidden; }
+  body.flash::before { content: ""; position: fixed; inset: 0; background: var(--flash); pointer-events: none; animation: blink .12s ease-out forwards; z-index: 9; }
   @keyframes blink { from { opacity: 1; } to { opacity: 0; } }
-  main { max-width: 1400px; margin: 0 auto; padding: 24px 16px 72px; }
-  .cols { display: grid; grid-template-columns: minmax(380px, 5fr) minmax(420px, 6fr); gap: 16px; align-items: start; }
-  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
-  .row { cursor: pointer; }
-  .row.selected { outline: 2px solid var(--ink); outline-offset: -1px; }
-  aside { position: sticky; top: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-  aside .head { padding: 10px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; }
-  aside .head .fn { font-size: 14px; }
-  aside .head .risk { font-size: 16px; }
-  pre { margin: 0; padding: 10px 0; font: 12.5px/1.55 ui-monospace, "SF Mono", Menlo, monospace; overflow: auto; max-height: 52vh; }
-  pre .ln { display: grid; grid-template-columns: 44px 1fr; }
-  pre .ln .n { color: var(--muted); text-align: right; padding-right: 12px; user-select: none; }
-  pre .ln .c { white-space: pre; padding-right: 14px; }
-  pre .ln.diff { background: var(--hot-soft); }
-  pre .ln.diff .n { color: var(--hot); font-weight: 600; }
-  .smells { border-top: 1px solid var(--line); padding: 10px 14px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 3px 18px; }
-  .sm { display: grid; grid-template-columns: 78px 1fr 36px; align-items: center; gap: 8px; font-size: 12px; }
-  .sm .p { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .sm.hit { font-weight: 600; } .sm.hit .p { color: var(--hot); }
-  .sm .track { height: 5px; }
-  .placeholder { color: var(--muted); padding: 40px 14px; text-align: center; font-size: 13px; }
-  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
-  h1 { font-size: 18px; margin: 0; }
-  .sub { color: var(--muted); font-size: 12px; }
-  .sub button { border: 0; background: none; color: var(--muted); font: inherit; cursor: pointer; padding: 0; text-decoration: underline dotted; }
-  #list { position: relative; }
+
+  /* Two equal columns filling the window: editor left, verdicts right. */
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; height: 100%; padding: 14px; }
+  section { display: flex; flex-direction: column; min-height: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); min-height: 36px; }
+  .bar h1 { font-size: 13px; margin: 0; color: var(--ink); }
+  .bar .grow { flex: 1; }
+  .bar button, .bar select { border: 1px solid var(--line); background: none; color: var(--muted); font: inherit; border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+  .bar .dirty { color: var(--hot); }
+
+  /* editor */
+  .editor { flex: 1; display: grid; grid-template-columns: 44px 1fr; min-height: 0; font: 13px/1.6 ui-monospace, "SF Mono", Menlo, monospace; }
+  .gutter { overflow: hidden; color: var(--muted); text-align: right; padding: 10px 10px 10px 0; user-select: none; white-space: pre; }
+  textarea { border: 0; outline: 0; resize: none; background: none; color: var(--ink); font: inherit; padding: 10px 12px 10px 0; white-space: pre; overflow: auto; tab-size: 4; }
+
+  /* verdicts */
+  #list { flex: 1; overflow: auto; padding: 8px; }
   .row {
-    display: grid; grid-template-columns: 44px 1fr 200px; align-items: center; gap: 12px;
-    padding: 7px 12px; margin: 0 0 2px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line);
+    display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 10px; cursor: pointer;
+    padding: 5px 10px; margin: 0 0 2px; border-radius: 7px; border: 1px solid transparent;
     transition: background .4s, border-color .4s, box-shadow .4s;
   }
   .row.hot { border-color: var(--hot); background: var(--hot-soft); }
   .row.recent { box-shadow: 0 0 0 2px var(--hot-soft); }
   .row.recent:not(.hot) { box-shadow: 0 0 0 2px var(--flash); }
+  .row.selected { border-color: var(--ink); }
   .row.pending { opacity: .7; }
   .row.pending .risk::after { content: ""; animation: dots 1s steps(4, end) infinite; }
   @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
   .row.error { border-color: var(--hot); border-style: dashed; }
-  .risk { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); text-align: right; }
+  .risk { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); text-align: right; font-size: 13px; }
   .row.hot .risk { color: var(--hot); }
-  .name { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-  .fn { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .name { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .fn { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fn .file { color: var(--muted); }
-  .track { height: 6px; background: var(--bar); border-radius: 3px; overflow: hidden; }
+  .track { height: 5px; background: var(--bar); border-radius: 3px; overflow: hidden; }
   .fill { height: 100%; width: 0; background: var(--calm); border-radius: 3px; transition: width .5s cubic-bezier(.2,.7,.2,1), background .3s; }
   .row.hot .fill { background: var(--hot); }
-  .tags { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; font-size: 12px; }
-  .tag { padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .tags { display: flex; gap: 5px; justify-content: flex-end; font-size: 11px; }
+  .tag { padding: 0 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
   .tag.smell { border-color: var(--hot); color: var(--hot); font-weight: 600; }
   .tag.sev2, .tag.sev3 { color: var(--ink); border-color: var(--ink); }
   .empty { color: var(--muted); text-align: center; padding: 48px 0; }
-  footer { position: fixed; right: 16px; bottom: 12px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; }
+
+  /* detail of the selected function */
+  .detail { border-top: 1px solid var(--line); padding: 8px 12px 10px; }
+  .detail .head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; margin-bottom: 6px; }
+  .detail .head .fn { font-size: 13px; }
+  .detail .head .risk { font-size: 15px; }
+  .smells { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; }
+  .sm { display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: 8px; font-size: 11.5px; }
+  .sm .p { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .sm.hit { font-weight: 600; } .sm.hit .p { color: var(--hot); }
+  .sm .track { height: 4px; }
+  .placeholder { color: var(--muted); font-size: 12px; }
+  footer { display: flex; gap: 12px; padding: 6px 12px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
   footer b { color: var(--ink); font-weight: 600; }
-  .syntax { color: var(--hot); font-size: 12px; margin-bottom: 8px; min-height: 1.4em; }
+  .syntax { color: var(--hot); }
 </style>
 </head>
 <body>
 <main>
-  <header>
-    <h1>Jev 버그헌터</h1>
-    <div class="sub"><span id="watching">연결 중</span> · <button id="sound">소리 켜기</button></div>
-  </header>
-  <div class="syntax" id="syntax"></div>
-  <div class="cols">
+  <section id="left">
+    <div class="bar">
+      <select id="fileSel"></select>
+      <span id="dirty"></span>
+      <span class="grow"></span>
+      <span>⌘S 저장</span>
+    </div>
+    <div class="editor">
+      <div class="gutter" id="gutter"></div>
+      <textarea id="src" spellcheck="false" autocomplete="off"></textarea>
+    </div>
+  </section>
+  <section id="right">
+    <div class="bar"><h1>Jev 버그헌터</h1><span id="watching">연결 중</span><span class="grow"></span><span class="syntax" id="syntax"></span><button id="sound">소리 켜기</button></div>
     <div id="list"><div class="empty">함수를 기다리는 중</div></div>
-    <aside id="code"><div class="placeholder">줄을 누르면 코드가 보입니다. 저장하면 바뀐 함수가 자동으로 뜹니다.</div></aside>
-  </div>
+    <div class="detail" id="detail"><div class="placeholder">저장하면 바뀐 함수가 여기 뜹니다</div></div>
+    <footer id="stats"></footer>
+  </section>
 </main>
-<footer id="stats"></footer>
 <script>
 (() => {
   const list = document.getElementById('list');
   const statsEl = document.getElementById('stats');
   const syntaxEl = document.getElementById('syntax');
+  const detailEl = document.getElementById('detail');
+  const src = document.getElementById('src');
+  const gutter = document.getElementById('gutter');
+  const fileSel = document.getElementById('fileSel');
+  const dirtyEl = document.getElementById('dirty');
   const rows = new Map();          // id -> {data, el}
   let threshold = 0.5, smellNames = {}, severity = [];
   let changedTotal = 0, batchStart = 0, batchPending = 0, lastBatchMs = null, requests = 0;
-  let audio = null;
-  let selectedId = null;
-  const codeEl = document.getElementById('code');
-
-  function esc(t) { return t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
-  function showCode(id) {
-    const e = rows.get(id); if (!e) return;
-    selectedId = id;
-    for (const [rid, r] of rows) r.el.classList.toggle('selected', rid === id);
-    const d = e.data;
-    const changed = new Set(d.changed_lines || []);
-    const lines = (d.source || '').split('\n');
-    if (lines.length && lines[lines.length - 1] === '') lines.pop();
-    const hot = d.status === 'done' && d.risk >= threshold;
-    const risk = d.status === 'done' ? d.risk.toFixed(2) : (d.status === 'pending' ? '판정 중' : '');
-    const body = lines.map((l, i) => `<div class="ln${changed.has(i) ? ' diff' : ''}"><span class="n">${d.lineno + i}</span><span class="c">${esc(l) || ' '}</span></div>`).join('');
-    const smells = d.status === 'done' ? Object.entries(d.probabilities).map(([k, p]) =>
-      `<div class="sm${p >= threshold ? ' hit' : ''}"><span>${smellNames[k] || k}</span><div class="track"><div class="fill" style="width:${p * 100}%;background:${p >= threshold ? 'var(--hot)' : 'var(--calm)'}"></div></div><span class="p">${p.toFixed(2)}</span></div>`).join('') : '';
-    codeEl.innerHTML = `<div class="head"><span class="fn"><span class="file">${shortFile(d.file)}:${d.lineno} </span>${d.function}</span><span class="risk" style="color:${hot ? 'var(--hot)' : 'var(--muted)'}">${risk}${d.status === 'done' ? ` · ${d.severity}` : ''}</span></div><pre>${body}</pre>${smells ? `<div class="smells">${smells}</div>` : ''}`;
-  }
+  let audio = null, selectedId = null;
+  const files = new Map();         // file -> text on disk
+  let current = null, dirty = false;
 
   fetch('/api/smells').then(r => r.json()).then(m => { threshold = m.threshold; smellNames = m.smells; severity = m.severity; });
 
+  // ---- editor ---------------------------------------------------------------
+  function gutterLines() {
+    const n = src.value.split('\n').length;
+    gutter.textContent = Array.from({ length: n }, (_, i) => i + 1).join('\n');
+  }
+  src.addEventListener('scroll', () => { gutter.scrollTop = src.scrollTop; });
+  src.addEventListener('input', () => { dirty = true; dirtyEl.textContent = '● 수정됨'; dirtyEl.className = 'dirty'; gutterLines(); });
+  src.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = src.selectionStart, t = src.selectionEnd;
+      src.setRangeText('    ', s, t, 'end'); dirty = true; dirtyEl.textContent = '● 수정됨'; dirtyEl.className = 'dirty';
+    }
+  });
+  function openFile(name) {
+    current = name; src.value = files.get(name) ?? ''; dirty = false; dirtyEl.textContent = ''; gutterLines();
+  }
+  fileSel.onchange = () => openFile(fileSel.value);
+  async function save() {
+    if (!current) return;
+    const text = src.value;
+    await fetch('/api/save', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ file: current, text }) });
+    files.set(current, text); dirty = false; dirtyEl.textContent = '저장됨'; dirtyEl.className = '';
+  }
+  fetch('/api/files').then(r => r.json()).then(m => {
+    for (const f of m.files) { files.set(f.file, f.text); const o = document.createElement('option'); o.value = o.textContent = f.file; fileSel.appendChild(o); }
+    const first = new URLSearchParams(location.search).get('file') || m.files[0]?.file;
+    if (first) { fileSel.value = first; openFile(first); }
+  });
+
+  // ---- sound ----------------------------------------------------------------
   document.getElementById('sound').onclick = e => {
     audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-    audio.resume();
-    e.target.textContent = '소리 켜짐';
+    audio.resume(); e.target.textContent = '소리 켜짐';
   };
   function tick(hot) {
     if (!audio) return;
@@ -132,13 +163,14 @@
     o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + 0.1);
   }
 
-  function shortFile(f) { const parts = f.split('/'); return parts.slice(-2).join('/'); }
+  // ---- verdict list ---------------------------------------------------------
+  function shortFile(f) { return f.split('/').slice(-2).join('/'); }
 
   function render(entry) {
     const d = entry.data, el = entry.el;
     const risk = d.status === 'done' ? d.risk : (d.risk ?? null);
     const hot = d.status === 'done' && d.risk >= threshold;
-    el.className = 'row' + (hot ? ' hot' : '') + (d.status === 'pending' ? ' pending' : '') + (d.status === 'error' ? ' error' : '') + (entry.recent ? ' recent' : '');
+    el.className = 'row' + (hot ? ' hot' : '') + (d.status === 'pending' ? ' pending' : '') + (d.status === 'error' ? ' error' : '') + (entry.recent ? ' recent' : '') + (selectedId === d.id ? ' selected' : '');
     el.querySelector('.risk').textContent = risk == null ? '' : risk.toFixed(2);
     el.querySelector('.fn').innerHTML = `<span class="file">${shortFile(d.file)}:${d.lineno} </span>${d.function}`;
     el.querySelector('.fill').style.width = ((risk ?? 0) * 100) + '%';
@@ -148,6 +180,19 @@
     if (d.status !== 'done') return;
     const lvl = severity.indexOf(d.severity);
     tags.innerHTML = `<span class="tag sev${lvl}">${d.severity}</span>` + (d.labels || []).slice(0, 2).map(l => `<span class="tag smell">${l}</span>`).join('');
+  }
+
+  function showDetail(id) {
+    const e = rows.get(id); if (!e) return;
+    const prev = selectedId; selectedId = id;
+    if (prev && rows.get(prev)) render(rows.get(prev));
+    render(e);
+    const d = e.data;
+    const hot = d.status === 'done' && d.risk >= threshold;
+    const risk = d.status === 'done' ? `${d.risk.toFixed(2)} · ${d.severity}` : (d.status === 'pending' ? '판정 중…' : '');
+    const smells = d.status === 'done' ? Object.entries(d.probabilities).map(([k, p]) =>
+      `<div class="sm${p >= threshold ? ' hit' : ''}"><span>${smellNames[k] || k}</span><div class="track"><div class="fill" style="width:${p * 100}%;background:${p >= threshold ? 'var(--hot)' : 'var(--calm)'}"></div></div><span class="p">${p.toFixed(2)}</span></div>`).join('') : '';
+    detailEl.innerHTML = `<div class="head"><span class="fn"><span class="file">${shortFile(d.file)}:${d.lineno} </span>${d.function}</span><span class="risk" style="color:${hot ? 'var(--hot)' : 'var(--muted)'}">${risk}</span></div><div class="smells">${smells}</div>`;
   }
 
   function sortKey(d) { return [(d.status === 'done' ? d.risk : (d.risk ?? -1)), d.severity_score ?? 0]; }
@@ -178,7 +223,7 @@
       el.className = 'row';
       el.innerHTML = '<div class="risk"></div><div class="name"><div class="fn"></div><div class="track"><div class="fill"></div></div></div><div class="tags"></div>';
       e = { data: d, el, recent: false, timer: null };
-      el.onclick = () => showCode(d.id);
+      el.onclick = () => showDetail(d.id);
       rows.set(d.id, e);
       list.appendChild(el);
     }
@@ -195,7 +240,7 @@
   function stats(s) {
     if (s) requests = s.requests;
     const n = rows.size, hot = [...rows.values()].filter(e => e.data.status === 'done' && e.data.risk >= threshold).length;
-    statsEl.innerHTML = `<b>${n}</b> functions · <b>${hot}</b> hot · <b>${changedTotal}</b> changed · <b>${requests}</b> requests` + (lastBatchMs != null ? ` · <b>${(lastBatchMs / 1000).toFixed(1)}s</b>` : '');
+    statsEl.innerHTML = `<span><b>${n}</b> functions</span><span><b>${hot}</b> hot</span><span><b>${changedTotal}</b> changed</span><span><b>${requests}</b> requests</span>` + (lastBatchMs != null ? `<span><b>${(lastBatchMs / 1000).toFixed(1)}s</b></span>` : '');
   }
 
   const es = new EventSource('/events');
@@ -210,21 +255,26 @@
       changedTotal += m.count; batchStart = performance.now(); batchPending += m.count;
       document.body.classList.remove('flash'); void document.body.offsetWidth; document.body.classList.add('flash');
       syntaxEl.textContent = '';
+      // A save from outside the page: refresh the editor if it is not mid-edit.
+      fetch('/api/files').then(r => r.json()).then(fm => {
+        for (const f of fm.files) files.set(f.file, f.text);
+        if (!dirty && current && files.get(current) !== src.value) openFile(current);
+      });
     } else if (m.type === 'pending') {
       upsert(m.function, true);
-      showCode(m.function.id);
+      showDetail(m.function.id);
     } else if (m.type === 'verdict') {
       const { wasHot } = upsert(m.function, true);
-      if (selectedId === m.function.id || batchPending === 1) showCode(m.function.id);
+      if (selectedId === m.function.id || batchPending === 1) showDetail(m.function.id);
       const d = m.function, hot = d.status === 'done' && d.risk >= threshold;
       if (hot !== wasHot || hot) tick(hot);
       if (batchPending > 0 && --batchPending === 0) lastBatchMs = performance.now() - batchStart;
       reorder();
     } else if (m.type === 'removed') {
       const e = rows.get(m.id); if (e) { e.el.remove(); rows.delete(m.id); }
-      if (selectedId === m.id) { selectedId = null; codeEl.innerHTML = '<div class="placeholder">함수가 사라졌습니다</div>'; }
+      if (selectedId === m.id) { selectedId = null; detailEl.innerHTML = '<div class="placeholder">함수가 사라졌습니다</div>'; }
     } else if (m.type === 'syntax') {
-      syntaxEl.textContent = `${shortFile(m.file)}: 문법 오류 (${m.message}) — 마지막 판정 유지`;
+      syntaxEl.textContent = `${shortFile(m.file)} 문법 오류 (${m.message}) — 마지막 판정 유지`;
     }
     stats(m.stats);
   };
