@@ -28,9 +28,33 @@
   .bar .dirty { color: var(--hot); }
 
   /* editor */
-  .editor { flex: 1; display: grid; grid-template-columns: 44px 1fr; min-height: 0; font: 13px/1.6 ui-monospace, "SF Mono", Menlo, monospace; }
-  .gutter { overflow: hidden; color: var(--muted); text-align: right; padding: 10px 10px 10px 0; user-select: none; white-space: pre; }
-  textarea { border: 0; outline: 0; resize: none; background: none; color: var(--ink); font: inherit; padding: 10px 12px 10px 0; white-space: pre; overflow: auto; tab-size: 4; }
+  .editor { flex: 1; display: grid; grid-template-columns: 48px 1fr; min-height: 0; font: 15px/24px ui-monospace, "SF Mono", Menlo, monospace; }
+  .gutter { overflow: hidden; color: var(--muted); text-align: right; padding: 10px 12px 10px 0; user-select: none; white-space: pre; }
+  .textwrap { position: relative; min-height: 0; }
+  .overlay { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .overlay .mark { position: absolute; left: 0; right: 0; }
+  .overlay .caretline { background: var(--flash); }
+  .overlay .fn { background: var(--hot-soft); border-left: 3px solid var(--hot); }
+  .overlay .fn.fresh { animation: bloom .9s ease-out; }
+  @keyframes bloom { 0% { background: rgba(255,77,94,.55); } 100% { background: var(--hot-soft); } }
+  .overlay .fn.cool { background: rgba(120,200,140,.10); border-left-color: #58b37a; animation: none; }
+  .overlay .fn.cool.fresh { animation: cool .9s ease-out; }
+  @keyframes cool { 0% { background: rgba(88,179,122,.45); } 100% { background: rgba(120,200,140,.10); } }
+  textarea { position: relative; width: 100%; height: 100%; border: 0; outline: 0; resize: none; background: none; color: var(--ink); font: inherit; padding: 10px 12px 10px 0; white-space: pre; overflow: auto; tab-size: 4; caret-color: var(--hot); }
+  .typing { color: var(--hot); font-weight: 600; }
+  .typing::after { content: ""; animation: dots 1s steps(4, end) infinite; }
+  #left.saved { box-shadow: 0 0 0 3px var(--hot); transition: box-shadow .1s; }
+  #left { transition: box-shadow .6s; }
+
+  /* verdict toast */
+  #right { position: relative; }
+  .toast { position: absolute; left: 12px; right: 12px; top: 48px; z-index: 5; padding: 14px 18px; border-radius: 10px; background: var(--hot); color: #fff; font-weight: 700; font-size: 20px; display: flex; justify-content: space-between; align-items: baseline; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity .25s, transform .25s; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+  .toast.show { opacity: 1; transform: none; }
+  .toast.cool { background: #2f9e64; }
+  .toast .fnm { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .toast .big { font-size: 26px; font-variant-numeric: tabular-nums; }
+  .row.pop { animation: pop .5s cubic-bezier(.2,.9,.3,1.4); }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
   /* verdicts */
   #list { flex: 1; overflow: auto; padding: 8px; }
@@ -88,10 +112,11 @@
     </div>
     <div class="editor">
       <div class="gutter" id="gutter"></div>
-      <textarea id="src" spellcheck="false" autocomplete="off"></textarea>
+      <div class="textwrap"><div class="overlay" id="overlay"></div><textarea id="src" spellcheck="false" autocomplete="off"></textarea></div>
     </div>
   </section>
   <section id="right">
+    <div class="toast" id="toast"></div>
     <div class="bar"><h1>Jev 버그헌터</h1><span id="watching">연결 중</span><span class="grow"></span><span class="syntax" id="syntax"></span><button id="sound">소리 켜기</button></div>
     <div id="list"><div class="empty">함수를 기다리는 중</div></div>
     <div class="detail" id="detail"><div class="placeholder">저장하면 바뀐 함수가 여기 뜹니다</div></div>
@@ -122,8 +147,29 @@
     const n = src.value.split('\n').length;
     gutter.textContent = Array.from({ length: n }, (_, i) => i + 1).join('\n');
   }
-  src.addEventListener('scroll', () => { gutter.scrollTop = src.scrollTop; });
-  src.addEventListener('input', () => { dirty = true; dirtyEl.textContent = '● 수정됨'; dirtyEl.className = 'dirty'; gutterLines(); });
+  const overlay = document.getElementById('overlay');
+  const LH = 24, PAD = 10;
+  let typingTimer = null;
+  function lineOfCaret() { return src.value.slice(0, src.selectionStart).split('\n').length - 1; }
+  function renderOverlay() {
+    const top = l => PAD + l * LH - src.scrollTop;
+    let html = `<div class="mark caretline" style="top:${top(lineOfCaret())}px;height:${LH}px"></div>`;
+    for (const e of rows.values()) {
+      const d = e.data;
+      if (d.file !== current || d.status !== 'done' || !d.source) continue;
+      const hot = d.risk >= threshold;
+      if (!hot && !e.recent) continue;
+      const n = d.source.replace(/\n$/, '').split('\n').length;
+      html += `<div class="mark fn${hot ? '' : ' cool'}${e.fresh ? ' fresh' : ''}" style="top:${top(d.lineno - 1)}px;height:${n * LH}px"></div>`;
+    }
+    overlay.innerHTML = html;
+  }
+  src.addEventListener('scroll', () => { gutter.scrollTop = src.scrollTop; renderOverlay(); });
+  ['keyup', 'click', 'select'].forEach(ev => src.addEventListener(ev, renderOverlay));
+  src.addEventListener('input', () => {
+    dirty = true; dirtyEl.textContent = '타이핑 중'; dirtyEl.className = 'typing'; gutterLines(); renderOverlay();
+    clearTimeout(typingTimer); typingTimer = setTimeout(() => { if (dirty) { dirtyEl.textContent = '● 수정됨'; dirtyEl.className = 'dirty'; } }, 900);
+  });
   src.addEventListener('keydown', e => {
     if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); }
     if (e.key === 'Tab') {
@@ -133,14 +179,15 @@
     }
   });
   function openFile(name) {
-    current = name; src.value = files.get(name) ?? ''; dirty = false; dirtyEl.textContent = ''; gutterLines();
+    current = name; src.value = files.get(name) ?? ''; dirty = false; dirtyEl.textContent = ''; gutterLines(); renderOverlay();
   }
   fileSel.onchange = () => openFile(fileSel.value);
   async function save() {
     if (!current) return;
     const text = src.value;
     await fetch('/api/save', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ file: current, text }) });
-    files.set(current, text); dirty = false; dirtyEl.textContent = '저장됨'; dirtyEl.className = '';
+    files.set(current, text); dirty = false; dirtyEl.textContent = '저장됨 → Jev'; dirtyEl.className = 'dirty';
+    const left = document.getElementById('left'); left.classList.add('saved'); setTimeout(() => left.classList.remove('saved'), 350);
   }
   fetch('/api/files').then(r => r.json()).then(m => {
     for (const f of m.files) { files.set(f.file, f.text); const o = document.createElement('option'); o.value = o.textContent = f.file; fileSel.appendChild(o); }
@@ -166,12 +213,32 @@
   // ---- verdict list ---------------------------------------------------------
   function shortFile(f) { return f.split('/').slice(-2).join('/'); }
 
+  const toastEl = document.getElementById('toast');
+  let toastTimer = null;
+  function toast(d) {
+    const hot = d.risk >= threshold;
+    const label = hot ? (d.labels[0] || d.severity) : '깨끗함';
+    toastEl.className = 'toast show' + (hot ? '' : ' cool');
+    toastEl.innerHTML = `<span><span class="fnm">${d.function}</span> — ${label}</span><span class="big">${d.risk.toFixed(2)}</span>`;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
+  }
+  function countUp(el, from, to) {
+    const t0 = performance.now(), dur = 600;
+    (function step(now) {
+      const k = Math.min(1, (now - t0) / dur), v = from + (to - from) * (1 - Math.pow(1 - k, 3));
+      el.textContent = v.toFixed(2);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
   function render(entry) {
     const d = entry.data, el = entry.el;
     const risk = d.status === 'done' ? d.risk : (d.risk ?? null);
     const hot = d.status === 'done' && d.risk >= threshold;
-    el.className = 'row' + (hot ? ' hot' : '') + (d.status === 'pending' ? ' pending' : '') + (d.status === 'error' ? ' error' : '') + (entry.recent ? ' recent' : '') + (selectedId === d.id ? ' selected' : '');
-    el.querySelector('.risk').textContent = risk == null ? '' : risk.toFixed(2);
+    el.className = 'row' + (hot ? ' hot' : '') + (d.status === 'pending' ? ' pending' : '') + (d.status === 'error' ? ' error' : '') + (entry.recent ? ' recent' : '') + (selectedId === d.id ? ' selected' : '') + (entry.pop ? ' pop' : '');
+    const riskEl = el.querySelector('.risk');
+    if (entry.animateFrom != null && risk != null) { countUp(riskEl, entry.animateFrom, risk); entry.animateFrom = null; }
+    else riskEl.textContent = risk == null ? '' : risk.toFixed(2);
     el.querySelector('.fn').innerHTML = `<span class="file">${shortFile(d.file)}:${d.lineno} </span>${d.function}`;
     el.querySelector('.fill').style.width = ((risk ?? 0) * 100) + '%';
     const tags = el.querySelector('.tags');
@@ -228,12 +295,19 @@
       list.appendChild(el);
     }
     const wasHot = e.data.status === 'done' && e.data.risk >= threshold;
+    const oldRisk = e.data.status === 'done' ? e.data.risk : null;
     e.data = d;
     if (recent) {
       e.recent = true; clearTimeout(e.timer);
-      e.timer = setTimeout(() => { e.recent = false; render(e); }, 2500);
+      e.timer = setTimeout(() => { e.recent = false; e.fresh = false; render(e); renderOverlay(); }, 2500);
+    }
+    if (recent && d.status === 'done') {
+      e.pop = true; e.fresh = true; e.animateFrom = oldRisk ?? 0;
+      setTimeout(() => { e.pop = false; render(e); }, 600);
+      toast(d);
     }
     render(e);
+    renderOverlay();
     return { wasHot };
   }
 
