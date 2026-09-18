@@ -34,7 +34,7 @@ export const LABELS_KO = Object.freeze({
   build: "빌드",
   cash: "현금",
   spin: "스핀",
-  default: "습관",
+  default: "기본",
   veto: "거부",
   forced: "강제",
 });

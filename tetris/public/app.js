@@ -1077,7 +1077,7 @@ function verdictLineOf() {
   if (!v) return "";
   if (v.fallback) return `중재 실패 → E 최대 ${v.chosenId} (FALLBACK)`;
   if (v.vetoedTop) return `중재 1위 ${v.arbTop} → 코치 거부 → ${v.chosenId} 선택`;
-  if (v.ledBy === "default") return `습관이 이김 (${lab(v.leading)} → 습관)`;
+  if (v.ledBy === "default") return `기본이 이김 (${lab(v.leading)} → 기본)`;
   if (v.override) return `중재가 우선순위를 뒤집음 (${lab(v.leading)} → ${lab(v.ledBy)})`;
   const coach = v.hardVetoed.length ? v.hardVetoed.map((id) => `${leaderOf(v, id)} ${id} 거부`).join(" · ") : "거부 없음";
   return `중재: ${leaderOf(v, v.arbTop)} ${v.arbTop} 승 · 코치: ${coach}`;

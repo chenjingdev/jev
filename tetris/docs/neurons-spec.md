@@ -23,7 +23,7 @@
 | `build` | 의도 | 빌드 | `#7c8cff` | J 파랑(`#60a5fa`)보다 보라 쪽 인디고 |
 | `cash` | 의도 | 현금 | `#ffd166` | O 노랑(`#facc15`)보다 따뜻한 금색 |
 | `spin` | 의도 | 스핀 | `#f472b6` | T 보라(`#c084fc`)와 구분되는 핑크 |
-| `default` | 운동(긴장성) | 습관 | `#9aa3b8` | 의도가 아니다. 항상 켜진 회색 뉴런 |
+| `default` | 운동(긴장성) | 기본 | `#9aa3b8` | 의도가 아니다. 항상 켜진 회색 뉴런 |
 | — | 억제 | 거부 | `var(--warn)` `#f87171` | 빨간 링·빗금·VETO 알약 |
 | — | 엔진 규칙 | 강제 | `#fb923c` 주황 | 뇌간 강제 발화(엔진 규칙) 표시 전용 |
 
@@ -627,4 +627,4 @@ memoryNext = { previous_intent: ledBy ∈ INTENTS ? ledBy : null, hold: hold.val
 
 ## 부록 C — 용어
 
-발화(fire) = noul ≥ 0.5. 활성(activation) = noul p. 제안(proposal) = 운동 뉴런의 argmax. 중재(arbitrate) = 제안 중 선택 Choice. 거부(veto) = 코치 noul. 유지(hold) = 다음 조각 계획 강도. 습관(default) = 의도 없는 기준 운동 뉴런. 뒤집기(override) = 선택의 backer에 leading이 없음. 바꿈(changed) = 선택 ≠ 습관의 argmax. 불일치(disagreement) = 발화 뉴런들의 argmax가 둘 이상.
+발화(fire) = noul ≥ 0.5. 활성(activation) = noul p. 제안(proposal) = 운동 뉴런의 argmax. 중재(arbitrate) = 제안 중 선택 Choice. 거부(veto) = 코치 noul. 유지(hold) = 다음 조각 계획 강도. 기본(default, 코드에서는 habit) = 의도 없는 기준 운동 뉴런. 화면 라벨은 "기본". 뒤집기(override) = 선택의 backer에 leading이 없음. 바꿈(changed) = 선택 ≠ 습관의 argmax. 불일치(disagreement) = 발화 뉴런들의 argmax가 둘 이상.

@@ -783,7 +783,7 @@ function composeVerdictLine(view) {
     return { text: `중재 1위 ${verdict.arbTop} → 코치 거부 → ${verdict.chosenId} 선택`, hue: null };
   }
   if (verdict.override && leading) {
-    if (ledBy === "default") return { text: `습관이 이김 (${labelOf(leading)} → 습관)`, hue: null };
+    if (ledBy === "default") return { text: `기본이 이김 (${labelOf(leading)} → 기본)`, hue: null };
     return { text: `중재가 우선순위를 뒤집음 (${labelOf(leading)} → ${labelOf(ledBy)})`, hue: hueOf(ledBy) };
   }
   const hard = Array.isArray(verdict.hardVetoed) ? verdict.hardVetoed : [];

@@ -116,7 +116,7 @@ test("Appendix B constants and the palette are exported verbatim", () => {
   assert.equal(LABELS_KO.build, "빌드");
   assert.equal(LABELS_KO.cash, "현금");
   assert.equal(LABELS_KO.spin, "스핀");
-  assert.equal(LABELS_KO.default, "습관");
+  assert.equal(LABELS_KO.default, "기본");
 });
 
 // ---------------------------------------------------------------- percepts
@@ -644,7 +644,7 @@ test("ghostsFrom: colour, alpha, label, rings, vetoed and chosen flags; field gh
   assert.equal(g1.p, 1);
   assert.equal(g1.alpha, MAX_GHOST_ALPHA);
   assert.equal(g1.label, "100%");
-  assert.equal(g1.tag, "빌드·습관 · 선택");
+  assert.equal(g1.tag, "빌드·기본 · 선택");
   assert.deepEqual(g1.rings, [HUES.build, HUES.default]);
   assert.equal(g1.cells, cands[1].cells);
   assert.equal(g1.dashed, false);
@@ -689,7 +689,7 @@ test("ghostsFrom: alpha follows the current heatmap formula, ALT ghosts are dash
   assert.equal(g1.color, HUES.spin);
   assert.equal(g1.tag, "스핀");
   assert.deepEqual(g1.rings, [HUES.spin]);
-  assert.equal(g0.tag, "스핀·습관 · 선택");
+  assert.equal(g0.tag, "스핀·기본 · 선택");
 
   // A tiny probability drops below the labelled floor.
   const r2 = combine({ choice: "c0", confidence: 0.99, probabilities: { c0: 0.99, c1: 0.01 } }, {}, HOLD, props, intent, cands);
