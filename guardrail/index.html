@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev 가드레일</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #fff; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e3e3df;
+    --safe: #2f9e64; --warn: #d9a400; --harm: #e0662a; --severe: #c8283a; --bar: #d6d6d0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #161616; --panel: #1f1f1f; --ink: #ececea; --muted: #9a9a96; --line: #2e2e2c; --bar: #333; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
+  form { display: flex; gap: 8px; }
+  textarea { flex: 1; resize: vertical; min-height: 72px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font: inherit; }
+  button { padding: 0 18px; border: 0; border-radius: 8px; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  form { margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; animation: rise .35s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .card.pending { color: var(--muted); }
+  .dots::after { content: ""; animation: dots 1s steps(4, end) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .verdict { font-size: 18px; font-weight: 700; }
+  .sev { font-size: 13px; padding: 2px 10px; border-radius: 999px; color: #fff; }
+  .sev.l0 { background: var(--safe); } .sev.l1 { background: var(--warn); } .sev.l2 { background: var(--harm); } .sev.l3 { background: var(--severe); }
+  .text { color: var(--muted); font-size: 14px; margin-bottom: 14px; white-space: pre-wrap; }
+  .row { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 10px; font-size: 13px; padding: 2px 0; }
+  .row.hit { font-weight: 600; }
+  .track { height: 8px; background: var(--bar); border-radius: 4px; overflow: hidden; }
+  .fill { height: 100%; background: var(--muted); border-radius: 4px; width: 0; transition: width .6s cubic-bezier(.2,.7,.2,1); }
+  .row.hit .fill { background: var(--harm); }
+  .p { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .error { color: var(--severe); }
+  .empty { color: var(--muted); text-align: center; padding: 32px 0; }
+  @media (max-width: 600px) {
+    main { padding: 40px 20px; }
+    h1 { font-size: 26px; }
+    .sub { font-size: 15px; margin-bottom: 28px; }
+    textarea { min-height: 96px; font-size: 17px; }
+    button { font-size: 17px; padding: 0 22px; }
+    .verdict { font-size: 22px; }
+    .sev { font-size: 14px; }
+    .text { font-size: 15px; }
+    .row { font-size: 15px; grid-template-columns: 100px 1fr 46px; padding: 4px 0; }
+    .track { height: 10px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Jev 가드레일</h1>
+  <p class="sub">문장을 넣으면 유해성 카테고리 12개의 확률과 심각도 4단계를 돌려준다.</p>
+
+  <form id="form">
+    <textarea id="text" placeholder="판별할 문장" autofocus></textarea>
+    <button id="go" type="submit">판별</button>
+  </form>
+
+  <div id="results"><div class="empty">아직 판별한 문장이 없다</div></div>
+</main>
+
+<script>
+const SEVERITY = ["안전", "주의", "유해", "심각"];
+
+const form = document.getElementById("form");
+const textarea = document.getElementById("text");
+const go = document.getElementById("go");
+const results = document.getElementById("results");
+
+textarea.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); screen(); }
+});
+form.addEventListener("submit", (e) => { e.preventDefault(); screen(); });
+
+async function screen() {
+  const text = textarea.value.trim();
+  if (!text || go.disabled) return;
+  go.disabled = true;
+  const started = performance.now();
+  results.replaceChildren();
+  const pending = document.createElement("div");
+  pending.className = "card pending";
+  pending.innerHTML = `<div class="text">${esc(text)}</div><span class="dots">판별 중</span>`;
+  results.append(pending);
+  try {
+    const res = await fetch("/api/screen", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    render(data, performance.now() - started, pending);
+    textarea.value = "";
+    textarea.focus();
+  } catch (err) {
+    pending.className = "card error";
+    pending.textContent = `오류: ${err.message}`;
+  } finally {
+    go.disabled = false;
+  }
+}
+
+function render(v, ms, pending) {
+  const level = SEVERITY.indexOf(v.severity);
+  const card = document.createElement("div");
+  card.className = "card";
+  const headline = v.safe ? "안전" : (v.categories.length ? v.categories.join(" + ") : "(카테고리 없음)");
+  card.innerHTML = `
+    <div class="head">
+      <span class="verdict">${esc(headline)}</span>
+      <span class="sev l${level}">${esc(v.severity)} ${v.severity_score.toFixed(2)}/3</span>
+    </div>
+    <div class="text">${esc(v.text)}</div>
+    ${Object.entries(v.probabilities).map(([name, p]) => `
+      <div class="row ${v.categories.includes(name) ? "hit" : ""}">
+        <span>${esc(name)}</span>
+        <div class="track"><div class="fill" data-w="${Math.round(p * 100)}"></div></div>
+        <span class="p">${p.toFixed(2)}</span>
+      </div>`).join("")}
+    <div class="meta">${Math.round(ms)}ms · 심각도 confidence ${v.severity_confidence.toFixed(2)} · 임계값 0.5</div>`;
+  pending.replaceWith(card);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    for (const f of card.querySelectorAll(".fill")) f.style.width = f.dataset.w + "%";
+  }));
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+</script>
+</body>
+</html>

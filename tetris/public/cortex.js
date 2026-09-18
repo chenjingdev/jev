@@ -14,25 +14,34 @@ const NS = "http://www.w3.org/2000/svg";
 
 // Row 1 geometry (6.3): five intent circles, then the habit circle.
 const CIRCLE_X = { survive: 45, clean: 105, build: 165, cash: 225, spin: 285, default: 335 };
-const CIRCLE_Y = 95;
+const CIRCLE_Y = 117;
 const R_IDLE = 13;
 const R_HABIT = 10;
 // Row 2: proposal chips.
-const CHIP_Y = 156;
+const CHIP_Y = 196;
 const CHIP_W = 88;
 const CHIP_H = 40;
 const chipX = (k) => 12 + 96 * k;
 // Row 3: verdict bars.
-const BAR_Y0 = 246;
+const BAR_Y0 = 300;
 const BAR_STEP = 20;
 const BAR_H = 14;
 const BAR_X = 56;
 const BAR_W = 244;
 // Recurrent nodes on the left edge.
-const STAY = { x: 18, y: 95, r: 7 };
-const HOLD = { x: 18, y: 300, r: 7 };
+const STAY = { x: 18, y: 117, r: 7 };
+const HOLD = { x: 18, y: 354, r: 7 };
 // Appetite gauge.
-const GAUGE = { x: 372, y: 70, w: 12, h: 55 };
+const GAUGE = { x: 372, y: 92, w: 12, h: 55 };
+// The three layers as bands: y range of each, and the header baseline inside it. The piece's
+// phase (data-phase on the svg) dims the bands that have not run yet, so the eye reads the
+// request order top to bottom instead of one flat panel.
+const BANDS = {
+  sense: { y: 50, h: 110, label: "R1 감각층" },
+  motor: { y: 172, h: 76, label: "R2 운동층" },
+  verdict: { y: 260, h: 122, label: "R3 판정층" },
+};
+const VIEW_H = 390;
 
 const MAX_CHIPS = 4;
 const TIMELINE_N = 40;
@@ -68,6 +77,19 @@ const STYLE = `
 #cortex .rec.lit { stroke-width: 1.5; animation: cx-flow .9s linear infinite; }
 #cortex .arrow { transition: opacity .15s ease; }
 #cortex .hidden { display: none; }
+#cortex .band { transition: opacity .25s ease; }
+#cortex .band .frame { fill: ${COLORS.panel}; fill-opacity: .35; stroke: ${COLORS.line}; stroke-width: 1; }
+#cortex .band .head { font-size: 10px; font-weight: 700; fill: ${COLORS.muted}; letter-spacing: .08em; }
+#cortex .band .count { font-size: 9.5px; fill: ${COLORS.text}; }
+#cortex[data-phase="sense"] .band-motor, #cortex[data-phase="sense"] .band-verdict { opacity: .22; }
+#cortex[data-phase="motor"] .band-verdict { opacity: .22; }
+#cortex[data-phase="verdict"] .band-sense, #cortex[data-phase="moving"] .band-sense { opacity: .55; }
+#cortex[data-phase="moving"] .band-motor { opacity: .7; }
+#cortex[data-phase="idle"] .band, #cortex[data-phase="single"] .band { opacity: .35; }
+#cortex .hop { fill: ${COLORS.dim}; transition: fill .2s ease; }
+#cortex .hop-text { font-size: 8px; fill: ${COLORS.muted}; opacity: 0; transition: opacity .2s ease; }
+#cortex.inflight-motor .hop-1, #cortex.inflight-arbitrate .hop-2 { fill: ${COLORS.white}; animation: cx-pulse .5s ease-in-out infinite alternate; }
+#cortex.inflight-motor .hop-text-1, #cortex.inflight-arbitrate .hop-text-2 { opacity: 1; }
 #cortex.inflight-sense .sline { stroke-opacity: .8; animation: cx-flow .5s linear infinite; }
 #cortex.inflight-motor .mline.pending { stroke-opacity: .8; animation: cx-flow .5s linear infinite; }
 #cortex.inflight-arbitrate .arrow { animation: cx-pulse .7s ease-in-out infinite alternate; }
@@ -198,6 +220,24 @@ function fitTwoLines(first, second, str, maxW) {
 
 // ---------------------------------------------------------------- build
 
+function buildBands(svg) {
+  el.bands = {};
+  for (const [key, b] of Object.entries(BANDS)) {
+    const g = make("g", { class: `band band-${key}` }, svg);
+    make("rect", { class: "frame", x: 4, y: b.y, width: 392, height: b.h, rx: 8 }, g);
+    text(g, 12, b.y + 13, { class: "head" }, b.label);
+    const count = text(g, 388, b.y + 13, { class: "count mono", "text-anchor": "end" }, "");
+    el.bands[key] = { g, count };
+  }
+  // Hop arrows in the gaps between bands: lit only while that request is in flight.
+  const hop = (n, y) => {
+    make("polygon", { class: `hop hop-${n}`, points: `${200 - 6},${y} ${200 + 6},${y} 200,${y + 7}` }, svg);
+    el[`hop${n}`] = text(svg, 212, y + 7, { class: `hop-text hop-text-${n}` }, "");
+  };
+  hop(1, BANDS.sense.y + BANDS.sense.h + 2);
+  hop(2, BANDS.motor.y + BANDS.motor.h + 2);
+}
+
 function buildRow0(svg) {
   const g = make("g", { class: "row0" }, svg);
   for (let c = 0; c < 10; c++) {
@@ -211,7 +251,7 @@ function buildRow0(svg) {
   el.queue = text(g, tx, 41, { "font-size": 10, fill: COLORS.muted, class: "mono" }, "큐 –");
   // Request-1 flow: the retina row down to each intent circle, visible only while in flight.
   for (const i of INTENTS) {
-    el.slines[i] = make("line", { class: "sline", x1: CIRCLE_X[i], y1: 44, x2: CIRCLE_X[i], y2: CIRCLE_Y - R_IDLE - 1 }, g);
+    el.slines[i] = make("line", { class: "sline", x1: CIRCLE_X[i], y1: BANDS.sense.y + 18, x2: CIRCLE_X[i], y2: CIRCLE_Y - R_IDLE - 1 }, g);
   }
 }
 
@@ -228,8 +268,8 @@ function buildNeuron(svg, name) {
   setTitle(g, "");
   const body = make("circle", { class: "body", cx: x, cy: CIRCLE_Y, r: R_IDLE, fill: hueOf(name), "fill-opacity": 0.12, stroke: "none" }, g);
   const value = text(g, x, CIRCLE_Y + 3.4, { class: "mono", "font-size": 9, fill: COLORS.white, "text-anchor": "middle" }, "");
-  const label = text(g, x, 122, { "font-size": 10, fill: COLORS.muted, "text-anchor": "middle" }, labelOf(name));
-  const forced = text(g, x, 74, { class: "hidden", "font-size": 9, "font-weight": 700, fill: HUES.forced, "text-anchor": "middle" }, LABELS_KO.forced);
+  const label = text(g, x, CIRCLE_Y + 27, { "font-size": 10, fill: COLORS.muted, "text-anchor": "middle" }, labelOf(name));
+  const forced = text(g, x, CIRCLE_Y - 21, { class: "hidden", "font-size": 9, "font-weight": 700, fill: HUES.forced, "text-anchor": "middle" }, LABELS_KO.forced);
   const lock = buildLock(g);
   lock.setAttribute("transform", `translate(${x + 13}, ${CIRCLE_Y - 24})`);
   el.neurons[name] = { g, body, value, label, forced, lock };
@@ -256,7 +296,7 @@ function buildGauge(svg) {
     make("line", { x1: x, y1: yy, x2: x + w, y2: yy, stroke: COLORS.line, "stroke-width": 1 }, g);
   }
   const value = text(g, x + w / 2, y - 5, { class: "mono", "font-size": 9, fill: COLORS.text, "text-anchor": "middle" }, "");
-  text(g, x + w / 2, 136, { "font-size": 9, fill: COLORS.muted, "text-anchor": "middle" }, "선호");
+  text(g, x + w / 2, y + h + 11, { "font-size": 9, fill: COLORS.muted, "text-anchor": "middle" }, "선호");
   el.gauge = { g, fill, value };
 }
 
@@ -301,15 +341,16 @@ function buildArrows(svg) {
   const g = make("g", { class: "row3head" }, svg);
   const one = (x, label) => {
     const ag = make("g", { class: "arrow" }, g);
-    text(ag, x, 231, { "font-size": 10, "font-weight": 700, fill: COLORS.text, "text-anchor": "middle" }, label);
-    make("line", { x1: x, y1: 234, x2: x, y2: 241, stroke: COLORS.muted, "stroke-width": 1 }, ag);
-    make("polygon", { points: `${x - 3},241 ${x + 3},241 ${x},245`, fill: COLORS.muted }, ag);
+    const ty = BAR_Y0 - 15;
+    text(ag, x, ty, { "font-size": 10, "font-weight": 700, fill: COLORS.text, "text-anchor": "middle" }, label);
+    make("line", { x1: x, y1: ty + 3, x2: x, y2: ty + 10, stroke: COLORS.muted, "stroke-width": 1 }, ag);
+    make("polygon", { points: `${x - 3},${ty + 10} ${x + 3},${ty + 10} ${x},${ty + 14}`, fill: COLORS.muted }, ag);
     return ag;
   };
   // Two arrows side by side: the arbiter and the coach judge in the same request, never one
   // after the other (Appendix A-4), and the picture must say so.
   el.arrows = [one(150, "중재"), one(270, "코치")];
-  text(g, 210, 231, { "font-size": 8, fill: COLORS.muted, "text-anchor": "middle" }, "동시에");
+  text(g, 210, BAR_Y0 - 15, { "font-size": 8, fill: COLORS.muted, "text-anchor": "middle" }, "동시에");
 }
 
 function buildBars(svg) {
@@ -358,6 +399,7 @@ export function initCortex() {
   const style = make("style", {}, svg);
   style.textContent = STYLE;
 
+  buildBands(svg);
   buildRow0(svg);
   // The recurrent link: HOLD (this verdict) climbs the left edge into STAY (the next R1).
   el.rec = make("path", {
@@ -382,6 +424,22 @@ export function initCortex() {
 }
 
 // ---------------------------------------------------------------- derived values
+
+// Band headers carry counts so a piece with one fired neuron still reads as three stages:
+// "5 evaluated → 1 fired", "2 proposals", "arbiter + 2 coaches + hold".
+function renderBands(view) {
+  if (!el.bands) return;
+  const sensed = view.sense ? INTENTS.filter((i) => typeof view.sense[i] === "number").length : 0;
+  const fired = view.intent?.fired?.length ?? 0;
+  const props = view.proposals?.length ?? 0;
+  const forced = view.intent?.forced ? " · 강제" : "";
+  const stayed = view.intent?.stayed ? " · 유지" : "";
+  setText(el.bands.sense.count, sensed ? `뉴런 ${sensed + 1}개 평가 → ${fired}개 발화${forced}${stayed}` : "");
+  setText(el.bands.motor.count, props ? `운동 뉴런 ${fired + 1}개 → 제안 ${props}개` : fired ? `운동 뉴런 ${fired + 1}개` : "");
+  setText(el.bands.verdict.count, props ? `중재 1 + 코치 ${props} + 유지 1` : "");
+  if (el.hop1) setText(el.hop1, fired ? `발화 ${fired}개 → 운동 질문 ${fired + 1}개` : "");
+  if (el.hop2) setText(el.hop2, props ? `제안 ${props}개 → 판정 질문 ${props + 2}개` : "");
+}
 
 function activationOf(view, name) {
   const a = view.intent?.activations?.[name];
@@ -523,7 +581,7 @@ function setMotorLine(neuron, chipIndex, a, pending) {
   const y1 = CHIP_Y - 1;
   // Straight down past the label, then an S-sweep in the gap between labels and chips: long
   // sweeps flatten into a bus that other neurons' lines join before the chip.
-  const ys = 128;
+  const ys = CIRCLE_Y + 33;
   const ye = CHIP_Y - 4;
   line.setAttribute("d", `M${x0},${y0.toFixed(1)} L${x0},${ys} C${x0},${ys + 18} ${x1},${ye - 18} ${x1},${ye} L${x1},${y1}`);
   line.setAttribute("stroke", hueOf(neuron));
@@ -778,6 +836,7 @@ export function renderCortex(view) {
   const v = view && typeof view === "object" ? view : {};
   if (v.phase === "idle" && !v.timeline?.length) prevLedMemo = null; // new game
   el.svg.setAttribute("data-phase", v.phase ?? "idle");
+  renderBands(v);
   renderRow0(v);
   renderNeurons(v);
   renderChips(v);
