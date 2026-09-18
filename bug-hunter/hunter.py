@@ -180,20 +180,27 @@ class Verdict:
 
 
 def extract_functions(source: str, file: str, *, language: str = "python") -> list[Function]:
-    """Every def/async def in a Python source, methods included, outermost first.
+    """Every def/async def in a Python source, methods included, in file order.
 
-    Nested functions are returned as their own entries as well as inside their
-    parent; Jev sees the parent whole, so the inner copy is what gets its own row.
+    Nested functions and methods get their own entries; `name` is the qualified
+    name (`Class.method`, `outer.inner`) so two `as_dict`s stay apart.
     """
     tree = ast.parse(source, filename=file)
     out: list[Function] = []
-    for node in ast.walk(tree):
-        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            continue
-        segment = ast.get_source_segment(source, node)
-        if not segment:
-            continue
-        out.append(Function(file=file, name=node.name, lineno=node.lineno, source=segment, language=language))
+
+    def visit(node: ast.AST, prefix: str) -> None:
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                qualname = f"{prefix}{child.name}"
+                if not isinstance(child, ast.ClassDef):
+                    segment = ast.get_source_segment(source, child)
+                    if segment:
+                        out.append(Function(file=file, name=qualname, lineno=child.lineno, source=segment, language=language))
+                visit(child, f"{qualname}.")
+            else:
+                visit(child, prefix)
+
+    visit(tree, "")
     out.sort(key=lambda f: f.lineno)
     return out
 

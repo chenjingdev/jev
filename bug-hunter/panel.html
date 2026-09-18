@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev 버그헌터</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #fff; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e3e3df;
+    --bar: #d6d6d0; --calm: #9a9a96; --hot: #c8283a; --hot-soft: rgba(200,40,58,.12); --flash: rgba(28,28,28,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #131313; --panel: #1c1c1c; --ink: #ececea; --muted: #8f8f8a; --line: #2a2a28; --bar: #2e2e2c; --calm: #6f6f6a; --hot: #ff4d5e; --hot-soft: rgba(255,77,94,.14); --flash: rgba(255,255,255,.07); }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; }
+  body.flash::before { content: ""; position: fixed; inset: 0; background: var(--flash); pointer-events: none; animation: blink .12s ease-out forwards; }
+  @keyframes blink { from { opacity: 1; } to { opacity: 0; } }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 72px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
+  h1 { font-size: 18px; margin: 0; }
+  .sub { color: var(--muted); font-size: 12px; }
+  .sub button { border: 0; background: none; color: var(--muted); font: inherit; cursor: pointer; padding: 0; text-decoration: underline dotted; }
+  #list { position: relative; }
+  .row {
+    display: grid; grid-template-columns: 44px 1fr 200px; align-items: center; gap: 12px;
+    padding: 7px 12px; margin: 0 0 2px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line);
+    transition: background .4s, border-color .4s, box-shadow .4s;
+  }
+  .row.hot { border-color: var(--hot); background: var(--hot-soft); }
+  .row.recent { box-shadow: 0 0 0 2px var(--hot-soft); }
+  .row.recent:not(.hot) { box-shadow: 0 0 0 2px var(--flash); }
+  .row.pending { opacity: .7; }
+  .row.pending .risk::after { content: ""; animation: dots 1s steps(4, end) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .row.error { border-color: var(--hot); border-style: dashed; }
+  .risk { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); text-align: right; }
+  .row.hot .risk { color: var(--hot); }
+  .name { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .fn { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fn .file { color: var(--muted); }
+  .track { height: 6px; background: var(--bar); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; width: 0; background: var(--calm); border-radius: 3px; transition: width .5s cubic-bezier(.2,.7,.2,1), background .3s; }
+  .row.hot .fill { background: var(--hot); }
+  .tags { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; font-size: 12px; }
+  .tag { padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .tag.smell { border-color: var(--hot); color: var(--hot); font-weight: 600; }
+  .tag.sev2, .tag.sev3 { color: var(--ink); border-color: var(--ink); }
+  .empty { color: var(--muted); text-align: center; padding: 48px 0; }
+  footer { position: fixed; right: 16px; bottom: 12px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; }
+  footer b { color: var(--ink); font-weight: 600; }
+  .syntax { color: var(--hot); font-size: 12px; margin-bottom: 8px; min-height: 1.4em; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Jev 버그헌터</h1>
+    <div class="sub"><span id="watching">연결 중</span> · <button id="sound">소리 켜기</button></div>
+  </header>
+  <div class="syntax" id="syntax"></div>
+  <div id="list"><div class="empty">함수를 기다리는 중</div></div>
+</main>
+<footer id="stats"></footer>
+<script>
+(() => {
+  const list = document.getElementById('list');
+  const statsEl = document.getElementById('stats');
+  const syntaxEl = document.getElementById('syntax');
+  const rows = new Map();          // id -> {data, el}
+  let threshold = 0.5, smellNames = {}, severity = [];
+  let changedTotal = 0, batchStart = 0, batchPending = 0, lastBatchMs = null, requests = 0;
+  let audio = null;
+
+  fetch('/api/smells').then(r => r.json()).then(m => { threshold = m.threshold; smellNames = m.smells; severity = m.severity; });
+
+  document.getElementById('sound').onclick = e => {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    audio.resume();
+    e.target.textContent = '소리 켜짐';
+  };
+  function tick(hot) {
+    if (!audio) return;
+    const o = audio.createOscillator(), g = audio.createGain();
+    o.frequency.value = hot ? 880 : 440; o.type = 'sine';
+    g.gain.setValueAtTime(0.0001, audio.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.15, audio.currentTime + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.09);
+    o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + 0.1);
+  }
+
+  function shortFile(f) { const parts = f.split('/'); return parts.slice(-2).join('/'); }
+
+  function render(entry) {
+    const d = entry.data, el = entry.el;
+    const risk = d.status === 'done' ? d.risk : (d.risk ?? null);
+    const hot = d.status === 'done' && d.risk >= threshold;
+    el.className = 'row' + (hot ? ' hot' : '') + (d.status === 'pending' ? ' pending' : '') + (d.status === 'error' ? ' error' : '') + (entry.recent ? ' recent' : '');
+    el.querySelector('.risk').textContent = risk == null ? '' : risk.toFixed(2);
+    el.querySelector('.fn').innerHTML = `<span class="file">${shortFile(d.file)}:${d.lineno} </span>${d.function}`;
+    el.querySelector('.fill').style.width = ((risk ?? 0) * 100) + '%';
+    const tags = el.querySelector('.tags');
+    tags.innerHTML = '';
+    if (d.status === 'error') { tags.innerHTML = `<span class="tag">${d.error}</span>`; return; }
+    if (d.status !== 'done') return;
+    const lvl = severity.indexOf(d.severity);
+    tags.innerHTML = `<span class="tag sev${lvl}">${d.severity}</span>` + (d.labels || []).slice(0, 2).map(l => `<span class="tag smell">${l}</span>`).join('');
+  }
+
+  function sortKey(d) { return [(d.status === 'done' ? d.risk : (d.risk ?? -1)), d.severity_score ?? 0]; }
+
+  // FLIP: remember positions, reorder, then slide each row from where it was.
+  function reorder() {
+    const before = new Map();
+    for (const [id, e] of rows) before.set(id, e.el.getBoundingClientRect().top);
+    const sorted = [...rows.values()].sort((a, b) => {
+      const ka = sortKey(a.data), kb = sortKey(b.data);
+      return kb[0] - ka[0] || kb[1] - ka[1] || a.data.function.localeCompare(b.data.function);
+    });
+    const empty = list.querySelector('.empty'); if (empty) empty.remove();
+    for (const e of sorted) list.appendChild(e.el);
+    for (const [id, e] of rows) {
+      const prev = before.get(id); if (prev == null) continue;
+      const dy = prev - e.el.getBoundingClientRect().top;
+      if (!dy) continue;
+      e.el.style.transition = 'none'; e.el.style.transform = `translateY(${dy}px)`;
+      requestAnimationFrame(() => { e.el.style.transition = 'transform .25s cubic-bezier(.2,.7,.2,1), background .4s, border-color .4s, box-shadow .4s'; e.el.style.transform = ''; });
+    }
+  }
+
+  function upsert(d, recent) {
+    let e = rows.get(d.id);
+    if (!e) {
+      const el = document.createElement('div');
+      el.className = 'row';
+      el.innerHTML = '<div class="risk"></div><div class="name"><div class="fn"></div><div class="track"><div class="fill"></div></div></div><div class="tags"></div>';
+      e = { data: d, el, recent: false, timer: null };
+      rows.set(d.id, e);
+      list.appendChild(el);
+    }
+    const wasHot = e.data.status === 'done' && e.data.risk >= threshold;
+    e.data = d;
+    if (recent) {
+      e.recent = true; clearTimeout(e.timer);
+      e.timer = setTimeout(() => { e.recent = false; render(e); }, 2500);
+    }
+    render(e);
+    return { wasHot };
+  }
+
+  function stats(s) {
+    if (s) requests = s.requests;
+    const n = rows.size, hot = [...rows.values()].filter(e => e.data.status === 'done' && e.data.risk >= threshold).length;
+    statsEl.innerHTML = `<b>${n}</b> functions · <b>${hot}</b> hot · <b>${changedTotal}</b> changed · <b>${requests}</b> requests` + (lastBatchMs != null ? ` · <b>${(lastBatchMs / 1000).toFixed(1)}s</b>` : '');
+  }
+
+  const es = new EventSource('/events');
+  es.onopen = () => { document.getElementById('watching').textContent = '감시 중'; };
+  es.onerror = () => { document.getElementById('watching').textContent = '연결 끊김'; };
+  es.onmessage = ev => {
+    const m = JSON.parse(ev.data);
+    if (m.type === 'snapshot') {
+      for (const d of m.functions) upsert(d, false);
+      reorder();
+    } else if (m.type === 'changed') {
+      changedTotal += m.count; batchStart = performance.now(); batchPending += m.count;
+      document.body.classList.remove('flash'); void document.body.offsetWidth; document.body.classList.add('flash');
+      syntaxEl.textContent = '';
+    } else if (m.type === 'pending') {
+      upsert(m.function, true);
+    } else if (m.type === 'verdict') {
+      const { wasHot } = upsert(m.function, true);
+      const d = m.function, hot = d.status === 'done' && d.risk >= threshold;
+      if (hot !== wasHot || hot) tick(hot);
+      if (batchPending > 0 && --batchPending === 0) lastBatchMs = performance.now() - batchStart;
+      reorder();
+    } else if (m.type === 'removed') {
+      const e = rows.get(m.id); if (e) { e.el.remove(); rows.delete(m.id); }
+    } else if (m.type === 'syntax') {
+      syntaxEl.textContent = `${shortFile(m.file)}: 문법 오류 (${m.message}) — 마지막 판정 유지`;
+    }
+    stats(m.stats);
+  };
+})();
+</script>
+</body>
+</html>

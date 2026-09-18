@@ -61,6 +61,19 @@ op run ... -- uv run python bug-hunter/run_samples.py
 
 함수 35개, 요청 35회, 요청당 약 300ms라 10초 남짓. 캐시가 켜져 있으니 같은 소스는 두 번째부터 공짜다.
 
+## 감시 모드 (영상용)
+
+```sh
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+  -- uv run python bug-hunter/watch.py src/sif/core.py        # http://localhost:3458
+```
+
+`watch.py`는 파일 mtime을 0.3초마다 보다가 저장이 감지되면 함수를 다시 자르고, **소스 해시가 바뀐 함수만** Jev에 보낸다. git과 무관하고 커밋 안 해도 된다. 변경 단위는 함수 본문이라 한 함수를 고치면 요청도 한 번. 같은 소스로 되돌리면 sif 캐시가 맞아서 0ms.
+
+`panel.html`은 SSE(`/events`)로 받은 판정을 위험 순으로 그린다. 저장하면 화면이 1프레임 깜빡이고, 바뀐 함수는 2.5초 테두리가 남으며, 순위가 바뀌면 200ms 미끄러진다. 색은 임계값 0.5에서만 회색↔빨강으로 바뀐다(그라데이션 없음 — 반사 반응은 이진이어야 느낌이 산다). "소리 켜기"를 누르면 판정마다 틱 소리(빨강이면 높은 음). 우하단 카운터는 `functions · hot · changed · requests · 마지막 배치 시간`. 문법 오류 상태로 저장하면 마지막 판정을 유지하고 상단에 한 줄 띄운다.
+
+연출 순서: 평온한 목록 → 한 함수에 버그 심고 저장 → 그 줄이 빨갛게 올라옴 → 몇 개 더 → Cmd+Z 저장 → 다시 내려감 → 카운터.
+
 ## 쌍둥이 샘플 결과
 
 `samples.py`에 버그 함수와 그 버그만 고친 함수 24쌍(냄새당 2~3쌍). 한 줄이나 연산자 하나만 다르므로 이름·길이로는 구분할 수 없다. 두 쌍둥이는 같은 `file`·`function` 이름으로 보내고 소스만 다르다.
