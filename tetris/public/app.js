@@ -488,7 +488,7 @@ function drawWires(ctx, now, alpha) {
 
 function drawWirePills(ctx, now, alpha) {
   for (const w of G.wires) {
-    if (now < w.appearAt) continue;
+    if (now < w.appearAt || !w.cells.length) continue;
     const b = bbox(w.cells);
     drawPill(ctx, w.tag, b.x + b.w / 2, b.y, w.color, alpha);
   }
@@ -505,7 +505,7 @@ function drawGhostFills(ctx, fade) {
 // legible whatever sits next to the ghost.
 function drawGhostDecor(ctx, now, fade, countup) {
   for (const g of G.ghosts) {
-    if (g.faint) continue;
+    if (g.faint || !g.cells.length) continue;
     if (g.vetoed) {
       const b = bbox(g.cells);
       hatchCells(ctx, g.cells, HUES.veto, fade * 0.9);
@@ -528,7 +528,7 @@ function drawGhostDecor(ctx, now, fade, countup) {
     }
   }
   for (const g of G.ghosts) {
-    if (g.faint) continue;
+    if (g.faint || !g.cells.length) continue;
     const b = bbox(g.cells);
     if (g.tag) drawPill(ctx, g.tag, b.x + b.w / 2, b.y, g.vetoed ? HUES.veto : g.color, fade);
     if (g.label != null && (g.vetoed || g.p >= GHOST_LABEL_MIN_P)) {
@@ -702,6 +702,7 @@ function drawSynapses(animate) {
   const sy = cRect.height / (ROWS * CELL);
   const frag = document.createDocumentFragment();
   for (const g of items) {
+    if (!g.cells.length) continue;
     const { cx, cy } = centroid(g.cells);
     const x1 = cRect.left + cx * sx - sRect.left;
     const y1 = cRect.top + cy * sy - sRect.top;
@@ -982,16 +983,18 @@ function renderDecideRows(decision, chosenId) {
   }
 }
 
-let toastTimer = null;
+let toastTimer = null; // set only for a timed toast (the R3 fallback notice)
 function showToast(msg, ms = 0) {
   const t = $("toast");
   if (!t) return;
   t.textContent = msg;
   t.classList.add("show");
   clearTimeout(toastTimer);
-  if (ms > 0) toastTimer = setTimeout(hideToast, ms);
+  toastTimer = ms > 0 ? setTimeout(hideToast, ms) : null;
 }
 function hideToast() {
+  clearTimeout(toastTimer);
+  toastTimer = null;
   $("toast")?.classList.remove("show");
 }
 
@@ -1184,7 +1187,7 @@ async function askJev(gen, path, payload) {
   while (G.gen === gen) {
     try {
       const data = await postJson(path, payload);
-      hideToast();
+      if (!toastTimer) hideToast(); // a timed fallback notice runs its 3 s out
       return data;
     } catch (err) {
       showToast(`서버 오류 (${path}): ${err.message} — 자동 일시정지. 재개를 누르면 다시 시도합니다.`);

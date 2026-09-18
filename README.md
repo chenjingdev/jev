@@ -5,6 +5,21 @@ semantic if. TypeSafe의 판단 모델 Jev를 평범한 제어문처럼 쓴다.
 Jev는 참/거짓, 선택, 점수 세 가지만 돌려주는 모델이다. 조건을 코드로 쓸 수 없는 것,
 예를 들어 "이 문의가 급한가", "이 명령이 위험한가"를 if문 조건에 넣을 수 있게 된다.
 
+## 저장소 구조
+
+Jev로 하는 실험은 전부 이 저장소에 모은다. 라이브러리 하나, 실험 여럿, 데모 프로젝트 여럿.
+
+| 경로 | 무엇 |
+|---|---|
+| `src/sif/` | `sif` 라이브러리 (Python). 위 사용법. |
+| `tests/` | `sif` 테스트 |
+| `examples/` | `sif` 데모 스크립트 |
+| `experiments/<이름>/` | 측정 실험 하나당 폴더. 스크립트 + 결과 + `README.md`(질문·방법·수치). `branches`, `limits`, `hangul`, `chess`. |
+| `tetris/` | Jev가 플레이하는 테트리스 (Node). 자체 `README.md`와 `docs/neurons-spec.md`. |
+
+새 데모 프로젝트는 `tetris/`처럼 루트에 폴더 하나로, 새 측정 실험은 `experiments/` 아래에 둔다.
+키는 어디서든 1Password 참조(`op run`)로만 주입하고 디스크에 쓰지 않는다.
+
 ## 설치
 
 ```sh
