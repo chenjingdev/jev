@@ -121,10 +121,15 @@
     transition: box-shadow .3s ease; }
   #board { display: block; }
 
+  /* Board and the next-queue strip side by side; the strip is a Tetris element, not a card. */
+  .board-row { display: flex; gap: 12px; align-items: stretch; }
+  .queue-wrap { position: relative; border-radius: 10px; border: 1px solid var(--line);
+    background: #080a0e; line-height: 0; overflow: hidden; }
+  #queue { display: block; }
+  .queue-wrap .next-k { position: absolute; top: 8px; left: 0; right: 0; text-align: center;
+    color: var(--muted); font-size: 10px; letter-spacing: .12em; line-height: 1; }
+
   .below-board { display: flex; gap: 14px; align-items: center; padding: 10px 14px; }
-  #next { display: block; }
-  .next-k { color: var(--muted); font-size: 10px; margin-bottom: 3px; }
-  #queueText { color: var(--muted); font-weight: 400; margin-left: 6px; letter-spacing: .08em; }
   .phase { flex: 1; color: var(--muted); font-size: 12px; min-width: 0; }
   .phase b { color: var(--text); font-weight: 700; display: block; font-size: 15px; }
 
@@ -243,7 +248,7 @@
     .col { display: contents; }
     .col-side { overflow: visible; }
 
-    .board-wrap { order: 1; align-self: center; max-width: 100%; }
+    .board-row { order: 1; align-self: center; max-width: 100%; }
     .below-board { order: 2; }
     .card-cortex { order: 3; }
     .card-props { order: 4; }
@@ -253,7 +258,6 @@
     #synapses { display: none; }
 
     .below-board { padding: 8px 10px; gap: 10px; }
-    #next { flex: 0 0 auto; }
 
     /* the SVG scales with the card, so give it the width: less padding here */
     .card-cortex { padding: 10px 8px; }
@@ -289,19 +293,21 @@
 <main>
   <!-- 보드 -->
   <section class="col col-board">
-    <div class="board-wrap">
-      <canvas id="board"></canvas>
-      <div class="overlay hidden" id="gameover">
-        <div class="big">게임 오버</div>
-        <div class="res" id="goRes"></div>
-        <button class="act" id="btnNew2">새 게임</button>
+    <div class="board-row">
+      <div class="board-wrap">
+        <canvas id="board"></canvas>
+        <div class="overlay hidden" id="gameover">
+          <div class="big">게임 오버</div>
+          <div class="res" id="goRes"></div>
+          <button class="act" id="btnNew2">새 게임</button>
+        </div>
+      </div>
+      <div class="queue-wrap" aria-label="다음 조각 5개">
+        <div class="next-k">다음</div>
+        <canvas id="queue"></canvas>
       </div>
     </div>
     <div class="card below-board">
-      <div>
-        <div class="next-k">다음<span id="queueText"></span></div>
-        <canvas id="next"></canvas>
-      </div>
       <div class="phase"><b id="phaseName">대기</b><span id="phaseNote">시작하는 중…</span></div>
     </div>
   </section>

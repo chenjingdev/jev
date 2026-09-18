@@ -68,9 +68,9 @@ function safe(fn, ...args) {
 
 // Cell sizes are recomputed from the viewport (see applySizes) so the board fits a phone.
 let CELL = 30;
-let NEXT_S = 12; // preview cell size
-let NEXT_W = 96;
-let NEXT_H = 56;
+let QS = 14; // next-queue cell size
+let QUEUE_W = 70;
+const QUEUE_N = 5; // pieces shown; Jev reads the same five
 const DECIDE_GHOST_MS = 800; // single-Choice path: how long its heatmap sits before the move
 const STEP_MS = 90; // one shift or rotation in the replayed path
 const DROP_TOTAL_MS = 260; // a run of soft-drop steps is compressed into about this long
@@ -130,8 +130,8 @@ const fmtP = (p) => (p >= 1 ? "1.00" : (p ?? 0).toFixed(2).replace(/^0/, ""));
 
 const boardCanvas = $("board");
 const bctx = boardCanvas.getContext("2d");
-const nextCanvas = $("next");
-const nctx = nextCanvas ? nextCanvas.getContext("2d") : null;
+const queueCanvas = $("queue");
+const qctx = queueCanvas ? queueCanvas.getContext("2d") : null;
 
 function sizeCanvas(canvas, ctx, cssW, cssH) {
   const dpr = window.devicePixelRatio || 1;
@@ -147,27 +147,25 @@ function sizeCanvas(canvas, ctx, cssW, cssH) {
 function cellSizeForViewport() {
   const vw = window.innerWidth || document.documentElement.clientWidth || 0;
   const vh = window.innerHeight || document.documentElement.clientHeight || 0;
-  if (vw <= NARROW_PX) return Math.max(8, Math.min(30, Math.floor((vw - 32) / COLS)));
+  // The queue strip beside the board is QUEUE_CELLS cells wide plus its gap.
+  if (vw <= NARROW_PX) return Math.max(8, Math.min(30, Math.floor((vw - 32 - 12) / (COLS + QUEUE_CELLS))));
   const byHeight = Math.floor((vh - 176) / ROWS); // header + caption card + paddings
-  const byWidth = Math.floor((vw - 48 - 90) / ROWS); // board + panel ≈ ROWS cells + caption wide
+  const byWidth = Math.floor((vw - 48 - 24 - 24) / ((COLS + QUEUE_CELLS) * 2)); // two equal halves + gaps
   return Math.max(8, Math.min(44, byHeight, byWidth));
 }
-// Side panel width = board column height − board width − gap, so the board column and the
-// panel together form a square. Measured after layout because the caption card's height
-// depends on font metrics.
+const QUEUE_CELLS = 2.4; // strip width in board cells
+// The panel is exactly as wide as the board row (board + queue strip): two equal halves.
+// Its height is pinned to the board column (--col-h) so the two read as one block.
 function sidePanelWidth() {
-  const col = document.querySelector(".col-board");
-  const colH = col ? col.getBoundingClientRect().height : ROWS * CELL;
-  return Math.max(240, Math.round(colH - COLS * CELL - COL_GAP));
+  return Math.max(240, COLS * CELL + 12 + QUEUE_W);
 }
 
 function applySizes() {
   CELL = cellSizeForViewport();
-  NEXT_S = Math.max(6, Math.round(CELL * 0.4));
-  NEXT_W = NEXT_S * 8;
-  NEXT_H = Math.round((NEXT_S * 14) / 3);
+  QS = Math.max(6, Math.round(CELL * 0.5));
+  QUEUE_W = Math.round(CELL * QUEUE_CELLS);
   sizeCanvas(boardCanvas, bctx, COLS * CELL, ROWS * CELL);
-  if (nextCanvas) sizeCanvas(nextCanvas, nctx, NEXT_W, NEXT_H);
+  if (queueCanvas) sizeCanvas(queueCanvas, qctx, QUEUE_W, ROWS * CELL);
   document.documentElement.style.setProperty("--side-w", sidePanelWidth() + "px");
   // Pin the panel to the board column's height (not the viewport's) so the two stay a square
   // on tall screens too; the cortex card absorbs the difference.
@@ -460,19 +458,33 @@ function drawLabel(ctx, text, cx, cy, alpha) {
 
 // ---------------------------------------------------------------- board drawing
 
-function drawNext() {
-  if (!nctx) return;
-  nctx.clearRect(0, 0, NEXT_W, NEXT_H);
-  if (!G.nextType) return;
-  const type = G.nextType;
-  const { height, width } = pieceSize(type, 0);
-  const s = NEXT_S;
-  const ox = (NEXT_W - width * s) / 2;
-  const oy = (NEXT_H - height * s) / 2;
-  nctx.fillStyle = PIECE_COLORS[type];
-  for (const [r, c] of pieceCells(type, 0)) {
-    nctx.fillRect(ox + c * s + 1, oy + r * s + 1, s - 2, s - 2);
-  }
+// The next five pieces, top to bottom, in the strip beside the board. The first is drawn a
+// touch larger and brighter; it is the piece Jev will be asked about next.
+function drawQueue() {
+  if (!qctx) return;
+  const H = ROWS * CELL;
+  qctx.clearRect(0, 0, QUEUE_W, H);
+  const pieces = G.queue.slice(0, QUEUE_N);
+  if (!pieces.length) return;
+  const top = 26; // below the "다음" label
+  const slot = (H - top - 8) / QUEUE_N;
+  pieces.forEach((type, i) => {
+    const s = i === 0 ? QS * 1.15 : QS;
+    const { height, width } = pieceSize(type, 0);
+    const ox = (QUEUE_W - width * s) / 2;
+    const oy = top + slot * i + (slot - height * s) / 2;
+    qctx.globalAlpha = i === 0 ? 1 : 0.55;
+    qctx.fillStyle = PIECE_COLORS[type];
+    for (const [r, c] of pieceCells(type, 0)) {
+      qctx.fillRect(ox + c * s + 1, oy + r * s + 1, s - 2, s - 2);
+    }
+    if (i === 0) {
+      qctx.globalAlpha = 0.32;
+      qctx.fillStyle = "#ffffff";
+      for (const [r, c] of pieceCells(type, 0)) qctx.fillRect(ox + c * s + 1, oy + r * s + 1, s - 2, 3);
+    }
+  });
+  qctx.globalAlpha = 1;
 }
 
 // R2 arrived: each motor neuron's argmax as a wire outline in its hue, width 2k when k backers
@@ -649,7 +661,7 @@ function draw(now) {
     bctx.globalAlpha = 1;
   }
 
-  drawNext();
+  drawQueue();
 }
 
 function frame(now) {
@@ -1163,7 +1175,6 @@ function newGame() {
   clearSynapses();
   renderStats();
   renderProps();
-  setText("queueText", G.queue.slice(0, 5).join(" "));
   setDot("live");
   setPhase("idle");
   showCortex("idle", null);
@@ -1321,7 +1332,6 @@ async function playPiece(gen) {
   G.nextType = G.queue[0];
   resetPieceState();
   G.spawnT0 = performance.now();
-  setText("queueText", G.queue.slice(0, 5).join(" "));
 
   const all = reachablePlacements(G.board, type);
   if (all.length === 0) {
