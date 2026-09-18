@@ -1,0 +1,376 @@
+<title>Jev 자판</title>
+<meta name="description" content="판단 모델 Jev를 자기회귀 디코더로 써서 한글을 한 글자씩 조립한 실험 기록">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F7F5; --surface:#FFFFFF; --surface2:#EDF0EE; --line:#D6DCD8;
+  --ink:#171D1B; --ink2:#4E5B57; --muted:#7B8783;
+  --accent:#1B75A3;
+  --cho:#1B75A3; --jung:#C8641A; --jong:#6B4FA0; --syl:#2E7D4F;
+  --ok:#2E7D4F; --loop:#B23A3A;
+  --conf0:#E4EAE7; --conf1:#0F5F86;
+  --grid:#E3E8E5;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14181A; --surface:#1C2224; --surface2:#242C2E; --line:#333D40;
+    --ink:#E9EEEC; --ink2:#B4BFBB; --muted:#8B9793;
+    --accent:#3987E5;
+    --cho:#3987E5; --jung:#D95926; --jong:#9085E9; --syl:#199E70;
+    --ok:#3FAE7A; --loop:#E36B6B;
+    --conf0:#2A3335; --conf1:#5FB0EA;
+    --grid:#2C3537;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14181A; --surface:#1C2224; --surface2:#242C2E; --line:#333D40;
+  --ink:#E9EEEC; --ink2:#B4BFBB; --muted:#8B9793;
+  --accent:#3987E5;
+  --cho:#3987E5; --jung:#D95926; --jong:#9085E9; --syl:#199E70;
+  --ok:#3FAE7A; --loop:#E36B6B;
+  --conf0:#2A3335; --conf1:#5FB0EA;
+  --grid:#2C3537;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-inline:16px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+h1{font-size:34px;line-height:1.15;margin:0 0 6px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:19px;margin:0 0 12px;font-weight:700}
+h3{font-size:15px;margin:0 0 8px;font-weight:700}
+.lede{color:var(--ink2);max-width:66ch;margin:0 0 20px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+section{margin-top:40px}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+.stat .s{font-size:12px;color:var(--ink2)}
+.verdict{background:var(--surface);border-left:3px solid var(--accent);padding:14px 18px;border-radius:0 8px 8px 0;margin-top:20px}
+.verdict p{margin:6px 0;max-width:72ch}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink2);align-items:center;margin:10px 0 0}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.ramp{display:inline-block;width:110px;height:12px;border-radius:3px;background:linear-gradient(90deg,var(--conf0),var(--conf1));vertical-align:-1px;margin:0 6px}
+.runs{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+.prompt-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:22px}
+.prompt-h .p{font-size:17px;font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card.sel{outline:2px solid var(--accent);outline-offset:-1px}
+.card .head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.chip{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);background:var(--surface2);white-space:nowrap}
+.chip.stop-end{color:var(--ok);border-color:var(--ok)}
+.chip.stop-loop{color:var(--loop);border-color:var(--loop)}
+.chip.u-jamo{border-color:var(--cho);color:var(--cho)}
+.chip.u-syllable{border-color:var(--syl);color:var(--syl)}
+.meta{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tiles{display:flex;flex-wrap:wrap;gap:4px}
+.tile{width:38px;height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;cursor:pointer;border:1px solid transparent;color:var(--ink);position:relative;user-select:none;font-family:inherit;padding:0}
+.tile.space{width:18px;background:transparent!important;border:1px dashed var(--line)}
+.tile.end{font-size:16px}
+.tile:hover,.tile:focus-visible{border-color:var(--ink);outline:none}
+.tile.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
+.tile.hi{color:#fff}
+.spark{margin-top:10px;display:block;width:100%;height:36px}
+.detail{position:sticky;top:env(safe-area-inset-top,0px);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.detail .state{white-space:pre-wrap;font-size:13px;background:var(--surface2);border-radius:6px;padding:10px 12px;color:var(--ink2);margin:8px 0 12px;overflow-x:auto}
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.q h3{display:flex;align-items:center;gap:8px}
+.q .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:13px}
+.bars .lab{font-family:"IBM Plex Mono",monospace;text-align:right;min-width:3ch}
+.bars .bar{height:10px;border-radius:3px;background:var(--surface2);position:relative;overflow:hidden}
+.bars .bar i{position:absolute;inset:0 auto 0 0;border-radius:3px}
+.bars .val{font-variant-numeric:tabular-nums;color:var(--ink2);min-width:4ch;text-align:right}
+.bars .picked{font-weight:700;color:var(--ink)}
+.mark{font-size:12px;color:var(--muted);margin-top:6px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.chart svg{display:block;width:100%;height:auto;max-width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}.tile{width:34px;height:40px;font-size:18px}}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.tbl{overflow-x:auto}
+.note{font-size:13px;color:var(--ink2);max-width:72ch}
+.note li{margin:4px 0}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">실험 기록 · TypeSafe Jev · <span id="gen" class="mono"></span></div>
+  <h1>Jev 자판</h1>
+  <p class="lede">문장을 생성하지 않는 판단 모델 Jev에게 자모(또는 음절)를 한 개씩 고르게 하고, 고른 것을 다시 입력에 붙여 되돌리면 글을 쓸 수 있을까. LLM이 토큰을 뽑는 방식을 API 호출로 바깥에서 흉내 낸 기록이다.</p>
+
+  <div class="strip" id="strip"></div>
+
+  <div class="verdict" id="verdict"></div>
+
+  <section>
+    <h2>생성된 답장</h2>
+    <p class="note">사용자 발화 하나를 주고 봇의 답장을 조립했다. 타일 색은 그 글자를 고를 때의 확신도(초성·중성·받침 중 가장 낮은 값)다. 타일을 누르면 그 순간 Jev가 본 입력과 확률 분포가 아래에 열린다.</p>
+    <div class="legend">
+      <span>확신도 낮음 <span class="ramp"></span> 높음</span>
+      <span><span class="sw" style="background:var(--ok)"></span>마침표로 종료</span>
+      <span><span class="sw" style="background:var(--loop)"></span>반복 감지로 중단</span>
+    </div>
+    <div id="runs"></div>
+    <div class="detail" id="detail" hidden></div>
+  </section>
+
+  <section>
+    <h2>왜 글이 안 되나: 단계별 확신도</h2>
+    <p class="note">호출마다 Jev가 고른 답의 확신도를 질문 종류별로 모았다. 초성과 음절 단계가 특히 낮다. 선택지 19~255개 위에서 0.3이면 거의 균등 분포에 가깝다.</p>
+    <div class="two">
+      <div class="chart"><h3>질문 종류별 확신도 분포</h3><div id="confChart"></div></div>
+      <div class="chart"><h3>음절 순서에 따른 확신도 (샘플링 모드)</h3><div id="seqChart"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>모드 비교</h2>
+    <div class="tbl"><table id="modes"></table></div>
+  </section>
+
+  <section>
+    <h2>첫 판: 주제만 준 경우</h2>
+    <p class="note">대화 프라이밍 전, "주제: 비 오는 저녁" 같은 설명만 주고 빈 문장에서 시작한 결과. 첫 글자가 주제의 첫 자음에 고착되고 그대로 반복됐다.</p>
+    <div class="tbl"><table id="v1"></table></div>
+  </section>
+
+  <section>
+    <h2>방법</h2>
+    <ul class="note">
+      <li><b>자모 모드</b>: 초성 19 + 띄어쓰기 + 문장 끝 → 중성 21 → 받침 28. 순차는 앞 선택을 보고 다음을 고르고(호출 3회), 병렬은 한 요청에 세 질문을 넣어 서로의 답을 못 본다(호출 1회).</li>
+      <li><b>음절 모드</b>: 이 컴퓨터의 한국어 마크다운 1,479개에서 센 빈도 상위 253음절 + 띄어쓰기 + 문장 끝 = 선택지 255개(Choice 상한).</li>
+      <li><b>argmax</b>는 최댓값, <b>sample</b>은 반복 페널티(직전 라벨 ×0.3, 직전 3개 ×0.6) → temperature 0.8 → top-p 0.9 → 추첨. 시드 고정.</li>
+      <li>같은 글자 4연속 또는 4글자 덩어리 3회면 반복으로 보고 중단. 최대 40음절.</li>
+      <li>모델 <span class="mono" id="model"></span>, 호출당 지연 중앙값 <span class="mono" id="lat"></span>.</li>
+    </ul>
+  </section>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function(){
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const V = DATA.v2, V1 = DATA.v1_runs;
+  const $ = (s, r=document) => r.querySelector(s);
+  const el = (t, cls, txt) => { const e=document.createElement(t); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+  const NS = 'http://www.w3.org/2000/svg';
+  const sv = (t, attrs) => { const e=document.createElementNS(NS,t); for(const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  const MODE_LABEL = {
+    'jamo-seq-argmax':'자모 · 순차 · argmax',
+    'jamo-seq-sample':'자모 · 순차 · 샘플링',
+    'jamo-par-argmax':'자모 · 병렬 · argmax',
+    'syl-argmax':'음절 · argmax',
+    'syl-sample':'음절 · 샘플링'
+  };
+  const Q_LABEL = {cho:'초성', jung:'중성', jong:'받침', syl:'음절'};
+  const Q_COLOR = {cho:'var(--cho)', jung:'var(--jung)', jong:'var(--jong)', syl:'var(--syl)'};
+  const fmt = n => n.toLocaleString('ko-KR');
+  const pct = p => (p*100).toFixed(0)+'%';
+  const mean = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+
+  // ---- 요약 띠
+  const calls = V.calls;
+  const lats = calls.map(c=>c.latency_ms).sort((a,b)=>a-b);
+  const medLat = lats[Math.floor(lats.length/2)] || 0;
+  const ends = V.runs.filter(r=>r.stop==='end').length;
+  const loops = V.runs.filter(r=>r.stop==='loop').length;
+  const stats = [
+    ['모델', V.model, ''],
+    ['호출', fmt(V.totals.calls)+'회', V.runs.length+'개 실행'],
+    ['입력 토큰', fmt(V.totals.input_tokens), '약 $'+(V.totals.input_tokens/1e6*0.042).toFixed(3)],
+    ['소요', V.totals.seconds+'초', '호출당 중앙값 '+Math.round(medLat)+'ms'],
+    ['종료', ends+' / '+loops, '마침표 / 반복 중단'],
+  ];
+  const strip = $('#strip');
+  stats.forEach(([k,v,s])=>{ const d=el('div','stat'); d.append(el('div','k',k), el('div','v',v), el('div','s',s)); strip.append(d); });
+  $('#gen').textContent = (V.generated_at||'').slice(0,10);
+  $('#model').textContent = V.model; $('#lat').textContent = Math.round(medLat)+'ms';
+
+  // ---- 결론
+  const confBy = {};
+  calls.forEach(c=>Object.entries(c.answers).forEach(([q,a])=>{ (confBy[q]=confBy[q]||[]).push(a.confidence); }));
+  const vd = $('#verdict');
+  vd.append(el('div','eyebrow','결론'));
+  vd.append(el('p',null,`글은 나오지 않았다. ${V.runs.length}번 중 ${loops}번은 같은 글자를 반복하다 중단됐고, 나머지도 「저 는 일 했.」 같은 조각이 최선이었다.`));
+  vd.append(el('p',null,`원인은 분포가 평평하다는 것이다. 초성 단계 평균 확신도 ${mean(confBy.cho||[]).toFixed(2)}, 음절 단계 ${mean(confBy.syl||[]).toFixed(2)}. 판단 모델은 "이 글자 다음에 무엇이 오나"에 대한 사전 분포를 거의 갖고 있지 않다. 받침(${mean(confBy.jong||[]).toFixed(2)})처럼 문법 규칙에 가까운 판단만 확신이 높다.`));
+  vd.append(el('p',null,'또 하나, 첫 글자가 사용자 발화의 첫 음절을 그대로 베낀다("안녕하세요"→아, "오늘 하루 어땠어?"→어). 입력 안의 텍스트를 판단 근거가 아니라 답으로 복사하는 편향이다.'));
+
+  // ---- 실행 카드
+  const runsEl = $('#runs');
+  const prompts = [...new Set(V.runs.map(r=>r.prompt))];
+  const callIndex = new Map();
+  calls.forEach(c=>{ const k=c.prompt+'|'+c.mode+'|'+c.syllable; if(!callIndex.has(k)) callIndex.set(k,[]); callIndex.get(k).push(c); });
+  const mix = t => `color-mix(in oklab, var(--conf1) ${Math.round(t*100)}%, var(--conf0))`;
+  const cardOf = new Map();
+
+  prompts.forEach(p=>{
+    const h = el('div','prompt-h'); h.append(el('span','eyebrow','사용자'), el('span','p','“'+p+'”')); runsEl.append(h);
+    const grid = el('div','runs');
+    V.runs.filter(r=>r.prompt===p).forEach(run=>{
+      const card = el('div','card'); cardOf.set(run, card);
+      const head = el('div','head');
+      head.append(el('span','chip u-'+run.unit, MODE_LABEL[run.mode]||run.mode));
+      head.append(el('span','chip stop-'+run.stop, run.stop==='end'?'마침표로 종료':run.stop==='loop'?'반복 감지로 중단':'최대 길이'));
+      head.append(el('span','meta', `${run.calls}회 · ${run.seconds}초`));
+      card.append(head);
+      const tiles = el('div','tiles');
+      run.syllables.forEach(s=>{
+        const conf = Math.min(...s.conf);
+        const t = el('button','tile'+(s.unit===' '?' space':s.unit==='.'?' end':''), s.unit===' '?'':s.unit);
+        if(s.unit!==' '){ t.style.background = mix(conf); if(conf>0.55) t.classList.add('hi'); }
+        t.title = `#${s.i} 확신도 ${conf.toFixed(2)}`;
+        t.setAttribute('aria-label', `${s.i}번째 ${s.unit===' '?'띄어쓰기':s.unit}, 확신도 ${conf.toFixed(2)}`);
+        t.addEventListener('click', ()=>select(run, s, t, card));
+        tiles.append(t);
+      });
+      card.append(tiles);
+      card.append(sparkline(run));
+      grid.append(card);
+    });
+    runsEl.append(grid);
+  });
+
+  function sparkline(run){
+    const w=300,h=36,pad=3; const pts=run.syllables.map(s=>Math.min(...s.conf));
+    const svg=sv('svg',{viewBox:`0 0 ${w} ${h}`, class:'spark', preserveAspectRatio:'none', 'aria-hidden':'true'});
+    const n=Math.max(pts.length-1,1);
+    const x=i=>pad+i*(w-2*pad)/n, y=v=>h-pad-v*(h-2*pad);
+    svg.append(sv('line',{x1:0,x2:w,y1:y(0.5),y2:y(0.5),stroke:'var(--grid)','stroke-dasharray':'3 3'}));
+    svg.append(sv('path',{d:pts.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' '),fill:'none',stroke:'var(--accent)','stroke-width':'2','vector-effect':'non-scaling-stroke'}));
+    pts.forEach((v,i)=>svg.append(sv('circle',{cx:x(i),cy:y(v),r:2.5,fill:'var(--accent)'})));
+    return svg;
+  }
+
+  const detail = $('#detail');
+  function select(run, s, tile, card){
+    document.querySelectorAll('.tile.on').forEach(t=>t.classList.remove('on'));
+    document.querySelectorAll('.card.sel').forEach(c=>c.classList.remove('sel'));
+    tile.classList.add('on'); card.classList.add('sel');
+    const cs = callIndex.get(run.prompt+'|'+run.mode+'|'+s.i) || [];
+    detail.hidden = false; detail.innerHTML='';
+    detail.append(el('div','eyebrow', `${MODE_LABEL[run.mode]} · ${s.i}번째 · 「${s.unit===' '?'␣':s.unit}」`));
+    if(cs.length){
+      detail.append(el('h3',null,'Jev가 본 입력 (이 글자의 마지막 호출)'));
+      detail.append(el('div','state mono', cs[cs.length-1].state));
+    }
+    const qs = el('div','qs');
+    cs.forEach(c=>Object.entries(c.answers).forEach(([q,a])=>{
+      const box = el('div','q');
+      const h = el('h3'); const dot=el('span','dot'); dot.style.background=Q_COLOR[q]||'var(--ink2)';
+      h.append(dot, document.createTextNode((Q_LABEL[q]||q)+' · 확신도 '+a.confidence.toFixed(2)+' · '+Math.round(c.latency_ms)+'ms')); box.append(h);
+      const bars = el('div','bars');
+      const picked = (c.picked&&c.picked[q]) || a.choice;
+      Object.entries(a.probabilities).slice(0,8).forEach(([lab,p])=>{
+        const isP = lab===picked;
+        const L = el('span','lab'+(isP?' picked':''), lab==='space'?'␣':lab==='end'?'끝':lab==='none'?'∅':lab);
+        const B = el('span','bar'); const i=document.createElement('i'); i.style.width=(p*100)+'%'; i.style.background=Q_COLOR[q]||'var(--ink2)'; B.append(i);
+        const R = el('span','val'+(isP?' picked':''), pct(p));
+        bars.append(L,B,R);
+      });
+      box.append(bars);
+      box.append(el('div','mark', picked!==a.choice ? `샘플링이 ${picked}를 뽑았다 (최댓값은 ${a.choice})` : `최댓값 ${a.choice} 선택`));
+      qs.append(box);
+    }));
+    detail.append(qs);
+    detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  // ---- 확신도 분포 (질문 종류별 도트 스트립 + 평균)
+  (function(){
+    const order = ['cho','jung','jong','syl'].filter(q=>confBy[q]);
+    const w=520, rowH=44, padL=54, padR=16, h=order.length*rowH+30;
+    const svg=sv('svg',{viewBox:`0 0 ${w} ${h}`, role:'img', 'aria-label':'질문 종류별 확신도 분포'});
+    const X = v => padL + v*(w-padL-padR);
+    let seed = 7; const rnd = () => { seed = (seed*9301+49297)%233280; return seed/233280; };
+    [0,0.25,0.5,0.75,1].forEach(v=>{
+      svg.append(sv('line',{x1:X(v),x2:X(v),y1:8,y2:h-22,stroke:'var(--grid)'}));
+      const t=sv('text',{x:X(v),y:h-6,'text-anchor':'middle','font-size':'11',fill:'var(--muted)'}); t.textContent=v.toFixed(2); svg.append(t);
+    });
+    order.forEach((q,i)=>{
+      const cy = 8+i*rowH+rowH/2;
+      const lab=sv('text',{x:padL-8,y:cy+4,'text-anchor':'end','font-size':'13',fill:'var(--ink)'}); lab.textContent=Q_LABEL[q]; svg.append(lab);
+      confBy[q].forEach(v=>svg.append(sv('circle',{cx:X(v),cy:cy+(rnd()-0.5)*14,r:4,fill:Q_COLOR[q],'fill-opacity':'0.45'})));
+      const m = mean(confBy[q]);
+      svg.append(sv('line',{x1:X(m),x2:X(m),y1:cy-16,y2:cy+16,stroke:'var(--ink)','stroke-width':'2'}));
+      const mt=sv('text',{x:X(m)+6,y:cy-12,'font-size':'11',fill:'var(--ink)','font-weight':'700'}); mt.textContent='평균 '+m.toFixed(2)+' (n='+confBy[q].length+')'; svg.append(mt);
+    });
+    $('#confChart').append(svg);
+  })();
+
+  // ---- 음절 순서에 따른 확신도 (샘플링 모드)
+  (function(){
+    const runs = V.runs.filter(r=>r.decode==='sample');
+    const w=520,h=200,padL=36,padR=12,padT=10,padB=26;
+    const maxN = Math.max(1, ...runs.map(r=>r.syllables.length));
+    const svg=sv('svg',{viewBox:`0 0 ${w} ${h}`, role:'img', 'aria-label':'음절 순서에 따른 확신도'});
+    const X=i=>padL+i*(w-padL-padR)/Math.max(maxN-1,1), Y=v=>padT+(1-v)*(h-padT-padB);
+    [0,0.5,1].forEach(v=>{
+      svg.append(sv('line',{x1:padL,x2:w-padR,y1:Y(v),y2:Y(v),stroke:'var(--grid)'}));
+      const t=sv('text',{x:padL-6,y:Y(v)+4,'text-anchor':'end','font-size':'11',fill:'var(--muted)'}); t.textContent=v.toFixed(1); svg.append(t);
+    });
+    const xt=sv('text',{x:w-padR,y:h-8,'text-anchor':'end','font-size':'11',fill:'var(--muted)'}); xt.textContent='음절 순서 →'; svg.append(xt);
+    runs.forEach((r,k)=>{
+      const col = r.unit==='jamo'?'var(--cho)':'var(--syl)';
+      const pts=r.syllables.map(s=>Math.min(...s.conf));
+      svg.append(sv('path',{d:pts.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' '),fill:'none',stroke:col,'stroke-width':'2','stroke-dasharray':(k%2?'5 4':'none')}));
+      const last=pts.length-1;
+      const t=sv('text',{x:X(last)+4,y:Y(pts[last])+4,'font-size':'11',fill:col}); t.textContent=(r.unit==='jamo'?'자모':'음절')+' · '+r.prompt.slice(0,6); svg.append(t);
+    });
+    $('#seqChart').append(svg);
+    const lg = el('div','legend');
+    const a=el('span',null,'자모 순차 샘플링'); a.style.color='var(--cho)';
+    const b=el('span',null,'음절 샘플링'); b.style.color='var(--syl)';
+    lg.append(a, b, el('span',null,'점선은 두 번째 사용자 발화'));
+    $('#seqChart').append(lg);
+  })();
+
+  // ---- 모드 비교표
+  (function(){
+    const tb = $('#modes');
+    tb.innerHTML = '<thead><tr><th>모드</th><th>사용자</th><th>답장</th><th>종료</th><th class="num">호출</th><th class="num">초</th><th class="num">평균 확신도</th></tr></thead>';
+    const body = el('tbody');
+    V.runs.forEach(r=>{
+      const confs = r.syllables.map(s=>Math.min(...s.conf));
+      const tr = el('tr');
+      [MODE_LABEL[r.mode], r.prompt, '「'+r.text+'」', r.stop==='end'?'마침표':'반복 중단', r.calls, r.seconds, mean(confs).toFixed(2)].forEach((v,i)=>{
+        const td=el('td', i>=4?'num':(i===2?'mono':null), String(v));
+        if(i===3) td.style.color = r.stop==='end'?'var(--ok)':'var(--loop)';
+        tr.append(td);
+      });
+      body.append(tr);
+    });
+    tb.append(body);
+  })();
+
+  // ---- v1 표
+  (function(){
+    const tb = $('#v1');
+    tb.innerHTML = '<thead><tr><th>주제</th><th>모드</th><th>결과</th><th>종료</th><th class="num">호출</th><th class="num">초</th></tr></thead>';
+    const body = el('tbody');
+    V1.forEach(r=>{
+      const tr = el('tr');
+      [r.topic, r.mode==='sequential'?'자모 · 순차 · argmax':'자모 · 병렬 · argmax', '「'+r.text+'」', r.stop==='end'?'마침표':'반복 중단', r.calls, r.seconds].forEach((v,i)=>{
+        const td=el('td', i>=4?'num':(i===2?'mono':null), String(v));
+        if(i===3) td.style.color = r.stop==='end'?'var(--ok)':'var(--loop)';
+        tr.append(td);
+      });
+      body.append(tr);
+    });
+    tb.append(body);
+  })();
+
+  // 첫 화면: 가장 읽을 만한 결과를 미리 선택
+  const first = V.runs.find(r=>r.mode==='syl-argmax' && r.stop==='end') || V.runs[0];
+  const firstCard = cardOf.get(first);
+  if(firstCard){ const t=firstCard.querySelector('.tile:not(.space)'); if(t) t.click(); }
+})();
+</script>
