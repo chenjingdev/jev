@@ -46,13 +46,6 @@
   #left.saved { box-shadow: 0 0 0 3px var(--hot); transition: box-shadow .1s; }
   #left { transition: box-shadow .6s; }
 
-  /* verdict toast */
-  #right { position: relative; }
-  .toast { position: absolute; left: 12px; right: 12px; top: 48px; z-index: 5; padding: 14px 18px; border-radius: 10px; background: var(--hot); color: #fff; font-weight: 700; font-size: 20px; display: flex; justify-content: space-between; align-items: baseline; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity .25s, transform .25s; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
-  .toast.show { opacity: 1; transform: none; }
-  .toast.cool { background: #2f9e64; }
-  .toast .fnm { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-  .toast .big { font-size: 26px; font-variant-numeric: tabular-nums; }
   .row.pop { animation: pop .5s cubic-bezier(.2,.9,.3,1.4); }
   @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
@@ -116,7 +109,6 @@
     </div>
   </section>
   <section id="right">
-    <div class="toast" id="toast"></div>
     <div class="bar"><h1>Jev 버그헌터</h1><span id="watching">연결 중</span><span class="grow"></span><span class="syntax" id="syntax"></span><button id="sound">소리 켜기</button></div>
     <div id="list"><div class="empty">함수를 기다리는 중</div></div>
     <div class="detail" id="detail"><div class="placeholder">저장하면 바뀐 함수가 여기 뜹니다</div></div>
@@ -213,15 +205,6 @@
   // ---- verdict list ---------------------------------------------------------
   function shortFile(f) { return f.split('/').slice(-2).join('/'); }
 
-  const toastEl = document.getElementById('toast');
-  let toastTimer = null;
-  function toast(d) {
-    const hot = d.risk >= threshold;
-    const label = hot ? (d.labels[0] || d.severity) : '깨끗함';
-    toastEl.className = 'toast show' + (hot ? '' : ' cool');
-    toastEl.innerHTML = `<span><span class="fnm">${d.function}</span> — ${label}</span><span class="big">${d.risk.toFixed(2)}</span>`;
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
-  }
   function countUp(el, from, to) {
     const t0 = performance.now(), dur = 600;
     (function step(now) {
@@ -304,7 +287,6 @@
     if (recent && d.status === 'done') {
       e.pop = true; e.fresh = true; e.animateFrom = oldRisk ?? 0;
       setTimeout(() => { e.pop = false; render(e); }, 600);
-      toast(d);
     }
     render(e);
     renderOverlay();

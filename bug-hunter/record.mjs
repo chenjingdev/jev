@@ -28,37 +28,33 @@ const rec = (async () => {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 // Put the caret after `needle`, scroll it to mid-screen, delete it key by key, type the replacement, save.
 async function replace(needle, text) {
-  const len = await p.evaluate((needle) => {
+  // Select the old text (visible for a beat), delete it in one stroke, type the new text.
+  await p.evaluate((needle) => {
     const t = document.getElementById('src'); const a = t.value.indexOf(needle);
     if (a < 0) throw new Error("needle not found: " + needle);
-    const line = t.value.slice(0, a).split('\n').length - 1;
-    t.scrollTop = Math.max(0, line * 24 - t.getBoundingClientRect().height / 2 + 12);
-    t.focus(); t.setSelectionRange(a + needle.length, a + needle.length);
-    t.dispatchEvent(new Event('scroll'));
-    return needle.length;
+    t.focus(); t.setSelectionRange(a, a + needle.length);
   }, needle);
-  await sleep(900);
-  // Chrome re-scrolls the caret to the top edge on the first edit; put the line back mid-screen after it.
+  await sleep(700);
   await p.keyboard.press("Backspace");
-  await p.evaluate((needle) => {
-    const t = document.getElementById('src'); const a = t.value.indexOf(needle.slice(0, -1));
-    const line = t.value.slice(0, a).split('\n').length - 1;
+  // Chrome re-scrolls the caret to the top edge on the first edit; put the line back mid-screen.
+  await p.evaluate(() => {
+    const t = document.getElementById('src');
+    const line = t.value.slice(0, t.selectionStart).split('\n').length - 1;
     t.scrollTop = Math.max(0, line * 24 - t.getBoundingClientRect().height / 2 + 12);
     t.dispatchEvent(new Event('scroll'));
-  }, needle);
-  for (let i = 1; i < len; i++) { await p.keyboard.press("Backspace"); }
-  await sleep(350);
-  await p.keyboard.type(text, { delay: 65 });
-  await sleep(900);
+  });
+  await sleep(250);
+  await p.keyboard.type(text, { delay: 30 });
+  await sleep(500);
   await p.keyboard.press("Meta+s");
 }
 
-await sleep(2500);
-await replace("return low <= value <= high", "return low <= value < high");          await sleep(3600);
-await replace("except ValueError:\n        return default", "except:\n        pass"); await sleep(3600);
-await replace("tags=None):\n    tags = [] if tags is None else list(tags)\n", "tags=[]):\n"); await sleep(3600);
-await replace('"SELECT * FROM users WHERE name = ?", (name,)', 'f"SELECT * FROM users WHERE name = \'{name}\'"'); await sleep(3800);
-await replace("return low <= value < high", "return low <= value <= high");           await sleep(3600);
+await sleep(2000);
+await replace("return low <= value <= high", "return low <= value < high");          await sleep(3000);
+await replace("except ValueError:\n        return default", "except:\n        pass"); await sleep(3000);
+await replace("tags=None):\n    tags = [] if tags is None else list(tags)\n", "tags=[]):\n"); await sleep(3000);
+await replace('"SELECT * FROM users WHERE name = ?", (name,)', 'f"SELECT * FROM users WHERE name = \'{name}\'"'); await sleep(3200);
+await replace("return low <= value < high", "return low <= value <= high");           await sleep(3000);
 await sleep(2500);
 
 on = false; await rec;
