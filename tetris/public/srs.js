@@ -55,8 +55,9 @@ export const SRS_SHAPES = {
 };
 
 // Kick offsets as [dx, dy] with dy pointing UP (guideline convention); applied as col += dx,
-// row -= dy. Keyed by "from>to" state.
-const KICKS_JLSTZ = {
+// row -= dy. Keyed by "from>to" state. Exported so the tests can regenerate them from the
+// guideline offset data instead of trusting the transcription.
+export const KICKS_JLSTZ = {
   "0>1": [[0, 0], [-1, 0], [-1, 1], [0, -2], [-1, -2]],
   "1>0": [[0, 0], [1, 0], [1, -1], [0, 2], [1, 2]],
   "1>2": [[0, 0], [1, 0], [1, -1], [0, 2], [1, 2]],
@@ -66,7 +67,7 @@ const KICKS_JLSTZ = {
   "3>0": [[0, 0], [-1, 0], [-1, -1], [0, 2], [-1, 2]],
   "0>3": [[0, 0], [1, 0], [1, 1], [0, -2], [1, -2]],
 };
-const KICKS_I = {
+export const KICKS_I = {
   "0>1": [[0, 0], [-2, 0], [1, 0], [-2, -1], [1, 2]],
   "1>0": [[0, 0], [2, 0], [-1, 0], [2, 1], [-1, -2]],
   "1>2": [[0, 0], [-1, 0], [2, 0], [-1, 2], [2, -1]],
@@ -76,7 +77,7 @@ const KICKS_I = {
   "3>0": [[0, 0], [1, 0], [-2, 0], [1, -2], [-2, 1]],
   "0>3": [[0, 0], [-1, 0], [2, 0], [-1, 2], [2, -1]],
 };
-const KICKS_O = { "0>1": [[0, 0]], "1>0": [[0, 0]], "1>2": [[0, 0]], "2>1": [[0, 0]],
+export const KICKS_O = { "0>1": [[0, 0]], "1>0": [[0, 0]], "1>2": [[0, 0]], "2>1": [[0, 0]],
   "2>3": [[0, 0]], "3>2": [[0, 0]], "3>0": [[0, 0]], "0>3": [[0, 0]] };
 
 function kicksFor(type) {
@@ -92,9 +93,15 @@ export function srsCells(type, state) {
   return shapes[((state % 4) + 4) % 4];
 }
 
-/** Spawn position of the bounding box: horizontally centred, top rows just inside the board. */
+/**
+ * Spawn position of the bounding box: horizontally centred, with every cell in a hidden buffer
+ * two rows above the visible board (guideline rows 21-22). Spawning above the ceiling lets a
+ * piece slide over a stack that reaches the top instead of dying on contact; the search still
+ * refuses to lock a piece that has any cell above row 0, so the buffer is only free space to
+ * move through, never a place to rest. Renderers skip cells with negative rows.
+ */
 export function srsSpawn(type) {
-  return type === "I" ? { row: -1, col: 3 } : { row: 0, col: 3 };
+  return type === "I" ? { row: -3, col: 3 } : { row: -2, col: 3 };
 }
 
 function fits(board, type, state, row, col) {
@@ -140,7 +147,9 @@ export function tspinKind(board, state, row, col, kick) {
   ];
   const filled = corners.map(([r, c]) => filledOrWall(board, r, c));
   if (filled.filter(Boolean).length < 3) return null;
-  // The two corners the flat side faces are the "front" corners: state 0 faces up, and so on.
+  // The "front" corners are the two beside the T's protruding mino: state 0 points up (TL, TR),
+  // 1 points right (TR, BR), 2 points down (BR, BL), 3 points left (BL, TL). Two front corners
+  // filled make a full T-spin; the fifth kick (the TST/fin kick) is a full T-spin regardless.
   const front = [[0, 1], [1, 2], [2, 3], [3, 0]][state];
   const isFull = (filled[front[0]] && filled[front[1]]) || kick === 4;
   return isFull ? "full" : "mini";
@@ -166,9 +175,13 @@ export function reachablePlacements(board, type) {
   const spawn = srsSpawn(type);
   if (!fits(board, type, 0, spawn.row, spawn.col)) return [];
 
-  // BFS over (state, row, col, lastWasRotation). The rotation flag is part of the node so a
-  // slot reachable both by dropping and by spinning keeps the spin path (that is the T-spin).
-  const key = (s, r, c, rot) => ((s * 64 + (r + 8)) * 16 + c) * 2 + rot;
+  // BFS over (state, row, col, rot). rot is how the node was entered: 0 by a shift or drop,
+  // 1 by a rotation with kicks 0-3, 2 by the fifth kick. It is part of the node so a slot
+  // reachable both by dropping and by spinning keeps the spin path (that is the T-spin), and
+  // the fifth kick is kept apart because it upgrades a mini to a full T-spin: without the split
+  // whichever arrival BFS happened to see first would decide the kind. Rows may run a few
+  // above the buffer after an upward kick, hence the generous offsets.
+  const key = (s, r, c, rot) => ((s * 64 + (r + 16)) * 16 + (c + 4)) * 3 + rot;
   const start = { state: 0, row: spawn.row, col: spawn.col, rot: 0, kick: -1, prev: null, move: null };
   const seen = new Map([[key(0, spawn.row, spawn.col, 0), start]]);
   const queue = [start];
@@ -190,7 +203,7 @@ export function reachablePlacements(board, type) {
         }
       } else {
         const r = tryRotate(board, type, node.state, node.row, node.col, move === "CW" ? 1 : -1);
-        if (r) next = { state: r.state, row: r.row, col: r.col, rot: 1, kick: r.kick };
+        if (r) next = { state: r.state, row: r.row, col: r.col, rot: r.kick === 4 ? 2 : 1, kick: r.kick };
       }
       if (!next) continue;
       const k = key(next.state, next.row, next.col, next.rot);
@@ -202,16 +215,20 @@ export function reachablePlacements(board, type) {
     }
   }
 
-  // Dedupe by final cells; prefer a T-spin lock, otherwise the first (shortest) path found.
+  // Dedupe by final cells, ranking full > mini > no T-spin. A later node replaces an earlier one
+  // only when its rank is strictly higher, so on a tie the first (shortest, BFS order) path wins
+  // and the reported kind never depends on which route the search happened to expand first.
+  const RANK = { full: 2, mini: 1 };
   const byCells = new Map();
   for (const node of lockable) {
     const cells = srsCells(type, node.state).map(([r, c]) => [node.row + r, node.col + c]);
     if (cells.some(([r]) => r < 0)) continue; // would lock sticking out over the ceiling
     const tspin = type === "T" && node.rot ? tspinKind(board, node.state, node.row, node.col, node.kick) : null;
+    const rank = RANK[tspin] ?? 0;
     const ck = cells.map(([r, c]) => r + ":" + c).sort().join(",");
     const existing = byCells.get(ck);
-    if (existing && (existing.tspin || !tspin)) continue;
-    byCells.set(ck, { node, cells, tspin });
+    if (existing && existing.rank >= rank) continue;
+    byCells.set(ck, { node, cells, tspin, rank });
   }
 
   const out = [];

@@ -1,16 +1,31 @@
-// server.js — static files for the browser game + a single /api/decide endpoint
-// that asks Jev where to put the current piece. The API key never leaves this process.
+// server.js — static files for the browser game + the Jev endpoints. /api/decide is the
+// single-Choice path; /api/sense, /api/motor and /api/arbitrate are the three neuron
+// requests of docs/neurons-spec.md. The API key never leaves this process.
 
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { choice, noul, score, APIError, TypeSafeClient } from "@typesafe-ai/sdk";
+import {
+  buildArbitrate,
+  buildMotor,
+  buildSense,
+  instructionsOf,
+  runQuestions,
+  validateArbitrate,
+  validateMotor,
+  validateSense,
+} from "./server/questions.js";
 
 const PORT = 3456;
 const MODEL = "jev-latest";
 const ROOT = fileURLToPath(new URL("./public/", import.meta.url));
 const MAX_BODY_BYTES = 4 * 1024 * 1024;
+// R2 fan-out: one request per motor question instead of one bundled request. Costs about
+// four times the tokens (spec section 3), so it stays off unless asked for.
+const FANOUT = process.env.JEV_FANOUT === "1";
+const FIRE_P = 0.5; // log-only: the client does the real gating
 
 if (!process.env.TYPESAFE_API_KEY || !process.env.TYPESAFE_API_KEY.trim()) {
   console.error(
@@ -222,6 +237,126 @@ async function handleDecide(req, res) {
   sendJson(res, 200, payload);
 }
 
+// ---------------------------------------------------------------------------
+// Neuron endpoints. All three share one skeleton: parse → validate → build → ask → shape.
+// `shape` turns the SDK answers into the section-5 response and returns a log fragment.
+
+const bare = ({ type, ...rest }) => rest; // choice answers minus the SDK's type tag
+const scored = ({ type, legend, score: value, ...rest }) => ({ value, ...rest });
+
+async function handleNeuron(req, res, { tag, validate, build, shape, fanout = false }) {
+  let body;
+  try {
+    body = JSON.parse(await readBody(req));
+  } catch (err) {
+    sendJson(res, 400, { error: "invalid JSON body: " + err.message });
+    return;
+  }
+
+  const problem = validate(body);
+  if (problem) {
+    sendJson(res, 400, { error: problem });
+    return;
+  }
+
+  const { state, questions } = build(body);
+
+  const started = Date.now();
+  let result;
+  try {
+    result = await runQuestions(client, MODEL, state, questions, fanout);
+  } catch (err) {
+    const status = err instanceof APIError ? err.status : "network";
+    console.error(`${tag} failed status=${status} msg=${err.message}`);
+    sendJson(res, 502, {
+      error: "TypeSafe request failed after one retry",
+      detail: err.message,
+      status: err instanceof APIError ? err.status : undefined,
+    });
+    return;
+  }
+  const latencyMs = Date.now() - started;
+
+  const { payload, note } = shape(result.answers, state, body);
+  const usage = result.usage;
+  console.log(
+    `${tag} ${note} latency=${latencyMs}ms tokens=${usage.input_tokens}in/${usage.output_tokens}out` +
+      (fanout ? ` fanout=${Object.keys(questions).length}` : ""),
+  );
+
+  sendJson(res, 200, {
+    ...payload,
+    instructions: instructionsOf(questions),
+    latencyMs,
+    usage,
+    model: result.model,
+  });
+}
+
+function handleSense(req, res) {
+  return handleNeuron(req, res, {
+    tag: "R1",
+    validate: validateSense,
+    build: buildSense,
+    shape(answers) {
+      const sense = {};
+      for (const name of ["survive", "clean", "build", "cash", "spin"]) sense[name] = answers[name].noul;
+      sense.stay = answers.stay ? answers.stay.noul : null;
+      const appetite = scored(answers.appetite);
+      const fired = Object.keys(sense).filter((k) => k !== "stay" && sense[k] >= FIRE_P);
+      return {
+        payload: { sense, appetite },
+        note:
+          `fired=[${fired.join(",")}] app=${appetite.value.toFixed(1)} ` +
+          `stay=${sense.stay === null ? "-" : sense.stay.toFixed(2)}`,
+      };
+    },
+  });
+}
+
+function handleMotor(req, res) {
+  return handleNeuron(req, res, {
+    tag: "R2",
+    validate: validateMotor,
+    build: buildMotor,
+    fanout: FANOUT,
+    shape(answers, state, body) {
+      const motor = {};
+      for (const [name, answer] of Object.entries(answers)) motor[name.replace(/^motor_/, "")] = bare(answer);
+      const picks = Object.entries(motor).map(([k, v]) => `${k}:${v.choice}`);
+      return {
+        payload: { motor, fanout: FANOUT },
+        note: `picks=${picks.join(",")} cands=${body.candidates.length}`,
+      };
+    },
+  });
+}
+
+function handleArbitrate(req, res) {
+  return handleNeuron(req, res, {
+    tag: "R3",
+    validate: validateArbitrate,
+    build: buildArbitrate,
+    shape(answers, state, body) {
+      const veto = {};
+      for (const p of body.proposals) veto[p.id] = answers[`veto_${p.id}`].noul;
+      const arbitrate = bare(answers.arbitrate);
+      const hold = scored(answers.hold);
+      const vetoNote = Object.entries(veto).map(([id, v]) => `${id}:${v.toFixed(2)}`);
+      return {
+        payload: { arbitrate, veto, hold, directive: state.intent.directive },
+        note: `arb=${arbitrate.choice} veto=${vetoNote.join(",")} hold=${hold.value.toFixed(1)}`,
+      };
+    },
+  });
+}
+
+const NEURON_ROUTES = {
+  "/api/sense": handleSense,
+  "/api/motor": handleMotor,
+  "/api/arbitrate": handleArbitrate,
+};
+
 const server = createServer((req, res) => {
   const url = new URL(req.url, "http://localhost");
   const path = decodeURIComponent(url.pathname);
@@ -229,6 +364,14 @@ const server = createServer((req, res) => {
   if (req.method === "POST" && path === "/api/decide") {
     handleDecide(req, res).catch((err) => {
       console.error("unhandled decide error:", err.message);
+      if (!res.headersSent) sendJson(res, 500, { error: "internal error" });
+    });
+    return;
+  }
+
+  if (req.method === "POST" && NEURON_ROUTES[path]) {
+    NEURON_ROUTES[path](req, res).catch((err) => {
+      console.error(`unhandled ${path} error:`, err.message);
       if (!res.headersSent) sendJson(res, 500, { error: "internal error" });
     });
     return;
