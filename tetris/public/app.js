@@ -600,7 +600,9 @@ function draw(now) {
 
   drawSettled(bctx, inCortex ? DIM_ALPHA : 1);
 
-  if (wireAlpha > 0) drawWirePills(bctx, now, wireAlpha);
+  // Wire pills vanish the moment the verdict lands: the ghost pills take their place, and two
+  // sets of labels over the same cells during the crossfade just collide.
+  if (wireAlpha > 0 && phase !== "verdict") drawWirePills(bctx, now, wireAlpha);
   if (ghostFade > 0) drawGhostDecor(bctx, now, ghostFade, countup);
   if (ghostFade > 0 && G.verdict?.fork) drawForkPill(bctx, ghostFade);
 
@@ -1707,13 +1709,28 @@ $("optNeurons")?.addEventListener("change", () => {
   G.opts.neurons = $("optNeurons").checked;
   setHeroLabel();
 });
-// Prefetch (firing the next piece's R1 during the current move) is a flag only: the spec keeps
-// it off because it desynchronises the show, and this build does not act on it.
-$("optPrefetch")?.addEventListener("change", () => {
-  G.opts.prefetch = $("optPrefetch").checked;
-});
 if ($("optNeurons")) G.opts.neurons = $("optNeurons").checked;
-if ($("optPrefetch")) G.opts.prefetch = $("optPrefetch").checked;
+
+// Recording mode hides the controls, the token fine print and the header status; keys keep
+// the game drivable. Default on, ?clean=0 or the C key turns it off.
+function setClean(on) {
+  document.body.classList.toggle("clean", on);
+  try { localStorage.setItem("jev-clean", on ? "1" : "0"); } catch {}
+  applySizes();
+}
+{
+  let clean = true;
+  try { clean = localStorage.getItem("jev-clean") !== "0"; } catch {}
+  const q = new URLSearchParams(location.search).get("clean");
+  if (q !== null) clean = q !== "0";
+  setClean(clean);
+}
+window.addEventListener("keydown", (e) => {
+  if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (e.code === "Space") { e.preventDefault(); setPaused(!G.paused); }
+  else if (e.key === "n" || e.key === "N") newGame();
+  else if (e.key === "c" || e.key === "C") setClean(!document.body.classList.contains("clean"));
+});
 
 safe(initCortex);
 setHeroLabel();

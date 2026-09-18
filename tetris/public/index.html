@@ -78,10 +78,23 @@
       scrollbar-gutter: auto; /* a reserved gutter would push the second column out of the box */
     }
     .col-side > .card { width: var(--side-w, 400px); }
+    /* 촬영 모드에서는 한 열로: 통계를 한 줄 띠로 줄여 피질·제안 아래에 붙인다 */
+    body.clean .col-side { width: var(--side-w, 400px); flex-flow: column nowrap; }
   }
+  body.clean .card-stats .stats { grid-template-columns: repeat(6, 1fr); gap: 4px 6px; }
+  body.clean .card-stats .stat { padding: 4px 8px; }
+  body.clean .card-stats .stat .v { font-size: 13px; }
+  body.clean .card-stats .stat .k { font-size: 9.5px; }
+  body.clean .card-stats .stat.optional { display: none; }
+  body.clean .card-stats h2 { display: none; }
+  body.clean .card-stats { padding-top: 10px; }
 
   /* Synapse lines from the cortex circles to the ghosts on the board (drawn by app.js). */
   #synapses { display: none !important; }
+
+  /* 촬영 모드: 시청자에게 의미 없는 것(컨트롤, 토큰 잔글씨, 상태 문구)을 숨긴다. C 키로 토글. */
+  body.clean .card-controls, body.clean .fine, body.clean header .sub { display: none; }
+  .card-controls h2 .keys { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--mute, #5e6479); margin-left: 8px; }
   #synapses-unused {
     position: absolute; inset: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 5; overflow: visible;
@@ -317,13 +330,13 @@
       <div class="stats">
         <div class="stat"><div class="k">조각</div><div class="v" id="stPieces">0</div></div>
         <div class="stat"><div class="k">줄</div><div class="v" id="stLines">0</div></div>
-        <div class="stat"><div class="k">점수</div><div class="v" id="stScore">0</div></div>
+        <div class="stat optional"><div class="k">점수</div><div class="v" id="stScore">0</div></div>
         <div class="stat"><div class="k">T스핀</div><div class="v" id="stTspins">0</div></div>
         <div class="stat"><div class="k">불일치</div><div class="v" id="stDisagree">0</div></div>
         <div class="stat"><div class="k">뒤집기</div><div class="v" id="stOverride">0</div></div>
-        <div class="stat"><div class="k">거부</div><div class="v" id="stVeto">0</div></div>
+        <div class="stat optional"><div class="k">거부</div><div class="v" id="stVeto">0</div></div>
         <div class="stat"><div class="k">바꿈</div><div class="v" id="stChanged">0</div></div>
-        <div class="stat"><div class="k">확신도</div><div class="v" id="stConf">–</div></div>
+        <div class="stat optional"><div class="k">확신도</div><div class="v" id="stConf">–</div></div>
       </div>
       <div class="fine">
         <span>R1 <b id="stR1">–</b> · R2 <b id="stR2">–</b> · R3 <b id="stR3">–</b> ms</span>
@@ -333,13 +346,12 @@
     </div>
 
     <div class="card card-controls">
-      <h2>컨트롤</h2>
+      <h2>컨트롤 <span class="keys">Space 일시정지 · N 새 게임 · C 촬영 모드</span></h2>
       <div class="controls">
         <button class="act" id="btnPause">일시정지</button>
         <button class="act" id="btnNew">새 게임</button>
         <span class="toggles">
           <label><input type="checkbox" id="optNeurons" checked> 뉴런</label>
-          <label><input type="checkbox" id="optPrefetch"> 미리 묻기</label>
         </span>
       </div>
       <div class="slider">
