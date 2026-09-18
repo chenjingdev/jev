@@ -19,14 +19,14 @@ Python 파일을 던지면 함수마다 Jev에게 "버그 냄새가 나는가"�
 |---|---|---|
 | none_unchecked | None 미검사 | None일 수 있는 값(Optional 인자, dict.get, re.match, find 결과 등)을 검사 없이 속성 접근·인덱싱·연산에 쓴다 |
 | boundary | 경계 미처리 | 빈 입력, 길이 0, 마지막 인덱스, 음수 같은 경계 입력에서 잘못된 결과를 내거나 예외를 낸다 |
-| off_by_one | 오프바이원 | range·슬라이스·비교 연산자에 하나 어긋난 경계가 있어 원소 하나를 빠뜨리거나 하나 더 본다 |
-| swallowed_exception | 예외 삼킴 | except 절에서 예외를 잡은 뒤 로그·재발생·의미 있는 처리 없이 무시하거나 잘못된 기본값을 돌려준다 |
+| off_by_one | 범위 한 칸 오류 | range·슬라이스·비교 연산자에 하나 어긋난 경계가 있어 원소 하나를 빠뜨리거나 하나 더 본다 |
+| swallowed_exception | 에러 무시 | except 절에서 예외를 잡은 뒤 로그·재발생·의미 있는 처리 없이 무시하거나 잘못된 기본값을 돌려준다 |
 | resource_leak | 자원 누수 | 파일·소켓·커서·락을 열고 나서 예외나 조기 반환 경로에서 닫지 않는다 |
-| mutable_default | 가변 기본값 | list·dict·set을 인자 기본값(`def f(x=[])`)으로 쓰고 그것을 변경하거나 돌려준다 |
-| wrong_return | 반환 불일치 | 어떤 분기에서 반환을 빠뜨리거나, 다른 분기와 타입·의미가 다른 값을 돌려준다 |
+| mutable_default | 기본값 공유 | list·dict·set을 인자 기본값(`def f(x=[])`)으로 쓰고 그것을 변경하거나 돌려준다 |
+| wrong_return | 반환 누락 | 어떤 분기에서 반환을 빠뜨리거나, 다른 분기와 타입·의미가 다른 값을 돌려준다 |
 | logic | 논리 오류 | 조건식·연산자·변수 이름이 의도와 어긋난다 (and/or 혼동, 반전된 비교, 덮어써진 결과) |
 | type_mismatch | 타입 혼동 | str과 bytes, int와 str, float 동등 비교처럼 타입이 맞지 않는 값을 섞어 쓴다 |
-| unsafe_input | 입력 신뢰 | 외부 입력(경로, SQL, 쉘 명령, HTML, eval 대상)을 검증이나 이스케이프 없이 그대로 쓴다 |
+| unsafe_input | 입력 미검증 | 외부 입력(경로, SQL, 쉘 명령, HTML, eval 대상)을 검증이나 이스케이프 없이 그대로 쓴다 |
 
 정확한 문구는 `hunter.py`의 `SMELLS`, `SEVERITY_INSTRUCTIONS`, `KINDS`.
 
