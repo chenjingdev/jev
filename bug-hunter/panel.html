@@ -263,6 +263,8 @@
     } else if (m.type === 'pending') {
       upsert(m.function, true);
       showDetail(m.function.id);
+    } else if (m.type === 'verdict' && m.quiet) {
+      upsert(m.function, false); reorder();
     } else if (m.type === 'verdict') {
       const { wasHot } = upsert(m.function, true);
       if (selectedId === m.function.id || batchPending === 1) showDetail(m.function.id);

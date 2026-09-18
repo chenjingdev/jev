@@ -125,6 +125,15 @@ class Board:
             self.requests += 1
         self.emit({"type": "verdict", "function": row})
 
+    def relocate(self, fid: str, lineno: int) -> None:
+        """Same source, new line number (something above it changed)."""
+        with self.lock:
+            row = self.verdicts.get(fid)
+            if row is None or row.get("lineno") == lineno:
+                return
+            row["lineno"] = lineno
+        self.emit({"type": "verdict", "function": row, "quiet": True})
+
     def remove(self, fid: str) -> None:
         with self.lock:
             self.verdicts.pop(fid, None)
@@ -186,6 +195,7 @@ class Watcher(threading.Thread):
             seen.add(fid)
             digest = _digest(function.source)
             if self.board.digests.get(fid) == digest:
+                self.board.relocate(fid, function.lineno)
                 continue
             self.board.digests[fid] = digest
             changed.append(function)
