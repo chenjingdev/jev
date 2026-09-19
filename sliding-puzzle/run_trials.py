@@ -1,4 +1,4 @@
-"""Measure who solves 3×3 boards: random, greedy Manhattan, Jev, Jev with the numbers stripped.
+"""v1 reflex mode on 3×3: who solves the board one slide at a time - random, greedy, Jev, Jev without numbers.
 
     op run --env-file=sliding-puzzle/.env.tpl -- uv run python sliding-puzzle/run_trials.py
     uv run python sliding-puzzle/run_trials.py --no-jev          # baselines only, no key
@@ -24,6 +24,7 @@ import puzzle as P  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 DEPTHS = (8, 12, 16, 20)
+G = P.Grid(3, 3)
 
 
 def run_baseline(name, boards, cap, seed):
@@ -31,10 +32,10 @@ def run_baseline(name, boards, cap, seed):
     games = []
     for depth, b in boards:
         if name == "random":
-            pick = lambda bd, last, seen: rng.choice(list(P.moves(bd)))  # noqa: E731
+            pick = lambda bd, last, seen: rng.choice(list(G.moves(bd)))  # noqa: E731
         else:
-            pick = lambda bd, last, seen: P.greedy_pick(bd, last, seen, rng, veto_seen=(name == "greedy+veto"))  # noqa: E731
-        ok, n, path = P.play(b, pick, cap)
+            pick = lambda bd, last, seen: P.greedy_pick(G, bd, last, seen, rng, veto_seen=(name == "greedy+veto"))  # noqa: E731
+        ok, n, path = P.play(G, b, pick, cap)
         games.append({"depth": depth, "board": b, "solved": ok, "moves": n})
     return games
 
@@ -52,14 +53,13 @@ def run_jev(name, boards, cap, workers):
     import brain
 
     numbers = name != "jev-nonumbers"
-    veto = name == "jev+veto"
 
     def one(item):
         depth, b = item
         history, log = [], []
         t0 = time.time()
         sample = random.Random(hash(b)) if name == "jev-sample" else None
-        ok, n, path = P.play(b, brain.picker(history, numbers=numbers, veto_seen=veto, log=log, sample=sample), cap)
+        ok, n, path = P.play(G, b, brain.picker(G, history, numbers=numbers, log=log, sample=sample), cap)
         return {
             "depth": depth, "board": b, "solved": ok, "moves": n, "seconds": round(time.time() - t0, 1),
             "latency_ms": [r["latency_ms"] for r in log if not r["forced"]],
@@ -111,7 +111,7 @@ def main():
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
-    boards = [(d, P.scramble(d, rng)) for d in DEPTHS for _ in range(args.per_depth)]
+    boards = [(d, G.scramble(d, rng)) for d in DEPTHS for _ in range(args.per_depth)]
     conditions = [c for c in args.conditions.split(",") if not (args.no_jev and c.startswith("jev"))]
 
     results = {"date": time.strftime("%Y-%m-%d"), "boards": len(boards), "cap": args.cap, "seed": args.seed, "conditions": {}}

@@ -1,10 +1,10 @@
-"""Browser UI: one static page, GET /api/scramble, POST /api/step.
+"""Browser UI for peel mode: one static page, GET /api/scramble, POST /api/peel.
 
     op run --env-file=sliding-puzzle/.env.tpl -- uv run python sliding-puzzle/server.py   # :3459
 
-The key lives only in this process. The page keeps the board and asks the server for
-the next slide; the server runs `brain.step` and returns Jev's choice with every
-candidate's numbers so the page can draw the distribution.
+The key lives only in this process. The page keeps the board and the unsolved region; each
+POST asks Jev which line to peel (unless only one is possible), peels it with the BFS and
+returns the slide path so the page can animate it.
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ from typesafe_sdk import TypeSafeError  # noqa: E402
 PORT = int(os.environ.get("PORT", "3459"))
 PAGE = HERE / "index.html"
 MAX_BODY = 16 * 1024
+G = P.Grid()
 rng = random.Random()
 
 
@@ -47,14 +48,14 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
         elif url.path == "/api/scramble":
             q = parse_qs(url.query)
-            depth = int(q.get("depth", ["14"])[0])
-            board = P.scramble(depth, rng)
-            self._json(200, {"board": list(board), "optimal": depth, "distance": P.cost(board), "home": P.tiles_home(board)})
+            walk = int(q.get("walk", ["0"])[0])
+            board = G.random_walk(walk, rng) if walk else G.shuffle(rng)
+            self._json(200, {"rows": G.rows, "cols": G.cols, "board": list(board), "distance": G.manhattan(board), "home": G.tiles_home(board)})
         else:
             self._send(404, b"not found", "text/plain")
 
     def do_POST(self) -> None:  # noqa: N802
-        if self.path != "/api/step":
+        if self.path != "/api/peel":
             self._send(404, b"not found", "text/plain")
             return
         length = int(self.headers.get("Content-Length", "0"))
@@ -64,33 +65,46 @@ class Handler(BaseHTTPRequestHandler):
         try:
             body = json.loads(self.rfile.read(length) or b"{}")
             board = tuple(int(v) for v in body["board"])
-            history = [str(h) for h in body.get("history", [])]
-            seen = {tuple(int(v) for v in k): int(c) for k, c in body.get("seen", [])}
-            last = body.get("last") or None
-            assert len(board) == P.N * P.N and sorted(board) == list(range(P.N * P.N))
+            region = (int(body["region"][0]), int(body["region"][1]))
+            hinted = bool(body.get("hinted", True))
+            assert len(board) == G.cells and sorted(board) == list(range(G.cells))
         except (ValueError, KeyError, TypeError, AssertionError):
             self._json(400, {"error": "bad board"})
             return
-        try:
-            r = brain.step(board, last, seen, history)
-        except TypeSafeError as e:
-            self._json(502, {"error": str(e)})
+        keep = frozenset(t for t in range(1, G.cells) if board[t - 1] == t and (G.rc(t - 1)[0] < region[0] or G.rc(t - 1)[1] < region[1]))
+        lines = P.region_lines(G, region)
+        if not lines:  # last 2×2
+            rest = [t for t in range(1, G.cells) if t not in keep]
+            after, _, path = P.peel(G, board, keep, rest)
+            self._json(200, {"line": "end", "forced": True, "tiles": rest, "path": path, "after": list(after),
+                             "region": list(region), "solved": after == G.solved()})
             return
-        after = P.moves(board)[r["choice"]]
-        r["after"] = list(after)
-        r["solved"] = after == P.solved()
-        r["distance"] = P.cost(after)
-        r["home"] = P.tiles_home(after)
+        if len(lines) == 1:
+            choice = next(iter(lines))
+            f = P.line_facts(G, board, lines[choice])
+            r = {"choice": choice, "forced": True, "probabilities": {choice: 1.0}, "progress": None,
+                 "candidates": {choice: {**f, "text": brain.describe_line(choice, f)}}, "latency_ms": 0}
+        else:
+            try:
+                r = brain.peel_choice(G, board, region, lines, hinted=hinted)
+                r["forced"] = False
+            except TypeSafeError as e:
+                self._json(502, {"error": str(e)})
+                return
+        choice = r["choice"]
+        after, _, path = P.peel(G, board, keep, lines[choice])
+        new_region = (region[0] + 1, region[1]) if choice == "row" else (region[0], region[1] + 1)
+        r.update({"line": choice, "tiles": lines[choice], "path": path, "after": list(after), "region": list(new_region),
+                  "solved": after == G.solved()})
         self._json(200, r)
 
     def log_message(self, format, *args):  # noqa: A002 - quieter
-        if "/api/step" not in (args[0] if args else ""):
+        if "/api/peel" not in (args[0] if args else ""):
             super().log_message(format, *args)
 
 
 if __name__ == "__main__":
     if not os.environ.get("TYPESAFE_API_KEY"):
         sys.exit("TYPESAFE_API_KEY is not set. Run via: op run --env-file=sliding-puzzle/.env.tpl -- uv run python sliding-puzzle/server.py")
-    P.distance_table()
-    print(f"sliding puzzle on http://127.0.0.1:{PORT}")
+    print(f"sliding puzzle ({G.rows}×{G.cols}, peel mode) on http://127.0.0.1:{PORT}")
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
