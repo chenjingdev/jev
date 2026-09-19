@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev 슬라이딩 퍼즐</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #fff; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e3e3df;
+    --bar: #ececea; --calm: #9a9a94; --hot: #ff4d5e; --hot-soft: rgba(255,77,94,.14); --ok: #58b37a; --flash: rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #131313; --panel: #1c1c1c; --ink: #ececea; --muted: #8f8f8a; --line: #2a2a28; --bar: #2e2e2c; --calm: #6f6f6a; --hot: #ff4d5e; --hot-soft: rgba(255,77,94,.14); --ok: #58b37a; --flash: rgba(255,255,255,.07); }
+  }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; overflow: hidden; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px; height: 100%; padding: 14px; box-sizing: border-box; }
+  section { display: flex; flex-direction: column; min-height: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); min-height: 36px; }
+  .bar h1 { font-size: 13px; margin: 0; color: var(--ink); }
+  .bar .sp { flex: 1; }
+  .bar button, .bar select { border: 1px solid var(--line); background: none; color: var(--muted); font: inherit; border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+  .bar button.primary { color: var(--ink); border-color: var(--ink); }
+  .bar label.file { cursor: pointer; }
+  .bar input[type=file] { display: none; }
+  .stage { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; justify-items: center; gap: 20px; padding: 16px; min-height: 0; }
+  canvas#board { max-width: 100%; max-height: 100%; border-radius: 8px; }
+  .ref { display: flex; flex-direction: column; gap: 6px; align-items: center; color: var(--muted); font-size: 11px; }
+  canvas#ref { width: 120px; height: 120px; border-radius: 6px; border: 1px solid var(--line); }
+  .list { flex: 1; overflow: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .row { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; transition: border-color .3s, background .3s; }
+  .row.pick { border-color: var(--hot); background: var(--hot-soft); }
+  .row.veto { border-style: dashed; }
+  .row .name { font-weight: 600; }
+  .row .p { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); text-align: right; }
+  .row.pick .p { color: var(--hot); }
+  .row .desc { grid-column: 1 / -1; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11.5px; color: var(--muted); white-space: normal; }
+  .row .track { grid-column: 1 / -1; height: 5px; background: var(--bar); border-radius: 3px; overflow: hidden; }
+  .row .fill { height: 100%; width: 0; background: var(--calm); border-radius: 3px; transition: width .45s cubic-bezier(.2,.7,.2,1); }
+  .row.pick .fill { background: var(--hot); }
+  .gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 10px 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .gauge .v { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+  .gauge .track { height: 5px; background: var(--bar); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .gauge .fill { height: 100%; width: 0; background: var(--calm); transition: width .45s cubic-bezier(.2,.7,.2,1), background .3s; }
+  .gauge.hot .fill { background: var(--hot); }
+  .stats { display: flex; gap: 14px; flex-wrap: wrap; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .stats b { color: var(--ink); font-weight: 600; }
+  .status { font-size: 12px; color: var(--muted); }
+  .status.hot { color: var(--hot); }
+  .status.ok { color: var(--ok); }
+  .empty { color: var(--muted); text-align: center; padding: 48px 0; }
+  .fine { padding: 8px 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+  body.clean .bar .ctl, body.clean .fine { display: none; }
+  body.flash::before { content: ""; position: fixed; inset: 0; background: var(--flash); pointer-events: none; animation: blink .15s ease-out forwards; z-index: 9; }
+  @keyframes blink { from { opacity: 1; } to { opacity: 0; } }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } .stage { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="bar">
+      <h1>Jev 슬라이딩 퍼즐</h1>
+      <span id="status" class="status">준비</span>
+      <span class="sp"></span>
+      <span class="ctl">섞기 깊이 <select id="depth"><option>8</option><option>12</option><option selected>14</option><option>16</option><option>20</option><option>24</option></select></span>
+      <button id="scramble" class="ctl">섞기</button>
+      <button id="play" class="ctl primary">Jev 시작</button>
+      <label class="file ctl">그림 바꾸기<input id="file" type="file" accept="image/*"></label>
+    </div>
+    <div class="stage">
+      <canvas id="board"></canvas>
+      <div class="ref"><canvas id="ref"></canvas><span>완성 그림</span></div>
+    </div>
+    <div class="fine">Jev는 그림도 보드도 못 본다. 코드가 가능한 밀기 2~4개마다 "거리, 제자리 타일 수, 되돌리기 여부"를 한 줄로 써 주고, Jev는 그 줄을 읽고 하나를 고른다. 오른쪽이 Jev가 읽는 글 그대로.</div>
+  </section>
+  <section>
+    <div class="bar"><h1>Jev가 읽고 고르는 것</h1><span class="sp"></span><span id="lat"></span></div>
+    <div id="list" class="list"><div class="empty">섞은 뒤 시작을 누르면 밀기마다 Jev의 확률이 여기 그려진다.</div></div>
+    <div class="gauges">
+      <div class="gauge" id="gLoop"><span>맴돌고 있다</span> <span class="v">-</span><div class="track"><div class="fill"></div></div></div>
+      <div class="gauge" id="gProg"><span>완성에 가까움</span> <span class="v">-</span><div class="track"><div class="fill"></div></div></div>
+    </div>
+    <div class="stats">
+      <span>밀기 <b id="sMoves">0</b></span><span>최단 <b id="sOpt">-</b></span><span>거리 <b id="sDist">-</b></span><span>제자리 <b id="sHome">-</b>/8</span><span>요청 <b id="sReq">0</b></span><span>본 판 재방문 <b id="sRevisit">0</b></span>
+    </div>
+  </section>
+</main>
+<script>
+const N = 3, SIZE = 900;
+const q = new URLSearchParams(location.search);
+if (q.get('clean') || q.get('demo')) document.body.classList.add('clean');
+const $ = id => document.getElementById(id);
+const KO = { up: '위로', down: '아래로', left: '왼쪽으로', right: '오른쪽으로' };
+
+// ---- picture: a procedural one so nothing is committed that isn't ours; drop a file to swap.
+const pic = document.createElement('canvas'); pic.width = pic.height = SIZE;
+function drawDefault() {
+  const g = pic.getContext('2d');
+  const sky = g.createLinearGradient(0, 0, 0, SIZE); sky.addColorStop(0, '#1b2a49'); sky.addColorStop(.55, '#e2643b'); sky.addColorStop(1, '#f7d08a');
+  g.fillStyle = sky; g.fillRect(0, 0, SIZE, SIZE);
+  g.fillStyle = '#ffd77a'; g.beginPath(); g.arc(SIZE * .62, SIZE * .5, SIZE * .13, 0, Math.PI * 2); g.fill();
+  const hills = [['#3d2a4a', .6, 160], ['#6a3a4d', .7, 110], ['#2b1f2e', .82, 80]];
+  for (const [c, y, amp] of hills) {
+    g.fillStyle = c; g.beginPath(); g.moveTo(0, SIZE);
+    for (let x = 0; x <= SIZE; x += 10) g.lineTo(x, SIZE * y - Math.abs(Math.sin(x / amp)) * amp * .9 - Math.sin(x / 37) * 12);
+    g.lineTo(SIZE, SIZE); g.closePath(); g.fill();
+  }
+  g.fillStyle = 'rgba(255,255,255,.85)';
+  let s = 7; for (let i = 0; i < 120; i++) { s = (s * 9301 + 49297) % 233280; const x = (s / 233280) * SIZE; s = (s * 9301 + 49297) % 233280; const y = (s / 233280) * SIZE * .45; g.fillRect(x, y, 2, 2); }
+  g.strokeStyle = 'rgba(255,255,255,.25)'; g.lineWidth = 2;
+  for (let i = 1; i < N; i++) { g.beginPath(); g.moveTo(i * SIZE / N, 0); g.lineTo(i * SIZE / N, SIZE); g.stroke(); g.beginPath(); g.moveTo(0, i * SIZE / N); g.lineTo(SIZE, i * SIZE / N); g.stroke(); }
+}
+drawDefault();
+$('file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const img = new Image(); img.onload = () => {
+    const g = pic.getContext('2d'); const s = Math.min(img.width, img.height);
+    g.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, SIZE, SIZE); drawRef(); draw();
+  }; img.src = URL.createObjectURL(f);
+});
+
+// ---- board state
+let board = solvedBoard(), history = [], seen = new Map(), last = null, playing = false, moves = 0, optimal = null, requests = 0, revisits = 0;
+const pos = new Map();   // tile -> {x, y} in cell units, animated
+function solvedBoard() { const b = []; for (let i = 1; i < N * N; i++) b.push(i); b.push(0); return b; }
+function key(b) { return b.join(','); }
+function resetPos() { board.forEach((t, i) => { if (t) pos.set(t, { x: i % N, y: Math.floor(i / N) }); }); }
+resetPos();
+
+const cv = $('board'), ctx = cv.getContext('2d');
+function fit() {
+  const stage = cv.parentElement; const s = Math.max(200, Math.min(stage.clientWidth - 160, stage.clientHeight - 32));
+  const dpr = devicePixelRatio || 1; cv.width = s * dpr; cv.height = s * dpr; cv.style.width = cv.style.height = s + 'px'; draw();
+}
+function drawRef() { const r = $('ref'); const dpr = devicePixelRatio || 1; r.width = r.height = 120 * dpr; r.getContext('2d').drawImage(pic, 0, 0, r.width, r.height); }
+function draw() {
+  const s = cv.width, cell = s / N, gap = Math.round(s * .006);
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bar'); ctx.fillRect(0, 0, s, s);
+  const done = key(board) === key(solvedBoard());
+  for (const [t, p] of pos) {
+    const g = t - 1, sx = (g % N) * SIZE / N, sy = Math.floor(g / N) * SIZE / N;
+    ctx.drawImage(pic, sx, sy, SIZE / N, SIZE / N, p.x * cell + gap, p.y * cell + gap, cell - 2 * gap, cell - 2 * gap);
+  }
+  if (done) { const g = N * N - 1; ctx.drawImage(pic, (g % N) * SIZE / N, Math.floor(g / N) * SIZE / N, SIZE / N, SIZE / N, (g % N) * cell + gap, Math.floor(g / N) * cell + gap, cell - 2 * gap, cell - 2 * gap); }
+}
+function animateTo(t, x, y, ms = 220) {
+  const p = pos.get(t), x0 = p.x, y0 = p.y, t0 = performance.now();
+  return new Promise(res => { (function f(now) {
+    const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+    p.x = x0 + (x - x0) * e; p.y = y0 + (y - y0) * e; draw();
+    if (k < 1) setTimeout(() => f(performance.now()), 16); else res();  // setTimeout, not rAF: keeps moving when the window is occluded
+  })(t0); });
+}
+addEventListener('resize', fit); addEventListener('load', fit);
+
+// ---- ui
+function setStatus(t, cls = '') { $('status').textContent = t; $('status').className = 'status ' + cls; }
+function stats(d) {
+  $('sMoves').textContent = moves; $('sOpt').textContent = optimal ?? '-'; $('sReq').textContent = requests; $('sRevisit').textContent = revisits;
+  if (d) { $('sDist').textContent = d.distance; $('sHome').textContent = d.home; }
+  if (q.get('demo')) document.title = `밀기 ${moves} · 거리 ${d ? d.distance : '-'} · 최단 ${optimal ?? '-'}`;
+}
+function gauge(id, v, hot) { const g = $(id); g.querySelector('.v').textContent = v.toFixed(2); g.querySelector('.fill').style.width = (v * 100) + '%'; g.classList.toggle('hot', !!hot); }
+function renderCandidates(r) {
+  const order = Object.keys(r.candidates).sort((a, b) => (r.probabilities[b] || 0) - (r.probabilities[a] || 0));
+  $('list').innerHTML = order.map(d => {
+    const c = r.candidates[d], p = r.probabilities[d] || 0, pick = d === r.choice;
+    return `<div class="row${pick ? ' pick' : ''}${r.forced ? ' veto' : ''}"><span class="name">타일 ${c.tile} ${KO[d]}</span><span class="p">${r.forced ? '강제' : p.toFixed(2)}</span><span class="desc">${c.text}</span><div class="track"><div class="fill" style="width:0"></div></div></div>`;
+  }).join('');
+  requestAnimationFrame(() => [...$('list').querySelectorAll('.row')].forEach((el, i) => { el.querySelector('.fill').style.width = ((r.probabilities[order[i]] || 0) * 100) + '%'; }));
+}
+
+async function scramble() {
+  const depth = +$('depth').value;
+  const r = await (await fetch('/api/scramble?depth=' + depth)).json();
+  board = r.board; optimal = r.optimal; history = []; seen = new Map([[key(board), 1]]); last = null; moves = 0; requests = 0; revisits = 0;
+  resetPos(); draw(); stats(r); $('list').innerHTML = '<div class="empty">Jev 시작을 누르면 밀기마다 확률이 여기 그려진다.</div>';
+  gauge('gLoop', 0); gauge('gProg', 0); setStatus(`섞음 (최단 ${depth}수)`);
+}
+
+async function stepOnce() {
+  setStatus('Jev에게 묻는 중', 'hot');
+  const res = await fetch('/api/step', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ board, history, seen: [...seen].map(([k, c]) => [k.split(',').map(Number), c]), last }) });
+  if (!res.ok) { setStatus('오류 ' + res.status, 'hot'); playing = false; return; }
+  const r = await res.json();
+  if (r.forced) { $('lat').textContent = '선택지 하나, 묻지 않음'; }
+  else { requests++; $('lat').textContent = r.latency_ms + ' ms'; gauge('gLoop', r.looping, r.looping >= .5); gauge('gProg', r.progress / 3); }
+  renderCandidates(r);
+  const c = r.candidates[r.choice];
+  if (c.seen) revisits++;
+  setStatus(r.forced ? `타일 ${c.tile} ${KO[r.choice]}  (유일한 밀기)` : `타일 ${c.tile} ${KO[r.choice]}  ${(r.probabilities[r.choice] || 0).toFixed(2)}`);
+  const bi = board.indexOf(0);
+  await animateTo(c.tile, bi % N, Math.floor(bi / N));
+  board = r.after; history.push(`tile ${c.tile} ${r.choice}`); last = r.choice; moves++;
+  seen.set(key(board), (seen.get(key(board)) || 0) + 1);
+  stats(r);
+  if (r.solved) { document.body.classList.add('flash'); setTimeout(() => document.body.classList.remove('flash'), 200); draw(); setStatus(`완성 - ${moves}수 (최단 ${optimal})`, 'ok'); playing = false; }
+}
+async function play() {
+  if (playing) { playing = false; $('play').textContent = 'Jev 시작'; return; }
+  if (key(board) === key(solvedBoard())) await scramble();
+  playing = true; $('play').textContent = '멈춤';
+  try { while (playing) { await stepOnce(); if (q.get('demo')) await new Promise(r => setTimeout(r, 650)); } } finally { playing = false; $('play').textContent = 'Jev 시작'; }
+}
+$('scramble').onclick = scramble; $('play').onclick = play;
+window.__jev = { get moves() { return moves; }, get playing() { return playing; }, get solved() { return key(board) === key(solvedBoard()); }, get optimal() { return optimal; }, get requests() { return requests; } };
+
+drawRef(); fit();
+// ---- demo mode: ?demo=1[&depth=14] scrambles and plays by itself (requests are real).
+if (q.get('demo')) { $('depth').value = q.get('depth') || '14'; setTimeout(async () => { await scramble(); await new Promise(r => setTimeout(r, 1200)); await play(); document.title = `demo done · ${moves}수 · 최단 ${optimal}`; }, 800); }
+</script>
+</body>
+</html>
