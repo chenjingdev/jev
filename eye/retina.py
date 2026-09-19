@@ -71,6 +71,17 @@ class Region:
         cw, ch = self.w / COLS, self.h / ROWS
         return Region(self.x + c * cw, self.y + r * ch, cw, ch)
 
+    def block(self, r: int, c: int, rows: int, cols: int, overlap: float = 0.5) -> Region:
+        """Block (r, c) of a coarse `rows` x `cols` split of this region, grown
+        by `overlap` of a block on every side (clipped) so a row of tabs that
+        straddles a boundary is whole in at least one block."""
+        bw, bh = self.w / cols, self.h / rows
+        x0 = max(self.x, self.x + (c - overlap) * bw)
+        y0 = max(self.y, self.y + (r - overlap) * bh)
+        x1 = min(self.x + self.w, self.x + (c + 1 + overlap) * bw)
+        y1 = min(self.y + self.h, self.y + (r + 1 + overlap) * bh)
+        return Region(x0, y0, x1 - x0, y1 - y0)
+
     def around(self, r: int, c: int, span: int = 3) -> Region:
         """The `span`x`span` block of cells centred on (r, c), clipped to this region."""
         cw, ch = self.w / COLS, self.h / ROWS
@@ -147,7 +158,47 @@ class View:
                     words.append("has: " + ", ".join(kinds[(r, c)])[:120])
                 if (r, c) in by_cell:
                     words.append("says: " + " / ".join(by_cell[(r, c)])[:120])
+                line = self.row_of(r, c)
+                if line:
+                    words.append("in row: " + line)
                 out[self.cell_id(r, c)] = ", ".join(words)
+        return out
+
+    def row_of(self, r: int, c: int, reach: float = 400.0) -> str:
+        """The words on the same line as the cell's element, left to right - the
+        context that tells a '〉' in the browser toolbar from one in the page."""
+        cell = self.region.cell(r, c)
+        anchors = [e.box for e in self.elements if e.row == r and e.col == c] or \
+                  [t.box for t in self.texts if t.row == r and t.col == c]
+        if not anchors:
+            return ""
+        a = anchors[0]
+        cy = a.y + a.h / 2
+        band = [t for t in self.texts
+                if abs(t.box.y + t.box.h / 2 - cy) < max(a.h, 12) * 0.6
+                and abs(t.box.x + t.box.w / 2 - (a.x + a.w / 2)) < reach and t.confidence >= 0.3]
+        band.sort(key=lambda t: t.box.x)
+        return " ".join(t.text for t in band)[:160]
+
+    def blocks(self, rows: int = 3, cols: int = 4) -> dict[str, str]:
+        """A coarse split as Choice options: each block summarised by what it
+        holds - counts of buttons and icons, then its readable words in reading
+        order. Twelve short lines instead of ninety cells for the first pick."""
+        out: dict[str, str] = {}
+        for br in range(rows):
+            for bc in range(cols):
+                box = self.region.block(br, bc, rows, cols)
+                inside = lambda b: box.x <= b.x + b.w / 2 < box.x + box.w and box.y <= b.y + b.h / 2 < box.y + box.h
+                texts = [t for t in self.texts if inside(t.box) and t.confidence >= 0.5 and len(t.text) >= 2]
+                elements = [e for e in self.elements if inside(e.box)]
+                if not texts and not elements:
+                    continue
+                buttons = sum(e.kind == "button" for e in elements)
+                icons = len(elements) - buttons
+                words = " ".join(t.text for t in sorted(texts, key=lambda t: (t.box.y // 20, t.box.x)))[:200]
+                v = ("top", "middle", "bottom")[br * 3 // rows]
+                h = ("left", "centre-left", "centre-right", "right")[bc * 4 // cols]
+                out[f"b{br + 1}{bc + 1}"] = f"{v}-{h}, {buttons} buttons, {icons} icons, says: {words}"
         return out
 
     @staticmethod

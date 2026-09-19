@@ -35,15 +35,47 @@ MODEL = "jev-1.13.0"
 
 TARGET = (
     "The state is a screen reduced to a grid of cell labels plus the texts found on it, "
-    "and a goal. Which cell should be clicked next to make progress on the goal?"
+    "a goal, and what has already been clicked. Which cell should be clicked next to make progress on the goal?"
 )
 RISKY = "Clicking the most likely target cell would trigger an irreversible action (payment, deletion, sending, closing without saving)."
 DONE = "The goal already appears to be achieved on this screen."
 
 STAGES = ("screen", "zoom")
+BLOCK_ROWS, BLOCK_COLS = 3, 4
+COARSE = (
+    "The state is a screen split into a few blocks, each summarised by what it shows, and a goal. "
+    "Which block holds the thing to click next to make progress on the goal?"
+)
 
 
-def look(cursor: Cursor, goal: str, region: retina.Region | None, stage: str) -> tuple[retina.View, dict, float, float]:
+def glance(cursor: Cursor, goal: str, region: retina.Region | None, history: list[str] | None = None) -> tuple[retina.View, dict, retina.Region, float]:
+    """The coarse saccade: see the whole region once, let Jev pick one of 3x4
+    blocks from short summaries, return that block. Same `risky`/`done`."""
+    view = retina.see(region)
+    blocks = view.blocks(BLOCK_ROWS, BLOCK_COLS)
+    if not blocks:
+        raise SystemExit("retina: nothing on screen")
+    state = {"goal": goal, "stage": "glance", "blocks": blocks}
+    if history:
+        state["clicked_so_far"] = history
+    started = time.perf_counter()
+    answers = sif.ask(state, target=sif.options(blocks, COARSE), risky=RISKY, done=DONE)
+    latency = time.perf_counter() - started
+    target = answers["target"]
+    cells = []
+    for bid, p in target.probabilities.items():
+        if p > 0.01:
+            b = view.region.block(int(bid[1]) - 1, int(bid[2]) - 1, BLOCK_ROWS, BLOCK_COLS)
+            cells.append([b.x + 4, b.y + 4, b.w - 8, b.h - 8, p])
+    cursor.heat(cells)
+    chosen = view.region.block(int(target.choice[1]) - 1, int(target.choice[2]) - 1, BLOCK_ROWS, BLOCK_COLS)
+    cursor.look(chosen.x, chosen.y, chosen.w, chosen.h, label=f"{target.choice} {target.probabilities.get(target.choice, 0):.2f}")
+    cursor.move(chosen.x + chosen.w / 2, chosen.y + chosen.h / 2, ms=400)
+    cursor.label(f"glance: {blocks[target.choice][:60]}")
+    return view, answers, chosen, latency
+
+
+def look(cursor: Cursor, goal: str, region: retina.Region | None, stage: str, history: list[str] | None = None) -> tuple[retina.View, dict, float, float]:
     """See the region, ask Jev, paint the answer. Returns the view and the answers."""
     view = retina.see(region)
     options = view.options()
@@ -51,6 +83,9 @@ def look(cursor: Cursor, goal: str, region: retina.Region | None, stage: str) ->
         raise SystemExit("retina: nothing but blank cells; nothing to choose from")
 
     state = {"goal": goal, "stage": stage, "screen": view.state()}
+    if history:
+        # what this walk already pressed, so a two-step goal is not restarted
+        state["clicked_so_far"] = history
     started = time.perf_counter()
     answers = sif.ask(
         state,
@@ -84,6 +119,7 @@ def main() -> int:
     parser.add_argument("--goal", required=True, help="what the eye is trying to do, in words")
     parser.add_argument("--region", help="x,y,w,h in screen points; default the main display")
     parser.add_argument("--stages", type=int, default=2, choices=(1, 2))
+    parser.add_argument("--glance", action="store_true", help="first pick one of 3x4 blocks, then the grid inside it")
     parser.add_argument("--no-cache", action="store_true", help="ask again even for an identical screen")
     args = parser.parse_args()
 
@@ -91,6 +127,16 @@ def main() -> int:
     cursor = Cursor()
     cursor.clear()
     region = retina.Region(*(float(v) for v in args.region.split(","))) if args.region else None
+
+    if args.glance:
+        view, answers, region, latency = glance(cursor, args.goal, region)
+        target = answers["target"]
+        ranked = sorted(target.probabilities.items(), key=lambda kv: -kv[1])[:5]
+        print(f"[glance] {len(view.blocks(BLOCK_ROWS, BLOCK_COLS))} blocks, {len(view.texts)} texts, Jev {latency * 1000:.0f}ms")
+        print(f"  target: {target.choice}  ({view.blocks(BLOCK_ROWS, BLOCK_COLS)[target.choice][:100]})")
+        print("  top5:   " + "  ".join(f"{cid} {p:.2f}" for cid, p in ranked))
+        print(f"  risky:  {answers['risky'].noul:.2f}    done: {answers['done'].noul:.2f}")
+        time.sleep(0.6)
 
     for stage in STAGES[: args.stages]:
         view, answers, latency, n = look(cursor, args.goal, region, stage)
