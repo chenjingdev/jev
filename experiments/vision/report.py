@@ -135,6 +135,38 @@ def main() -> int:
             lines.append(cells)
         parts.append(table(["format"] + [f"row {i}" for i in range(1, 9)], lines) + "\n")
 
+    # ---- grid: feature screens
+    grid = [r for r in calls if r["axis"] == "grid"]
+    if grid:
+        parts.append("## grid: screens as coarse label grids, by shape\n")
+        parts.append("`pos` = label of one named cell (chance 1/6); `find_row` / `find_col` = which row / column holds the unique `input` cell (chance 1/rows, 1/cols).\n")
+        for spelling in dataset.GRID_FORMATS:
+            parts.append(f"### spelling `{spelling}`\n")
+            lines = []
+            for cols, rows in dataset.GRID_SHAPES:
+                size = cols * 100 + rows
+                cells = [f"{cols}x{rows}"]
+                for q, chance in (("pos", 1 / 6), ("find_row", 1 / rows), ("find_col", 1 / cols)):
+                    sub = [r for r in grid if r["format"] == spelling and r["question"] == q and r["size"] == size]
+                    s = stats(sub, chance)
+                    cells.append(f"{fmt(s['acc'])} (chance {chance:.2f}, gold p {fmt(s['gold_p'])})" if sub else "-")
+                sub = [r for r in grid if r["format"] == spelling and r["size"] == size]
+                cells.append(fmt(statistics.fmean(r["input_tokens"] or 0 for r in sub), 0) if sub else "-")
+                lines.append(cells)
+            parts.append(table(["shape", "pos", "find_row", "find_col", "in tok"], lines) + "\n")
+
+        parts.append("### find_row / find_col: how far off, spelling `words`\n")
+        lines = []
+        for cols, rows in dataset.GRID_SHAPES:
+            size = cols * 100 + rows
+            cells = [f"{cols}x{rows}"]
+            for q in ("find_row", "find_col"):
+                sub = [r for r in grid if r["format"] == "words" and r["question"] == q and r["size"] == size]
+                offs = [abs(int(r["choice"]) - int(r["gold"])) for r in sub]
+                cells.append(f"exact {sum(1 for o in offs if o == 0)}, off by 1: {sum(1 for o in offs if o == 1)}, off by 2+: {sum(1 for o in offs if o >= 2)}" if sub else "-")
+            lines.append(cells)
+        parts.append(table(["shape", "find_row", "find_col"], lines) + "\n")
+
     # ---- pixel: MNIST
     if pix:
         parts.append("## pixel: MNIST digits 14x14, by spelling\n")

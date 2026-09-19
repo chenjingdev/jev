@@ -44,7 +44,7 @@ TIMEOUT = 60.0
 
 FATAL = (TypeSafeAuthenticationError, TypeSafeBadRequestError, TypeSafeUnprocessableEntityError)
 
-AXES = ("encode", "pixel")
+AXES = ("encode", "grid", "pixel")
 
 
 @dataclass(frozen=True)
@@ -87,6 +87,18 @@ def plan() -> list[Task]:
                             instructions=dataset.encode_instructions(grid, fmt, question),
                             size=size, palette=palette, row=grid.row, col=grid.col,
                         ))
+    for cols, rows in dataset.GRID_SHAPES:
+        for grid in dataset.make_feature_grids(cols, rows):
+            for fmt in dataset.GRID_FORMATS:
+                state = dataset.feature_state(grid, fmt)
+                for question in dataset.GRID_QUESTIONS:
+                    tasks.append(Task(
+                        call_id=f"grid|{fmt}|{question}|{grid.id}", axis="grid", fmt=fmt,
+                        question=question, sample_id=grid.id, gold=dataset.feature_gold(grid, question),
+                        state=state, criteria=dataset.feature_criteria(grid, question),
+                        instructions=dataset.feature_instructions(grid, fmt, question),
+                        size=cols * 100 + rows, row=grid.row, col=grid.col,
+                    ))
     digits = dataset.load_digits()
     for fmt in dataset.PIXEL_FORMATS:
         for digit in digits:
@@ -116,7 +128,7 @@ def dry_run(tasks: list[Task], cap: int) -> int:
         print(f"{axis:7} {fmt:12} {len(group):6} {tokens:11,.0f} {chars:12,.0f}")
     print(f"{'total':7} {'':12} {len(tasks):6} {total:11,.0f}")
     print(f"~${total * PRICE_PER_MTOK / 1e6:.3f} input at ${PRICE_PER_MTOK}/Mtok; cap {cap:,}")
-    sample = next(t for t in tasks if t.fmt == "b64rgb" and t.question == "pos")
+    sample = next(t for t in tasks if t.axis == "grid" and t.question == "find_col" and t.size == 3218)
     print("\nexample call:")
     print(" ", sample.instructions)
     print(" ", json.dumps(sample.state, ensure_ascii=False))

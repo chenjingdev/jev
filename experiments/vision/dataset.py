@@ -428,3 +428,112 @@ def validate() -> list[str]:
                 if zlib.decompress(png[41:41 + struct.unpack(">I", png[33:37])[0]])[1:size * 3 + 1] != g.rgb_bytes()[:size * 3]:
                     problems.append(f"{g.id}: png first row mismatch")
     return problems
+
+
+# ------------------------------------------------------------------ feature grids
+
+#: The eye's real input: a screen reduced to a coarse grid where each cell is one
+#: label. Sizes run from the 8x8 the encode axis proved up to a 32x18 screen.
+GRID_SHAPES: tuple[tuple[int, int], ...] = ((8, 8), (16, 9), (24, 14), (32, 18))  # (cols, rows)
+FEATURE_LABELS: tuple[str, ...] = ("blank", "text", "button", "image", "edge", "input")
+FEATURE_LETTERS: dict[str, str] = {
+    "blank": ".", "text": "T", "button": "B", "image": "I", "edge": "E", "input": "N",
+}
+#: Sampling weights for the filler cells; `input` appears exactly once per grid.
+FEATURE_WEIGHTS: tuple[int, ...] = (60, 20, 8, 6, 6, 0)
+GRID_FORMATS: tuple[str, ...] = ("words", "letters")
+GRID_QUESTIONS: tuple[str, ...] = ("pos", "find_row", "find_col")
+
+
+@dataclass(frozen=True)
+class FeatureGrid:
+    id: str
+    cols: int
+    rows: int
+    cells: tuple[tuple[str, ...], ...]
+    row: int  # `pos` target, 1-based
+    col: int
+    input_row: int  # the unique `input` cell, 1-based
+    input_col: int
+
+    @property
+    def target(self) -> str:
+        return self.cells[self.row - 1][self.col - 1]
+
+
+def make_feature_grids(cols: int, rows: int, count: int = IMAGES_PER_CONDITION) -> list[FeatureGrid]:
+    """Random screens. The `pos` target cycles through the five filler labels and
+    the unique `input` cell cycles through rows and columns."""
+    rng = random.Random(f"vision-grid-{cols}x{rows}")
+    fillers = FEATURE_LABELS[:-1]
+    grids: list[FeatureGrid] = []
+    while len(grids) < count:
+        cells = [list(rng.choices(fillers, weights=FEATURE_WEIGHTS[:-1], k=cols)) for _ in range(rows)]
+        ir = (len(grids) * 7) % rows
+        ic = (len(grids) * 11) % cols
+        cells[ir][ic] = "input"
+        wanted = fillers[len(grids) % len(fillers)]
+        spots = [(r, c) for r in range(rows) for c in range(cols) if cells[r][c] == wanted]
+        if not spots:
+            continue
+        r, c = rng.choice(spots)
+        grids.append(FeatureGrid(
+            id=f"f{cols}x{rows}-{len(grids):02d}", cols=cols, rows=rows,
+            cells=tuple(tuple(line) for line in cells), row=r + 1, col=c + 1,
+            input_row=ir + 1, input_col=ic + 1,
+        ))
+    return grids
+
+
+GRID_FORMAT_TEXT: dict[str, str] = {
+    "words": "rows of cell labels separated by spaces, one row per line, top row first; labels are "
+             + ", ".join(FEATURE_LABELS),
+    "letters": "one character per cell, one row per line, top row first; "
+               + ", ".join(f"{v}={k}" for k, v in FEATURE_LETTERS.items()),
+}
+
+
+def spell_feature_grid(grid: FeatureGrid, fmt: str) -> str:
+    if fmt == "words":
+        return "\n".join(" ".join(line) for line in grid.cells)
+    if fmt == "letters":
+        return "\n".join("".join(FEATURE_LETTERS[c] for c in line) for line in grid.cells)
+    raise ValueError(fmt)
+
+
+def feature_state(grid: FeatureGrid, fmt: str) -> dict:
+    return {
+        "format": GRID_FORMAT_TEXT[fmt],
+        "width": grid.cols,
+        "height": grid.rows,
+        "data": spell_feature_grid(grid, fmt),
+    }
+
+
+def feature_instructions(grid: FeatureGrid, fmt: str, question: str) -> str:
+    head = f"The state is a screen reduced to a {grid.cols}-column by {grid.rows}-row grid of cell labels: {GRID_FORMAT_TEXT[fmt]}. "
+    if question == "pos":
+        return head + f"What is in the cell at row {grid.row}, column {grid.col} (1-based from the top-left)?"
+    if question == "find_row":
+        return head + "Exactly one cell is an input field. Which row (1-based from the top) is it in?"
+    if question == "find_col":
+        return head + "Exactly one cell is an input field. Which column (1-based from the left) is it in?"
+    raise ValueError(question)
+
+
+def feature_criteria(grid: FeatureGrid, question: str) -> dict[str, str | None]:
+    if question == "pos":
+        return {name: None for name in FEATURE_LABELS}
+    if question == "find_row":
+        return {str(i): f"row {i}" for i in range(1, grid.rows + 1)}
+    if question == "find_col":
+        return {str(i): f"column {i}" for i in range(1, grid.cols + 1)}
+    raise ValueError(question)
+
+
+def feature_gold(grid: FeatureGrid, question: str) -> str:
+    if question == "pos":
+        return grid.target
+    if question == "find_row":
+        return str(grid.input_row)
+    return str(grid.input_col)

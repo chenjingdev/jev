@@ -1,6 +1,6 @@
 # vision: results
 
-model jev-1.13.0, 2300 calls ok, 0 errors, input 1,656,393 + output 150,645 tokens, 630s.
+model jev-1.13.0, 2900 calls ok, 0 errors, input 2,131,638 + output 217,452 tokens, 795s.
 
 ## encode: colour grids, by spelling
 
@@ -70,6 +70,37 @@ acc = share correct; chance = 1/palette averaged over the rows; collapse = share
 | rgb | 1.00 (8) | 1.00 (9) | 1.00 (6) | 1.00 (4) | 1.00 (4) | 1.00 (9) | 1.00 (7) | 1.00 (3) |
 | hex | 1.00 (8) | 1.00 (9) | 1.00 (6) | 1.00 (4) | 1.00 (4) | 1.00 (9) | 1.00 (7) | 1.00 (3) |
 | ppm | 0.00 (8) | 0.44 (9) | 0.17 (6) | 0.25 (4) | 0.25 (4) | 0.33 (9) | 0.43 (7) | 0.33 (3) |
+
+## grid: screens as coarse label grids, by shape
+
+`pos` = label of one named cell (chance 1/6); `find_row` / `find_col` = which row / column holds the unique `input` cell (chance 1/rows, 1/cols).
+
+### spelling `words`
+
+| shape | pos | find_row | find_col | in tok |
+|---|---|---|---|---|
+| 8x8 | 1.00 (chance 0.17, gold p 0.98) | 1.00 (chance 0.12, gold p 1.00) | 1.00 (chance 0.12, gold p 0.97) | 559 |
+| 16x9 | 0.80 (chance 0.17, gold p 0.70) | 1.00 (chance 0.11, gold p 1.00) | 0.80 (chance 0.06, gold p 0.67) | 689 |
+| 24x14 | 0.68 (chance 0.17, gold p 0.56) | 1.00 (chance 0.07, gold p 0.99) | 0.56 (chance 0.04, gold p 0.48) | 957 |
+| 32x18 | 0.64 (chance 0.17, gold p 0.43) | 0.88 (chance 0.06, gold p 0.88) | 0.40 (chance 0.03, gold p 0.42) | 1265 |
+
+### spelling `letters`
+
+| shape | pos | find_row | find_col | in tok |
+|---|---|---|---|---|
+| 8x8 | 0.84 (chance 0.17, gold p 0.73) | 1.00 (chance 0.12, gold p 0.99) | 0.88 (chance 0.12, gold p 0.77) | 526 |
+| 16x9 | 0.40 (chance 0.17, gold p 0.40) | 1.00 (chance 0.11, gold p 1.00) | 0.44 (chance 0.06, gold p 0.37) | 612 |
+| 24x14 | 0.28 (chance 0.17, gold p 0.32) | 1.00 (chance 0.07, gold p 0.96) | 0.52 (chance 0.04, gold p 0.31) | 774 |
+| 32x18 | 0.28 (chance 0.17, gold p 0.32) | 1.00 (chance 0.06, gold p 0.98) | 0.32 (chance 0.03, gold p 0.20) | 954 |
+
+### find_row / find_col: how far off, spelling `words`
+
+| shape | find_row | find_col |
+|---|---|---|
+| 8x8 | exact 25, off by 1: 0, off by 2+: 0 | exact 25, off by 1: 0, off by 2+: 0 |
+| 16x9 | exact 25, off by 1: 0, off by 2+: 0 | exact 20, off by 1: 3, off by 2+: 2 |
+| 24x14 | exact 25, off by 1: 0, off by 2+: 0 | exact 14, off by 1: 7, off by 2+: 4 |
+| 32x18 | exact 22, off by 1: 3, off by 2+: 0 | exact 10, off by 1: 10, off by 2+: 5 |
 
 ## pixel: MNIST digits 14x14, by spelling
 
