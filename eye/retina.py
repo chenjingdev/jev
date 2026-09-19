@@ -8,14 +8,18 @@ about 16 wide, cannot read pixels, and reads lists well. So the retina emits a
 16x9 grid of labels plus a list of the texts it found, with the cell of each.
 
 Labels per cell, decided in this order:
+    button  a detected interactable element that shows words (the words go in `elements`)
+    icon    a detected interactable element without words
     text    an OCR box overlaps the cell (the text itself goes in `texts`)
     blank   the cell is one flat colour
     edge    a straight colour change across the cell (a border, a divider)
-    image   anything else: icons, pictures, dense UI without readable text
+    image   anything else: pictures, dense UI without readable text
 
-Text is macOS Vision OCR (Korean + English). blank/edge/image are pixel
-statistics on the greyscale cell. The capture is `screencapture`, which has
-the screen-recording permission this session already uses.
+Interactable elements come from OmniParser's icon detector (a YOLO trained on
+screenshots, `models/omniparser_icon_detect.pt`, AGPL). Text is macOS Vision
+OCR (Korean + English). blank/edge/image are pixel statistics on the greyscale
+cell. The capture is `screencapture`, which has the screen-recording
+permission this session already uses.
 """
 
 from __future__ import annotations
@@ -35,6 +39,8 @@ import Vision
 from AppKit import NSScreen
 from Foundation import NSURL
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 COLS, ROWS = 16, 9
 
 #: Greyscale spread below this is one flat colour. Tuned by eye on `--show`.
@@ -43,6 +49,13 @@ BLANK_STD = 3.0
 EDGE_RATIO = 0.85
 
 LANGS = ["ko-KR", "en-US"]
+
+DETECTOR = Path(__file__).resolve().parent / "models" / "omniparser_icon_detect.pt"
+#: OmniParser's own thresholds: low confidence, aggressive overlap suppression.
+DETECT_CONF = 0.1
+DETECT_IOU = 0.1
+DETECT_SIZE = 1280
+_detector = None
 
 
 @dataclass(frozen=True)
@@ -75,6 +88,18 @@ class Text:
     confidence: float
 
 
+@dataclass(frozen=True)
+class Element:
+    """A detected interactable: a button when it shows words, else an icon."""
+
+    kind: str
+    box: Region
+    row: int
+    col: int
+    text: str
+    confidence: float
+
+
 @dataclass
 class View:
     """What the retina saw: the grid, the texts, and where on screen it looked."""
@@ -82,6 +107,7 @@ class View:
     region: Region
     labels: list[list[str]]
     texts: list[Text] = field(default_factory=list)
+    elements: list[Element] = field(default_factory=list)
 
     def cell_id(self, r: int, c: int) -> str:
         return f"r{r + 1}c{c + 1}"
@@ -98,6 +124,9 @@ class View:
             "height": ROWS,
             "grid": self.grid_text(),
             "texts": [f"{self.cell_id(t.row, t.col)} {t.text}" for t in self.texts],
+            "elements": [
+                f"{self.cell_id(e.row, e.col)} {e.kind}" + (f" {e.text}" if e.text else "") for e in self.elements
+            ],
         }
 
     def options(self) -> dict[str, str]:
@@ -105,12 +134,17 @@ class View:
         by_cell: dict[tuple[int, int], list[str]] = {}
         for t in self.texts:
             by_cell.setdefault((t.row, t.col), []).append(t.text)
+        kinds: dict[tuple[int, int], list[str]] = {}
+        for e in self.elements:
+            kinds.setdefault((e.row, e.col), []).append(e.kind + (f" '{e.text}'" if e.text else ""))
         out: dict[str, str] = {}
         for r, row in enumerate(self.labels):
             for c, label in enumerate(row):
                 if label == "blank":
                     continue
                 words = [label, self._where(r, c)]
+                if (r, c) in kinds:
+                    words.append("has: " + ", ".join(kinds[(r, c)])[:120])
                 if (r, c) in by_cell:
                     words.append("says: " + " / ".join(by_cell[(r, c)])[:120])
                 out[self.cell_id(r, c)] = ", ".join(words)
@@ -123,9 +157,15 @@ class View:
         return f"{v}-{h}"
 
     def center(self, cell_id: str) -> tuple[float, float]:
+        """Where to aim in a cell: the detected element nearest its centre, else the centre."""
         r, c = parse_cell(cell_id)
         cell = self.region.cell(r, c)
-        return cell.x + cell.w / 2, cell.y + cell.h / 2
+        cx, cy = cell.x + cell.w / 2, cell.y + cell.h / 2
+        inside = [e for e in self.elements if e.row == r and e.col == c]
+        if not inside:
+            return cx, cy
+        best = min(inside, key=lambda e: (e.box.x + e.box.w / 2 - cx) ** 2 + (e.box.y + e.box.h / 2 - cy) ** 2)
+        return best.box.x + best.box.w / 2, best.box.y + best.box.h / 2
 
 
 def parse_cell(cell_id: str) -> tuple[int, int]:
@@ -184,21 +224,74 @@ def ocr(image, region: Region, image_w: int, image_h: int) -> list[Text]:
         return []
     px_to_pt = region.w / image_w
     texts: list[Text] = []
+
+    def to_screen(bb) -> Region:
+        return Region(
+            region.x + bb.origin.x * image_w * px_to_pt,
+            region.y + (1 - bb.origin.y - bb.size.height) * image_h * px_to_pt,
+            bb.size.width * image_w * px_to_pt,
+            bb.size.height * image_h * px_to_pt,
+        )
+
     for obs in request.results() or []:
         cand = obs.topCandidates_(1)
         if not cand:
             continue
-        bb = obs.boundingBox()
-        x = region.x + bb.origin.x * image_w * px_to_pt
-        y = region.y + (1 - bb.origin.y - bb.size.height) * image_h * px_to_pt
-        w = bb.size.width * image_w * px_to_pt
-        h = bb.size.height * image_h * px_to_pt
-        box = Region(x, y, w, h)
-        cx, cy = x + w / 2, y + h / 2
+        top = cand[0]
+        line = str(top.string())
+        confidence = float(top.confidence())
+        # one Text per word: a line like "이미지 동영상 쇼핑" is three tabs, and the
+        # zoom stage needs to tell them apart
+        pieces: list[tuple[str, Region]] = []
+        start = 0
+        for word in line.split(" "):
+            if word:
+                rect, _ = top.boundingBoxForRange_error_((start, len(word)), None)
+                if rect is not None:
+                    pieces.append((word, to_screen(rect.boundingBox())))
+            start += len(word) + 1
+        if not pieces:
+            pieces = [(line, to_screen(obs.boundingBox()))]
+        for word, box in pieces:
+            cx, cy = box.x + box.w / 2, box.y + box.h / 2
+            col = min(COLS - 1, max(0, int((cx - region.x) / region.w * COLS)))
+            row = min(ROWS - 1, max(0, int((cy - region.y) / region.h * ROWS)))
+            texts.append(Text(word, box, row, col, confidence))
+    return texts
+
+
+# ------------------------------------------------------------------ detector
+
+
+def detect(path: Path, region: Region, image_w: int, texts: list[Text]) -> list[Element]:
+    """Interactable boxes from the OmniParser detector, in screen points; a box
+    that overlaps OCR text is a button and carries the words, else an icon."""
+    global _detector
+    if not DETECTOR.exists():
+        return []
+    if _detector is None:
+        from ultralytics import YOLO
+        _detector = YOLO(str(DETECTOR))
+    result = _detector.predict(
+        str(path), imgsz=DETECT_SIZE, conf=DETECT_CONF, iou=DETECT_IOU, device="mps", verbose=False
+    )[0]
+    px_to_pt = region.w / image_w
+    out: list[Element] = []
+    for xyxy, conf in zip(result.boxes.xyxy.tolist(), result.boxes.conf.tolist()):
+        x0, y0, x1, y1 = (v * px_to_pt for v in xyxy)
+        box = Region(region.x + x0, region.y + y0, x1 - x0, y1 - y0)
+        words = [t.text for t in texts if _overlap(box, t.box) > 0.5 * t.box.w * t.box.h]
+        cx, cy = box.x + box.w / 2, box.y + box.h / 2
         col = min(COLS - 1, max(0, int((cx - region.x) / region.w * COLS)))
         row = min(ROWS - 1, max(0, int((cy - region.y) / region.h * ROWS)))
-        texts.append(Text(str(cand[0].string()), box, row, col, float(cand[0].confidence())))
-    return texts
+        out.append(Element("button" if words else "icon", box, row, col, " ".join(words)[:60], conf))
+    return out
+
+
+def _overlap(a: Region, b: Region) -> float:
+    w = min(a.x + a.w, b.x + b.w) - max(a.x, b.x)
+    h = min(a.y + a.h, b.y + b.h) - max(a.y, b.y)
+    return max(0.0, w) * max(0.0, h)
 
 
 # ------------------------------------------------------------------ the grid
@@ -219,8 +312,21 @@ def classify(cell: np.ndarray) -> str:
 
 
 def see(region: Region | None = None, keep: Path | None = None) -> View:
-    """Capture the region and reduce it to a View."""
+    """Capture the region and reduce it to a View. The cursor overlay is hidden
+    for the capture so the eye never reads its own labels."""
+    from cursor_client import Cursor
+
     region = region or main_display()
+    cursor = Cursor()
+    cursor.hide()
+    time.sleep(0.05)
+    try:
+        return _see(region, keep)
+    finally:
+        cursor.show()
+
+
+def _see(region: Region, keep: Path | None) -> View:
     # the image source decodes lazily, so the file must outlive both reads
     with tempfile.TemporaryDirectory() as tmp:
         path = keep or Path(tmp) / "shot.png"
@@ -229,6 +335,7 @@ def see(region: Region | None = None, keep: Path | None = None) -> View:
         w, h = Quartz.CGImageGetWidth(image), Quartz.CGImageGetHeight(image)
         grey = grey_pixels(image)
         texts = ocr(image, region, w, h)
+        elements = detect(path, region, w, texts)
 
     labels = [["blank"] * COLS for _ in range(ROWS)]
     for r in range(ROWS):
@@ -245,20 +352,23 @@ def see(region: Region | None = None, keep: Path | None = None) -> View:
         for r in range(r0, r1 + 1):
             for c in range(c0, c1 + 1):
                 labels[r][c] = "text"
-    return View(region, labels, texts)
+    for e in elements:
+        # an element is one thing, so it labels the cell that holds its centre
+        if e.kind == "button" or labels[e.row][e.col] != "button":
+            labels[e.row][e.col] = e.kind
+    return View(region, labels, texts, elements)
 
 
 # ------------------------------------------------------------------ cli
 
 
 def show(view: View) -> None:
-    """Paint the grid on the overlay: non-blank cells as heat, OCR boxes as-is."""
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    """Paint the grid on the overlay: non-blank cells as heat."""
     from cursor_client import Cursor
 
     cursor = Cursor()
     cells = []
-    strength = {"text": 0.6, "image": 0.35, "edge": 0.2}
+    strength = {"button": 0.8, "icon": 0.7, "text": 0.5, "image": 0.3, "edge": 0.15}
     for r, row in enumerate(view.labels):
         for c, label in enumerate(row):
             if label != "blank":
@@ -278,15 +388,7 @@ def main() -> int:
 
     region = Region(*(float(v) for v in args.region.split(","))) if args.region else None
     started = time.perf_counter()
-    if args.show:
-        # the overlay would be in the shot: hide it for the capture
-        sys.path.insert(0, str(Path(__file__).resolve().parent))
-        from cursor_client import Cursor
-        Cursor().hide()
-        time.sleep(0.05)
     view = see(region, args.keep)
-    if args.show:
-        Cursor().show()
     elapsed = time.perf_counter() - started
 
     if args.json:
@@ -296,7 +398,9 @@ def main() -> int:
         print()
         for t in view.texts:
             print(f"{view.cell_id(t.row, t.col):7} {t.confidence:.2f}  {t.text}")
-    print(f"\n{len(view.texts)} texts, {sum(l != 'blank' for row in view.labels for l in row)} non-blank cells, {elapsed:.2f}s", file=sys.stderr)
+        for e in view.elements:
+            print(f"{view.cell_id(e.row, e.col):7} {e.confidence:.2f}  {e.kind} {e.text}")
+    print(f"\n{len(view.texts)} texts, {len(view.elements)} elements, {sum(l != 'blank' for row in view.labels for l in row)} non-blank cells, {elapsed:.2f}s", file=sys.stderr)
     if args.show:
         show(view)
     return 0

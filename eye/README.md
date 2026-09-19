@@ -32,14 +32,21 @@ c.clear()
 
 ### `retina.py` — 망막
 
-스크린샷 한 장을 16×9 격자로 줄인다. 칸마다 단어 하나: `text`(Vision OCR 상자가 걸침), `blank`(한 색), `edge`(한 방향으로만 색이 바뀜), `image`(나머지). OCR로 읽은 글자는 칸 번호와 함께 별도 목록으로 나간다 — 칸 안에 글자를 넣으면 "토큰 하나 = 칸 하나"가 깨진다는 게 실험 결과다. Jev는 호출하지 않는다.
+스크린샷 한 장을 16×9 격자로 줄인다. 칸마다 단어 하나: `button`(디텍터 상자 + 글자), `icon`(디텍터 상자, 글자 없음), `text`(OCR 상자가 걸침), `blank`(한 색), `edge`(한 방향으로만 색이 바뀜), `image`(나머지). 읽은 글자와 찾은 요소는 칸 번호와 함께 별도 목록으로 나간다 — 칸 안에 글자를 넣으면 "토큰 하나 = 칸 하나"가 깨진다는 게 실험 결과다. Jev는 호출하지 않는다.
+
+요소는 **오브젝트 디텍션**으로 찾는다: Microsoft OmniParser v2의 아이콘 디텍터(스크린샷으로 학습한 YOLO, `models/omniparser_icon_detect.pt`, AGPL-3.0, gitignore — 아래 명령으로 받는다). 화면 한 장 300ms(MPS). 칸 분류 head가 실패한 자리를 이게 맡는다: 라벨이 상자 단위라 요소 크기와 딱 맞는다. OCR은 줄이 아니라 **단어 단위** 상자로 쪼갠다 — "이미지 동영상 쇼핑"은 탭 셋이지 한 덩어리가 아니다. 클릭 좌표는 칸 중심이 아니라 칸 안에서 가장 가까운 요소 상자의 중심.
+
+```sh
+curl -L -o eye/models/omniparser_icon_detect.pt \
+  https://huggingface.co/microsoft/OmniParser-v2.0/resolve/main/icon_detect/model.pt
+```
 
 ```sh
 uv run python eye/retina.py --show                    # 메인 화면을 격자로 줄여 오버레이에 칠함
 uv run python eye/retina.py --region 2560,0,2560,1440 --json
 ```
 
-메인 디스플레이 2560×1440 기준 OCR 포함 4초. 한국어+영어.
+메인 디스플레이 2560×1440 기준 OCR + 디텍터 5초(첫 호출은 모델 적재로 +10초). 한국어+영어. 캡처 동안 커서 오버레이는 스스로 숨긴다.
 
 ### `step.py` — 한 걸음
 
@@ -86,4 +93,5 @@ uv run python eye/head.py --holdout Slack --features fp    # 다른 앱으로 �
 ## 앞으로
 
 1. 여러 걸음 잇기: 클릭 → 다시 보기 → `done`으로 멈추기. 실제 클릭은 `risky` 가드레일 뒤에.
-2. 아이콘: 위 학습 재시도(요소 크롭 + CLIP) 또는 SF Symbols 대조.
+2. 아이콘 **뜻**: 디텍터는 "여기 아이콘이 있다"까지다. 톱니인지 돋보기인지는 SF Symbols 대조나 상자 크롭 분류가 필요하다.
+3. 디텍터가 놓치는 앱이 나오면 `collect.py`의 접근성 트리 상자로 fine-tune.

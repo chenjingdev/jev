@@ -45,10 +45,7 @@ STAGES = ("screen", "zoom")
 
 def look(cursor: Cursor, goal: str, region: retina.Region | None, stage: str) -> tuple[retina.View, dict, float, float]:
     """See the region, ask Jev, paint the answer. Returns the view and the answers."""
-    cursor.hide()
-    time.sleep(0.05)
     view = retina.see(region)
-    cursor.show()
     options = view.options()
     if not options:
         raise SystemExit("retina: nothing but blank cells; nothing to choose from")
