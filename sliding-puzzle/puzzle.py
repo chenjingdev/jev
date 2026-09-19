@@ -140,7 +140,7 @@ class Grid:
         Tiles in `keep` are walls; the blank and the target move among the rest (state = two
         positions, ≤ cells² states). When the walls make it impossible - the last tile of a row
         needs its neighbour to step aside - the kept tiles nearest the target's home are unlocked
-        one, then two at a time and tracked in the state, constrained to be home at the end.
+        one at a time up to `max_unlock` and tracked in the state, constrained to be home at the end.
         """
         if target in keep or board[target - 1] == target:
             return []

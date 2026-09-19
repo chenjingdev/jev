@@ -1,16 +1,21 @@
-"""What Jev is asked. Two modes.
+"""What Jev is asked. Three modes, newest first.
 
 Jev has no eyes (experiments/vision), so the code does the looking and Jev points.
 
-Target mode (5×6, the current one): Jev picks **which tile to bring home next**; the code
-brings it home with a BFS (puzzle.Grid.bring_home) and that tile becomes a wall. Jev sees
-cheap facts about every remaining tile - where it is, where its home is, how far - and
-never the BFS cost (that would make it a number comparator again, see reflex mode).
-One `sif.ask()` per decision: `target` Choice + `progress` Score.
+Peel mode (5×6, the current one - the page and the video): Jev picks which line of the
+unsolved rectangle to peel next, its top row or its left column; the code places that
+line with a BFS. Every choice is executable, so the judgement shows only in the slide
+count. One `sif.ask()` per decision: `line` Choice + `progress` Score. With the rule
+("smaller total distance is cheaper") in the instruction Jev matches the rule (71%);
+without it, a coin flip (47%).
 
-Reflex mode (3×3, v1): Jev picks the next slide from 1-3 candidates described by
-distance and tiles-home numbers. It followed the numbers 1,149/1,151 times and lost only
-on tie-breaking; kept for the README's first chapter.
+Target mode (free tile choice, README chapter 2): Jev picks which tile to bring home next;
+the code brings it home (puzzle.Grid.bring_home) and it becomes a wall. On 5×6 every order
+but the human one traps itself, Jev included, coached or not.
+
+Reflex mode (3×3, v1): Jev picks the next slide from 1-3 candidates described by distance
+and tiles-home numbers. It followed the numbers 1,149/1,151 times and lost only on
+tie-breaking.
 """
 
 from __future__ import annotations
