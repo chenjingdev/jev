@@ -233,12 +233,12 @@ class Driver(NSObject):
     """Main-thread timer: apply queued commands, advance the animation, redraw."""
 
     state: State
-    view: OverlayView
+    views: list
 
-    def initWithState_view_(self, state: State, view: OverlayView):
+    def initWithState_views_(self, state: State, views: list):
         self = objc.super(Driver, self).init()
         self.state = state
-        self.view = view
+        self.views = views
         return self
 
     def tick_(self, _timer) -> None:
@@ -246,7 +246,8 @@ class Driver(NSObject):
         for command in self.state.drain():
             self.state.apply(command, now)
         self.state.tick(now)
-        self.view.setNeedsDisplay_(True)
+        for view in self.views:
+            view.setNeedsDisplay_(True)
 
 
 def serve(state: State, path: str) -> None:
@@ -308,43 +309,42 @@ def main() -> int:
     app = NSApplication.sharedApplication()
     app.setActivationPolicy_(NSApplicationActivationPolicyAccessory)
 
-    # one window over the union of every display, in Cocoa (bottom-left) coordinates
-    frames = [s.frame() for s in NSScreen.screens()]
-    left = min(f.origin.x for f in frames)
-    bottom = min(f.origin.y for f in frames)
-    right = max(f.origin.x + f.size.width for f in frames)
-    top = max(f.origin.y + f.size.height for f in frames)
-    frame = NSMakeRect(left, bottom, right - left, top - bottom)
-
-    window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-        frame, NSWindowStyleMaskBorderless, NSBackingStoreBuffered, False
-    )
-    window.setOpaque_(False)
-    window.setBackgroundColor_(NSColor.clearColor())
-    window.setHasShadow_(False)
-    window.setIgnoresMouseEvents_(True)
-    window.setLevel_(CGShieldingWindowLevel())
-    window.setCollectionBehavior_(
-        NSWindowCollectionBehaviorCanJoinAllSpaces
-        | NSWindowCollectionBehaviorStationary
-        | NSWindowCollectionBehaviorFullScreenAuxiliary
-    )
-
+    # One window per display: with "Displays have separate Spaces" a window
+    # lives on one display only, so a single union window would show on one.
     state = State()
     main_h = NSScreen.mainScreen().frame().size.height
-    # The view is flipped (top-left origin, y down) and covers the union of the
-    # displays. A screen point (sx, sy) - top-left of the main display, y down -
-    # is Cocoa (sx, main_h - sy), which is view point (sx - left, sy + top - main_h).
-    # Shifting the bounds origin by (left, main_h - top) makes screen points draw
-    # as-is, on every display.
-    view = OverlayView.alloc().initWithFrame_state_(
-        NSMakeRect(0, 0, frame.size.width, frame.size.height), state
-    )
-    view.setBoundsOrigin_((left, main_h - top))
-    window.setContentView_(view)
-    window.orderFrontRegardless()
+    windows = []
+    views = []
+    for screen in NSScreen.screens():
+        frame = screen.frame()
+        window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
+            frame, NSWindowStyleMaskBorderless, NSBackingStoreBuffered, False
+        )
+        window.setOpaque_(False)
+        window.setBackgroundColor_(NSColor.clearColor())
+        window.setHasShadow_(False)
+        window.setIgnoresMouseEvents_(True)
+        window.setLevel_(CGShieldingWindowLevel())
+        window.setCollectionBehavior_(
+            NSWindowCollectionBehaviorCanJoinAllSpaces
+            | NSWindowCollectionBehaviorStationary
+            | NSWindowCollectionBehaviorFullScreenAuxiliary
+        )
+        # The view is flipped (top-left origin, y down). A screen point (sx, sy)
+        # - top-left of the main display, y down - is Cocoa (sx, main_h - sy),
+        # which on this window is (sx - frame.x, frame.top - (main_h - sy)).
+        # Shifting the bounds origin makes screen points draw as-is.
+        view = OverlayView.alloc().initWithFrame_state_(
+            NSMakeRect(0, 0, frame.size.width, frame.size.height), state
+        )
+        top = frame.origin.y + frame.size.height
+        view.setBoundsOrigin_((frame.origin.x, main_h - top))
+        window.setContentView_(view)
+        window.orderFrontRegardless()
+        windows.append(window)
+        views.append(view)
 
-    driver = Driver.alloc().initWithState_view_(state, view)
+    driver = Driver.alloc().initWithState_views_(state, views)
     NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
         1 / FPS, driver, "tick:", None, True
     )
@@ -352,7 +352,7 @@ def main() -> int:
     threading.Thread(target=serve, args=(state, args.socket), daemon=True).start()
     if args.demo:
         threading.Thread(target=demo, args=(args.socket,), daemon=True).start()
-    print(f"cursor: overlay {int(frame.size.width)}x{int(frame.size.height)}, socket {args.socket}")
+    print(f"cursor: overlay on {len(windows)} display(s), socket {args.socket}")
     app.run()
     return 0
 
