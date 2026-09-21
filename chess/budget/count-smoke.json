@@ -1,0 +1,1337 @@
+{
+  "created_at": "2026-09-21T02:35:49.138249+00:00",
+  "design": "Board fullness asked directly in three shapes over the constant-length state, scored against the piece count. Separates \"the complexity question was worded badly\" from \"Jev does not read how full the board is\".",
+  "model": "jev-1.13.0",
+  "questions": {
+    "mostly_full": {
+      "type": "Noul",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. A chess game starts with 32 pieces on the board and they come off as it goes on. More than 24 pieces are still on this board."
+    },
+    "how_many": {
+      "type": "Score",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. How many pieces are still on this board?",
+      "criteria": [
+        "Almost empty: about 8 pieces or fewer are left, the bare kings and a handful of others.",
+        "Half gone: somewhere around 16 pieces are left.",
+        "Almost untouched: nearly all 32 pieces are still there, very little has been captured."
+      ]
+    },
+    "stage": {
+      "type": "Choice",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. Which stage of the game is this position in?",
+      "criteria": [
+        "opening",
+        "middlegame",
+        "endgame"
+      ]
+    }
+  },
+  "report": {
+    "mostly_full": {
+      "true_positions": 12,
+      "positions": 20,
+      "auc_vs_piece_count": 0.9479,
+      "rho_vs_piece_count": 0.8271
+    },
+    "how_many": {
+      "true_positions": 12,
+      "positions": 20,
+      "auc_vs_piece_count": 0.9792,
+      "rho_vs_piece_count": 0.9278
+    },
+    "stage": {
+      "true_positions": 12,
+      "positions": 20,
+      "auc_vs_piece_count": 0.8646,
+      "rho_vs_piece_count": 0.815
+    }
+  },
+  "usage": {
+    "requests": 20,
+    "input_tokens": 37427,
+    "output_tokens": 1457
+  },
+  "elapsed_seconds": 1.72,
+  "positions": [
+    {
+      "fen": "4k3/6p1/8/1ppn1p2/1prp4/8/K7/8 w - - 2 41",
+      "match": "d2plain-vs-d4-100",
+      "game": 21,
+      "ply": 75,
+      "opening": "op11",
+      "played_uci": "a2a1",
+      "duplicates": 1,
+      "shallow_move": "a2a1",
+      "deep_move": "a2a1",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 4,
+      "shallow_ms": 1.04,
+      "deep_ms": 18.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 4,
+        "piece_count": 10
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.09,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 0.12,
+            "confidence": 0.81,
+            "choice": null,
+            "probabilities": {
+              "0": 0.88,
+              "1": 0.12,
+              "2": 0.0
+            }
+          },
+          "stage": {
+            "value": 0.0,
+            "confidence": 0.47,
+            "choice": "endgame",
+            "probabilities": {
+              "endgame": 0.64,
+              "opening": 0.01,
+              "middlegame": 0.35
+            }
+          }
+        },
+        "latency_ms": 222.29,
+        "usage": {
+          "input_tokens": 1853,
+          "output_tokens": 73
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r4b1r/1p3kpp/3pbn2/p1p5/P7/3P1B2/1P1B4/R2K4 w - - 4 26",
+      "match": "d2plain-vs-d4-100",
+      "game": 73,
+      "ply": 45,
+      "opening": "op37",
+      "played_uci": "f3b7",
+      "duplicates": 0,
+      "shallow_move": "f3b7",
+      "deep_move": "f3b7",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 14.59,
+      "deep_ms": 773.31,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 29,
+        "piece_count": 19
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.79,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.19,
+            "confidence": 0.7,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.8,
+              "2": 0.2
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.29,
+            "choice": "middlegame",
+            "probabilities": {
+              "opening": 0.46,
+              "endgame": 0.01,
+              "middlegame": 0.53
+            }
+          }
+        },
+        "latency_ms": 303.51,
+        "usage": {
+          "input_tokens": 1864,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqk2Q/1p1pbp1p/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR b KQq - 0 9",
+      "match": "d2plain-vs-d4-100",
+      "game": 74,
+      "ply": 12,
+      "opening": "op37",
+      "played_uci": "e7f8",
+      "duplicates": 0,
+      "shallow_move": "e7f8",
+      "deep_move": "e7f8",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 0.62,
+      "deep_ms": 28.6,
+      "features": {
+        "in_check": true,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 1,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.85,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.78,
+            "confidence": 0.67,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.22,
+              "2": 0.78
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.29,
+            "choice": "opening",
+            "probabilities": {
+              "opening": 0.53,
+              "endgame": 0.0,
+              "middlegame": 0.47
+            }
+          }
+        },
+        "latency_ms": 234.83,
+        "usage": {
+          "input_tokens": 1876,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3r4/3k4/p4p2/P2p1p1Q/5P2/1P1PBP1B/7P/R3K2R b KQ - 0 25",
+      "match": "d2plain-vs-d4-100",
+      "game": 82,
+      "ply": 44,
+      "opening": "op41",
+      "played_uci": "d5d4",
+      "duplicates": 0,
+      "shallow_move": "d5d4",
+      "deep_move": "d7c6",
+      "move_changed": true,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 7.6,
+      "deep_ms": 263.76,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 14,
+        "piece_count": 18
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.34,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.05,
+            "confidence": 0.89,
+            "choice": null,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.92,
+              "2": 0.07
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.79,
+            "choice": "middlegame",
+            "probabilities": {
+              "opening": 0.11,
+              "middlegame": 0.86,
+              "endgame": 0.03
+            }
+          }
+        },
+        "latency_ms": 595.47,
+        "usage": {
+          "input_tokens": 1864,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r6r/1p3k2/3b1q2/p1pPpbp1/P1B4p/1PB2P2/3P2PP/R2QK2R w K - 4 21",
+      "match": "d2plain-vs-d4-100",
+      "game": 87,
+      "ply": 35,
+      "opening": "op44",
+      "played_uci": "a1a2",
+      "duplicates": 0,
+      "shallow_move": "a1a2",
+      "deep_move": "a1a2",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 11,
+      "shallow_ms": 23.34,
+      "deep_ms": 1837.29,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 31,
+        "piece_count": 25
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.75,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.3,
+            "confidence": 0.54,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.69,
+              "2": 0.31
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.61,
+            "choice": "middlegame",
+            "probabilities": {
+              "middlegame": 0.74,
+              "endgame": 0.0,
+              "opening": 0.26
+            }
+          }
+        },
+        "latency_ms": 654.64,
+        "usage": {
+          "input_tokens": 1871,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2k4/2p1b3/1p1p4/3n3r/P7/Q4bn1/7q/1KR5 b - - 3 32",
+      "match": "d2rand-vs-d2-100",
+      "game": 5,
+      "ply": 58,
+      "opening": "op03",
+      "played_uci": "f3e4",
+      "duplicates": 0,
+      "shallow_move": "f3e4",
+      "deep_move": "f3e4",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 15.46,
+      "deep_ms": 708.25,
+      "features": {
+        "in_check": false,
+        "captures_available": 1,
+        "best_capture_value": 100,
+        "checks_available": 5,
+        "hanging_pieces": 1,
+        "max_hanging_value": 330,
+        "legal_moves": 51,
+        "piece_count": 15
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.28,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 0.99,
+            "confidence": 0.97,
+            "choice": null,
+            "probabilities": {
+              "0": 0.02,
+              "1": 0.98,
+              "2": 0.0
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.93,
+            "choice": "middlegame",
+            "probabilities": {
+              "endgame": 0.04,
+              "middlegame": 0.95,
+              "opening": 0.01
+            }
+          }
+        },
+        "latency_ms": 615.35,
+        "usage": {
+          "input_tokens": 1860,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2q1b1r/4pkp1/1p3n2/3b4/PpnN1Bp1/8/2B2P1P/R2QK2R w KQ - 0 18",
+      "match": "d2rand-vs-d2-100",
+      "game": 11,
+      "ply": 29,
+      "opening": "op06",
+      "played_uci": "h1f1",
+      "duplicates": 0,
+      "shallow_move": "f2f3",
+      "deep_move": "c2b3",
+      "move_changed": true,
+      "gap": 280,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 31.77,
+      "deep_ms": 2052.99,
+      "features": {
+        "in_check": false,
+        "captures_available": 1,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 1,
+        "max_hanging_value": 500,
+        "legal_moves": 44,
+        "piece_count": 23
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.85,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.48,
+            "confidence": 0.27,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.52,
+              "2": 0.48
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.49,
+            "choice": "middlegame",
+            "probabilities": {
+              "endgame": 0.0,
+              "middlegame": 0.66,
+              "opening": 0.34
+            }
+          }
+        },
+        "latency_ms": 252.24,
+        "usage": {
+          "input_tokens": 1870,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2qkb1r/2p1pppp/2n2n2/pB1p4/P7/1PN1PN2/1BQP1PPP/R3K2R b KQkq - 0 8",
+      "match": "d2rand-vs-d2-100",
+      "game": 23,
+      "ply": 10,
+      "opening": "op12",
+      "played_uci": "e7e5",
+      "duplicates": 0,
+      "shallow_move": "e7e5",
+      "deep_move": "d8d6",
+      "move_changed": true,
+      "gap": 300,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 3,
+      "shallow_ms": 19.53,
+      "deep_ms": 952.98,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 320,
+        "legal_moves": 22,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.83,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.97,
+            "confidence": 0.96,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.03,
+              "2": 0.97
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.85,
+            "choice": "opening",
+            "probabilities": {
+              "endgame": 0.0,
+              "opening": 0.9,
+              "middlegame": 0.1
+            }
+          }
+        },
+        "latency_ms": 229.92,
+        "usage": {
+          "input_tokens": 1878,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "k6r/8/5q2/p1Qp1P1p/P1P4P/4P3/R7/4K3 w - - 0 31",
+      "match": "d2rand-vs-d2-100",
+      "game": 27,
+      "ply": 55,
+      "opening": "op14",
+      "played_uci": "c5a5",
+      "duplicates": 0,
+      "shallow_move": "c5a5",
+      "deep_move": "c5a5",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 9.48,
+      "deep_ms": 236.77,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 6,
+        "hanging_pieces": 2,
+        "max_hanging_value": 100,
+        "legal_moves": 30,
+        "piece_count": 14
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.1,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 0.94,
+            "confidence": 0.9,
+            "choice": null,
+            "probabilities": {
+              "0": 0.06,
+              "1": 0.93,
+              "2": 0.01
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.61,
+            "choice": "middlegame",
+            "probabilities": {
+              "endgame": 0.24,
+              "opening": 0.02,
+              "middlegame": 0.74
+            }
+          }
+        },
+        "latency_ms": 223.69,
+        "usage": {
+          "input_tokens": 1858,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "1r2k2r/1bpq1p2/1pnppnp1/p1b4p/P1P4P/1PNPPNP1/1B2BP2/R2QK2R w Kk - 10 20",
+      "match": "d2rand-vs-d2-100",
+      "game": 38,
+      "ply": 33,
+      "opening": "op19",
+      "played_uci": "a1a2",
+      "duplicates": 0,
+      "shallow_move": "a1a2",
+      "deep_move": "b2a3",
+      "move_changed": true,
+      "gap": 330,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 14,
+      "shallow_ms": 21.12,
+      "deep_ms": 1101.26,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.89,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.98,
+            "confidence": 0.96,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.02,
+              "2": 0.98
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.73,
+            "choice": "opening",
+            "probabilities": {
+              "middlegame": 0.18,
+              "endgame": 0.0,
+              "opening": 0.82
+            }
+          }
+        },
+        "latency_ms": 232.38,
+        "usage": {
+          "input_tokens": 1879,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "7Q/8/8/2P1Q3/r1k1P3/p7/5R2/2K3NR b - - 0 41",
+      "match": "d2rand-vs-d2-100",
+      "game": 51,
+      "ply": 76,
+      "opening": "op26",
+      "played_uci": "a4a5",
+      "duplicates": 0,
+      "shallow_move": "a4a5",
+      "deep_move": "a4a6",
+      "move_changed": true,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 7,
+      "shallow_ms": 7.51,
+      "deep_ms": 457.6,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 10,
+        "piece_count": 11
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.07,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 0.24,
+            "confidence": 0.63,
+            "choice": null,
+            "probabilities": {
+              "0": 0.76,
+              "1": 0.24,
+              "2": 0.0
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.5,
+            "choice": "middlegame",
+            "probabilities": {
+              "opening": 0.01,
+              "middlegame": 0.66,
+              "endgame": 0.33
+            }
+          }
+        },
+        "latency_ms": 273.81,
+        "usage": {
+          "input_tokens": 1856,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/1b1pbp2/rpn1pnp1/p1p4p/P4B1P/1PNP1NP1/2P1PPB1/R2QK2R w Kk - 1 12",
+      "match": "d2rand-vs-d2-100",
+      "game": 53,
+      "ply": 17,
+      "opening": "op27",
+      "played_uci": "a1a3",
+      "duplicates": 0,
+      "shallow_move": "e2e3",
+      "deep_move": "f4g5",
+      "move_changed": true,
+      "gap": 90,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 25.21,
+      "deep_ms": 1263.93,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 41,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.87,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.95,
+            "confidence": 0.92,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.05,
+              "2": 0.95
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.63,
+            "choice": "opening",
+            "probabilities": {
+              "middlegame": 0.25,
+              "opening": 0.75,
+              "endgame": 0.0
+            }
+          }
+        },
+        "latency_ms": 223.84,
+        "usage": {
+          "input_tokens": 1879,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2qk2r/1bpp2pp/3b4/pP2p2P/1n2p1n1/2N2N2/1PPP1PB1/R1BQK2R w KQkq - 0 12",
+      "match": "d2rand-vs-d2-100",
+      "game": 56,
+      "ply": 17,
+      "opening": "op28",
+      "played_uci": "f3g1",
+      "duplicates": 0,
+      "shallow_move": "f3g1",
+      "deep_move": "f3g1",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 23.73,
+      "deep_ms": 1300.44,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.9,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.89,
+            "confidence": 0.84,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.11,
+              "2": 0.89
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.36,
+            "choice": "opening",
+            "probabilities": {
+              "opening": 0.57,
+              "endgame": 0.0,
+              "middlegame": 0.43
+            }
+          }
+        },
+        "latency_ms": 217.05,
+        "usage": {
+          "input_tokens": 1878,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r3k2r/3bq3/p2pp3/P1p5/2P1N1pP/1N6/4BP2/R2QK2R b KQkq - 1 26",
+      "match": "d2rand-vs-d2-100",
+      "game": 59,
+      "ply": 46,
+      "opening": "op30",
+      "played_uci": "d7c6",
+      "duplicates": 0,
+      "shallow_move": "d7c6",
+      "deep_move": "d6d5",
+      "move_changed": true,
+      "gap": 5,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 17.43,
+      "deep_ms": 989.34,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 30,
+        "piece_count": 21
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.76,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.37,
+            "confidence": 0.43,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.62,
+              "2": 0.38
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.28,
+            "choice": "opening",
+            "probabilities": {
+              "middlegame": 0.48,
+              "opening": 0.52,
+              "endgame": 0.0
+            }
+          }
+        },
+        "latency_ms": 252.07,
+        "usage": {
+          "input_tokens": 1870,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1b1k1nr/pp1p1ppp/4p3/2p5/P2n1b2/2N3q1/1PPPPN2/R1BQKB1R b KQkq - 1 9",
+      "match": "d2rand-vs-d2-100",
+      "game": 65,
+      "ply": 12,
+      "opening": "op33",
+      "played_uci": "g8f6",
+      "duplicates": 0,
+      "shallow_move": "g8f6",
+      "deep_move": "f4e5",
+      "move_changed": true,
+      "gap": 130,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 18.86,
+      "deep_ms": 860.84,
+      "features": {
+        "in_check": false,
+        "captures_available": 5,
+        "best_capture_value": 320,
+        "checks_available": 4,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 49,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.87,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.92,
+            "confidence": 0.88,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.08,
+              "2": 0.92
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.35,
+            "choice": "opening",
+            "probabilities": {
+              "middlegame": 0.43,
+              "endgame": 0.0,
+              "opening": 0.57
+            }
+          }
+        },
+        "latency_ms": 260.92,
+        "usage": {
+          "input_tokens": 1878,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqkb1r/2pppppp/8/pp1nB3/3Pn1PP/2P2N2/P3PP2/RN1QKB1R b KQkq - 0 8",
+      "match": "d2rand-vs-d2-100",
+      "game": 67,
+      "ply": 10,
+      "opening": "op34",
+      "played_uci": "c8b7",
+      "duplicates": 0,
+      "shallow_move": "c8b7",
+      "deep_move": "d7d6",
+      "move_changed": true,
+      "gap": 235,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 18.31,
+      "deep_ms": 999.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 32,
+        "piece_count": 31
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.89,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.96,
+            "confidence": 0.94,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.04,
+              "2": 0.96
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.37,
+            "choice": "opening",
+            "probabilities": {
+              "endgame": 0.0,
+              "opening": 0.58,
+              "middlegame": 0.42
+            }
+          }
+        },
+        "latency_ms": 264.1,
+        "usage": {
+          "input_tokens": 1880,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/1bpp4/rpnbpnp1/p4p1p/P6P/1PNPPN2/1BP1BPP1/R2QK2R b Kk - 4 14",
+      "match": "d2rand-vs-d2-100",
+      "game": 72,
+      "ply": 22,
+      "opening": "op36",
+      "played_uci": "a6a7",
+      "duplicates": 0,
+      "shallow_move": "a6a7",
+      "deep_move": "c6b4",
+      "move_changed": true,
+      "gap": 80,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 15,
+      "shallow_ms": 24.11,
+      "deep_ms": 1205.88,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 40,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.86,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.95,
+            "confidence": 0.93,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.04,
+              "2": 0.96
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.33,
+            "choice": "opening",
+            "probabilities": {
+              "opening": 0.55,
+              "endgame": 0.0,
+              "middlegame": 0.45
+            }
+          }
+        },
+        "latency_ms": 225.7,
+        "usage": {
+          "input_tokens": 1879,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/4ppb1/bpPp1n2/2r2P1p/P1nN1B1P/2N2BP1/2P5/R2QK2R w KQk - 5 23",
+      "match": "d2rand-vs-d2-100",
+      "game": 81,
+      "ply": 39,
+      "opening": "op41",
+      "played_uci": "a4a5",
+      "duplicates": 0,
+      "shallow_move": "a4a5",
+      "deep_move": "d1d3",
+      "move_changed": true,
+      "gap": 195,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 27.22,
+      "deep_ms": 1648.21,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 43,
+        "piece_count": 27
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.86,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.69,
+            "confidence": 0.53,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.31,
+              "2": 0.69
+            }
+          },
+          "stage": {
+            "value": 1.0,
+            "confidence": 0.68,
+            "choice": "middlegame",
+            "probabilities": {
+              "endgame": 0.0,
+              "opening": 0.21,
+              "middlegame": 0.79
+            }
+          }
+        },
+        "latency_ms": 644.11,
+        "usage": {
+          "input_tokens": 1875,
+          "output_tokens": 74
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qkb1r/rb2ppp1/1pnp1n2/p1p2P1p/P6P/1PNPPNP1/1BP3B1/2RQK2R w Kk - 11 17",
+      "match": "d2rand-vs-d2-100",
+      "game": 85,
+      "ply": 27,
+      "opening": "op43",
+      "played_uci": "c1a1",
+      "duplicates": 0,
+      "shallow_move": "c1a1",
+      "deep_move": "c3b5",
+      "move_changed": true,
+      "gap": 110,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 13,
+      "shallow_ms": 18.54,
+      "deep_ms": 1048.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.85,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.96,
+            "confidence": 0.94,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.04,
+              "2": 0.96
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.47,
+            "choice": "opening",
+            "probabilities": {
+              "endgame": 0.0,
+              "opening": 0.65,
+              "middlegame": 0.35
+            }
+          }
+        },
+        "latency_ms": 252.17,
+        "usage": {
+          "input_tokens": 1879,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqk2r/2pp1ppp/1pn1p3/p1b4P/P1P3P1/1P3N2/3PPnB1/RNBQK2R w KQkq - 0 9",
+      "match": "d2rand-vs-d2-100",
+      "game": 96,
+      "ply": 11,
+      "opening": "op48",
+      "played_uci": "d1c2",
+      "duplicates": 0,
+      "shallow_move": "d1c2",
+      "deep_move": "d1c2",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 22.56,
+      "deep_ms": 1299.2,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 29,
+        "piece_count": 31
+      },
+      "jev": {
+        "answers": {
+          "mostly_full": {
+            "value": 0.88,
+            "confidence": null,
+            "choice": null,
+            "probabilities": {}
+          },
+          "how_many": {
+            "value": 1.92,
+            "confidence": 0.89,
+            "choice": null,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.07,
+              "2": 0.93
+            }
+          },
+          "stage": {
+            "value": 2.0,
+            "confidence": 0.55,
+            "choice": "opening",
+            "probabilities": {
+              "endgame": 0.0,
+              "middlegame": 0.3,
+              "opening": 0.7
+            }
+          }
+        },
+        "latency_ms": 256.67,
+        "usage": {
+          "input_tokens": 1880,
+          "output_tokens": 72
+        },
+        "model": "jev-1.13.0"
+      }
+    }
+  ]
+}
