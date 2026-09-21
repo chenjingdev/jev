@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jev 시각 센서 실험실</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f3;color:#1b352a;font:21px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#153d2d;color:#e8f5ed;padding:20px 28px}h1{font-size:32px;margin:0}header p{margin:4px 0;color:#bdd6c8;font-size:20px}
+button{font:inherit;border:1px solid #c1d2c6;background:white;color:#214b32;border-radius:7px;padding:9px 15px;cursor:pointer}button:disabled{opacity:.45;cursor:default}.primary{background:#236943;color:white;border-color:#236943}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:20px 28px 12px}.status{padding:0 28px 18px;font-size:20px;min-height:50px}.status #stage{font-weight:600}.error{color:#a03e31}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:22px;padding:0 28px 28px;align-items:start}h2{font-size:25px;margin:0 0 12px}.hint{font-size:20px;color:#536f5e;margin:0 0 16px}
+.surface{position:relative;line-height:0;border:1px solid #c7d6cb;border-radius:10px;overflow:hidden;background:#e6ece7}.surface canvas,.surface img{display:block;width:100%;height:auto}.surface svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.surface rect{fill:transparent;stroke:#248258;stroke-width:2;vector-effect:non-scaling-stroke}.surface rect.text{stroke:#548cb9;opacity:.5}.surface rect.selected{stroke:#d38514;stroke-width:4;fill:#ffc34c22;opacity:1}
+/* Native keyboard/IME/accessibility input; the visible controls are painted on the canvas. */
+.workspace-controls{position:absolute;inset:0}.workspace-controls>*{position:absolute;opacity:0;padding:0;margin:0;border:0;cursor:pointer}.workspace-controls input{cursor:text;font:28px sans-serif}
+.bar{display:flex;gap:14px;align-items:center;font-size:20px;flex-wrap:wrap;margin:12px 0}.bar label{display:flex;gap:8px;align-items:center}.source-options{margin-top:18px}summary{cursor:pointer;font-size:20px;padding:8px 0}.source-buttons{display:flex;gap:12px;flex-wrap:wrap;padding:12px 0}
+aside{background:#fff;border:1px solid #c7d6cb;border-radius:10px;padding:20px;min-width:0}.summary{color:#48745a;font-size:20px;white-space:pre-line}#filter{font:inherit;width:100%;padding:9px;border:1px solid #c7d6cb;border-radius:6px;margin:14px 0}.elements{max-height:340px;overflow:auto}.elements button{display:block;text-align:left;width:100%;font-size:20px;margin:6px 0;overflow-wrap:anywhere}.elements button.active{border-color:#bd872a;background:#fff6df}.elements span{display:block;color:#5a7463;font-size:20px}
+pre{font:19px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto;background:#f0f4f1;padding:14px;border-radius:7px}.notice{font-size:19px;color:#657c6c;margin-top:18px}[hidden]{display:none!important}button:focus-visible,input:focus-visible{outline:3px solid #d6a44c;outline-offset:3px}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.elements{max-height:260px}}@media(max-width:650px){header,.toolbar{padding:18px}.layout{padding:0 18px 18px}.status{padding-inline:18px}}
+</style>
+<header><h1>시각 센서 실험실</h1><p>테스트 화면을 직접 조작하고, 센서가 읽은 결과를 확인하세요.</p></header>
+<div class="toolbar"><button id="live" class="primary" aria-pressed="false">센서 시작</button><button id="analyze">현재 화면 분석</button><button id="fixture" hidden>테스트 화면으로</button></div>
+<div class="status" aria-live="polite"><span id="stage">‘센서 시작’을 누르면 화면이 바뀔 때마다 관찰합니다.</span></div>
+<div class="layout">
+<section>
+ <h2 id="source-title">직접 조작하는 테스트 화면</h2>
+ <p class="hint" id="source-hint">검색, 즐겨찾기, 문서 열기, 설정을 눌러 보세요.</p>
+ <div id="drop">
+  <div id="workspace" class="surface"><canvas id="canvas" width="800" height="800" aria-label="문서 작업실 테스트 화면"></canvas><div id="workspace-controls" class="workspace-controls"></div><svg id="fixture-boxes" aria-label="테스트 화면 인식 영역"></svg></div>
+  <div id="image-wrap" class="surface" hidden><img id="image" alt="센서에 입력한 이미지"><svg id="image-boxes" aria-label="이미지 인식 영역"></svg></div>
+ </div>
+ <div class="bar"><label><input id="show-boxes" type="checkbox">인식 영역 겹쳐 보기</label><span id="dimensions">800 × 800</span></div>
+ <details class="source-options"><summary>다른 이미지로 시험하기</summary><div class="source-buttons"><button id="upload">이미지 넣기</button><input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden><button id="sample">예제 이미지</button></div><p class="hint">PNG · JPEG · WebP 이미지를 끌어 놓거나 붙여넣어도 됩니다.</p></details>
+</section>
+<aside><h2>센서 출력</h2><div class="summary" id="summary">아직 관찰하지 않았습니다.</div><input id="filter" placeholder="종류·글자·설명으로 찾기" aria-label="인식 결과 검색"><div class="elements" id="elements"></div><details open><summary>선택한 요소</summary><pre id="selected">분석 후 요소를 선택하세요.</pre></details><details><summary>전체 관찰 JSON</summary><pre id="raw">아직 출력이 없습니다.</pre></details><button id="download" disabled>JSON 내려받기</button><p class="notice">ScreenParser → OCR → 영역·글자 결합 → BLIP<br>아이콘 설명은 모델의 추정입니다. 상태 인식은 아직 미구현입니다.</p></aside>
+</div>
+<script type="module" src="/sensor.js"></script>
+</html>

@@ -36,7 +36,7 @@
 
 ```sh
 # 문장 하나
-op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python guardrail/check.py "이 개새끼야 꺼져"
 
 # 여러 줄은 stdin으로, --json이면 한 줄에 JSON 하나

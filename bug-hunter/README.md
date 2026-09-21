@@ -36,7 +36,7 @@ Python 파일을 던지면 함수마다 Jev에게 "버그 냄새가 나는가"�
 
 ```sh
 # 파일이나 디렉터리를 주루룩. 위험한 순서로 표
-op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python bug-hunter/hunt.py src/sif/core.py guardrail/
 
 # 옵션: --top 10, --json(함수당 한 줄), --detail(냄새별 확률 전부), --threshold 0.6
@@ -64,7 +64,7 @@ op run ... -- uv run python bug-hunter/run_samples.py
 ## 감시 모드 (영상용)
 
 ```sh
-op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python bug-hunter/watch.py src/sif/core.py        # http://localhost:3458
 ```
 

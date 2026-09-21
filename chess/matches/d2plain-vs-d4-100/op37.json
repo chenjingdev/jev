@@ -1,0 +1,6531 @@
+{
+  "created_at": "2026-09-20T18:27:29.004993+00:00",
+  "status": "complete",
+  "model": "jev-1.13.0",
+  "design": "Two color-swapped games from the same configured opening. Both sides use the same deterministic depth-2 material+PST engine (weak_engine.py); it leaves tactical mistakes a selector could avoid. The selector (Jev or seeded uniform random) picks among the top-3 root moves within margin of the best, in the weak engine's own units. No scores/ranks/base sent to Jev. Jev adds API time. Asymmetric: hybrid side searches depth 2, plain opponent depth 4.",
+  "selector": "none",
+  "base_engine": "weak",
+  "config": {
+    "engine": "weak_engine.py",
+    "nodes": null,
+    "margin_cp": 30,
+    "max_plies": 400,
+    "multipv": 3,
+    "threads": 1,
+    "hash_mb": 16,
+    "seed": 433419,
+    "opening_uci": [
+      "a2a4",
+      "a7a5",
+      "c2c4",
+      "c7c5",
+      "e2e4",
+      "e7e5"
+    ],
+    "selector": "none",
+    "base_engine": "weak",
+    "depth": 2,
+    "opponent_depth": 4,
+    "margin_units": 30
+  },
+  "engine_a": {
+    "name": "Weak2 (plain)",
+    "nodes": null
+  },
+  "engine_b": {
+    "name": "Weak4",
+    "nodes": null
+  },
+  "games": [
+    {
+      "game": 1,
+      "white": "Weak2 (plain)",
+      "black": "Weak4",
+      "initial_fen": "rnbqkbnr/1p1p1ppp/8/p1p1p3/P1P1P3/8/1P1P1PPP/RNBQKBNR w KQkq - 0 4",
+      "opening_uci": [
+        "a2a4",
+        "a7a5",
+        "c2c4",
+        "c7c5",
+        "e2e4",
+        "e7e5"
+      ],
+      "result": "0-1",
+      "termination": "checkmate",
+      "moves": [
+        {
+          "ply": 1,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "b1c3",
+          "san": "Nc3",
+          "fen_before": "rnbqkbnr/1p1p1ppp/8/p1p1p3/P1P1P3/8/1P1P1PPP/RNBQKBNR w KQkq - 0 4",
+          "base_move": "b1c3",
+          "engine_candidates": [
+            {
+              "move": "b1c3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "b1c3"
+              ]
+            },
+            {
+              "move": "f1d3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "f1d3"
+              ]
+            },
+            {
+              "move": "g1f3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 3,
+              "pv": [
+                "g1f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b1c3",
+            "f1d3",
+            "g1f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 20.95
+        },
+        {
+          "ply": 2,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b8c6",
+          "san": "Nc6",
+          "fen_before": "rnbqkbnr/1p1p1ppp/8/p1p1p3/P1P1P3/2N5/1P1P1PPP/R1BQKBNR b KQkq - 1 4",
+          "base_move": "b8c6",
+          "engine_candidates": [
+            {
+              "move": "b8c6",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 1,
+              "pv": [
+                "b8c6"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 3,
+              "pv": [
+                "g8f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b8c6",
+            "f8d6",
+            "g8f6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 1753.86
+        },
+        {
+          "ply": 3,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f1d3",
+          "san": "Bd3",
+          "fen_before": "r1bqkbnr/1p1p1ppp/2n5/p1p1p3/P1P1P3/2N5/1P1P1PPP/R1BQKBNR w KQkq - 2 5",
+          "base_move": "f1d3",
+          "engine_candidates": [
+            {
+              "move": "f1d3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "f1d3"
+              ]
+            },
+            {
+              "move": "g1f3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "g1f3"
+              ]
+            },
+            {
+              "move": "c3d5",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 3,
+              "pv": [
+                "c3d5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f1d3",
+            "g1f3",
+            "c3d5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 40.37
+        },
+        {
+          "ply": 4,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "c6b4",
+          "san": "Nb4",
+          "fen_before": "r1bqkbnr/1p1p1ppp/2n5/p1p1p3/P1P1P3/2NB4/1P1P1PPP/R1BQK1NR b KQkq - 3 5",
+          "base_move": "c6b4",
+          "engine_candidates": [
+            {
+              "move": "c6b4",
+              "cp": -20,
+              "mate": null,
+              "raw": -20,
+              "rank": 1,
+              "pv": [
+                "c6b4"
+              ]
+            },
+            {
+              "move": "c6d4",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 2,
+              "pv": [
+                "c6d4"
+              ]
+            },
+            {
+              "move": "d8g5",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "d8g5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c6b4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 2362.08
+        },
+        {
+          "ply": 5,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d3e2",
+          "san": "Be2",
+          "fen_before": "r1bqkbnr/1p1p1ppp/8/p1p1p3/PnP1P3/2NB4/1P1P1PPP/R1BQK1NR w KQkq - 4 6",
+          "base_move": "d3e2",
+          "engine_candidates": [
+            {
+              "move": "d3e2",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "d3e2"
+              ]
+            },
+            {
+              "move": "d3b1",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 2,
+              "pv": [
+                "d3b1"
+              ]
+            },
+            {
+              "move": "d3f1",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 3,
+              "pv": [
+                "d3f1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d3e2",
+            "d3b1",
+            "d3f1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 28.21
+        },
+        {
+          "ply": 6,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d8g5",
+          "san": "Qg5",
+          "fen_before": "r1bqkbnr/1p1p1ppp/8/p1p1p3/PnP1P3/2N5/1P1PBPPP/R1BQK1NR b KQkq - 5 6",
+          "base_move": "d8g5",
+          "engine_candidates": [
+            {
+              "move": "d8g5",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 1,
+              "pv": [
+                "d8g5"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 3,
+              "pv": [
+                "g8f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d8g5",
+            "f8d6",
+            "g8f6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 1594.18
+        },
+        {
+          "ply": 7,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "g1f3",
+          "san": "Nf3",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1p1q1/PnP1P3/2N5/1P1PBPPP/R1BQK1NR w KQkq - 6 7",
+          "base_move": "g1f3",
+          "engine_candidates": [
+            {
+              "move": "g1f3",
+              "cp": -60,
+              "mate": null,
+              "raw": -60,
+              "rank": 1,
+              "pv": [
+                "g1f3"
+              ]
+            },
+            {
+              "move": "e2f3",
+              "cp": -70,
+              "mate": null,
+              "raw": -70,
+              "rank": 2,
+              "pv": [
+                "e2f3"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -75,
+              "mate": null,
+              "raw": -75,
+              "rank": 3,
+              "pv": [
+                "b2b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g1f3",
+            "e2f3",
+            "b2b3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 31.73
+        },
+        {
+          "ply": 8,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g5g2",
+          "san": "Qxg2",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1p1q1/PnP1P3/2N2N2/1P1PBPPP/R1BQK2R b KQkq - 7 7",
+          "base_move": "g5g2",
+          "engine_candidates": [
+            {
+              "move": "g5g2",
+              "cp": -60,
+              "mate": null,
+              "raw": -60,
+              "rank": 1,
+              "pv": [
+                "g5g2"
+              ]
+            },
+            {
+              "move": "g5e7",
+              "cp": -150,
+              "mate": null,
+              "raw": -150,
+              "rank": 2,
+              "pv": [
+                "g5e7"
+              ]
+            },
+            {
+              "move": "g5f6",
+              "cp": -150,
+              "mate": null,
+              "raw": -150,
+              "rank": 3,
+              "pv": [
+                "g5f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g5g2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 1129.33
+        },
+        {
+          "ply": 9,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f3e5",
+          "san": "Nxe5",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1p3/PnP1P3/2N2N2/1P1PBPqP/R1BQK2R w KQkq - 0 8",
+          "base_move": "f3e5",
+          "engine_candidates": [
+            {
+              "move": "f3e5",
+              "cp": -440,
+              "mate": null,
+              "raw": -440,
+              "rank": 1,
+              "pv": [
+                "f3e5"
+              ]
+            },
+            {
+              "move": "c3d5",
+              "cp": -550,
+              "mate": null,
+              "raw": -550,
+              "rank": 2,
+              "pv": [
+                "c3d5"
+              ]
+            },
+            {
+              "move": "d2d4",
+              "cp": -550,
+              "mate": null,
+              "raw": -550,
+              "rank": 3,
+              "pv": [
+                "d2d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f3e5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 23,
+          "elapsed_ms": 25.64
+        },
+        {
+          "ply": 10,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g2h1",
+          "san": "Qxh1+",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1P3/2N5/1P1PBPqP/R1BQK2R b KQkq - 0 8",
+          "base_move": "g2h1",
+          "engine_candidates": [
+            {
+              "move": "g2h1",
+              "cp": 470,
+              "mate": null,
+              "raw": 470,
+              "rank": 1,
+              "pv": [
+                "g2h1"
+              ]
+            },
+            {
+              "move": "b4c2",
+              "cp": 120,
+              "mate": null,
+              "raw": 120,
+              "rank": 2,
+              "pv": [
+                "b4c2"
+              ]
+            },
+            {
+              "move": "b4d3",
+              "cp": 100,
+              "mate": null,
+              "raw": 100,
+              "rank": 3,
+              "pv": [
+                "b4d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g2h1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 38,
+          "elapsed_ms": 1153.86
+        },
+        {
+          "ply": 11,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e2f1",
+          "san": "Bf1",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1P3/2N5/1P1PBP1P/R1BQK2q w Qkq - 0 9",
+          "base_move": "e2f1",
+          "engine_candidates": [
+            {
+              "move": "e2f1",
+              "cp": -780,
+              "mate": null,
+              "raw": -780,
+              "rank": 1,
+              "pv": [
+                "e2f1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e2f1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 0.97
+        },
+        {
+          "ply": 12,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "h1h2",
+          "san": "Qxh2",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1P3/2N5/1P1P1P1P/R1BQKB1q b Qkq - 1 9",
+          "base_move": "h1h2",
+          "engine_candidates": [
+            {
+              "move": "h1h2",
+              "cp": 540,
+              "mate": null,
+              "raw": 540,
+              "rank": 1,
+              "pv": [
+                "h1h2"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": 465,
+              "mate": null,
+              "raw": 465,
+              "rank": 2,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 460,
+              "mate": null,
+              "raw": 460,
+              "rank": 3,
+              "pv": [
+                "f8d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h1h2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 32,
+          "elapsed_ms": 1008.16
+        },
+        {
+          "ply": 13,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f2f4",
+          "san": "f4",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1P3/2N5/1P1P1P1q/R1BQKB2 w Qkq - 0 10",
+          "base_move": "f2f4",
+          "engine_candidates": [
+            {
+              "move": "f2f4",
+              "cp": -650,
+              "mate": null,
+              "raw": -650,
+              "rank": 1,
+              "pv": [
+                "f2f4"
+              ]
+            },
+            {
+              "move": "e5f3",
+              "cp": -660,
+              "mate": null,
+              "raw": -660,
+              "rank": 2,
+              "pv": [
+                "e5f3"
+              ]
+            },
+            {
+              "move": "e5g4",
+              "cp": -670,
+              "mate": null,
+              "raw": -670,
+              "rank": 3,
+              "pv": [
+                "e5g4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f2f4",
+            "e5f3",
+            "e5g4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 38.03
+        },
+        {
+          "ply": 14,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "h2f4",
+          "san": "Qxf4",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1PP2/2N5/1P1P3q/R1BQKB2 b Qkq - 0 10",
+          "base_move": "h2f4",
+          "engine_candidates": [
+            {
+              "move": "h2f4",
+              "cp": 640,
+              "mate": null,
+              "raw": 640,
+              "rank": 1,
+              "pv": [
+                "h2f4"
+              ]
+            },
+            {
+              "move": "h2g3",
+              "cp": 570,
+              "mate": null,
+              "raw": 570,
+              "rank": 2,
+              "pv": [
+                "h2g3"
+              ]
+            },
+            {
+              "move": "h2h4",
+              "cp": 570,
+              "mate": null,
+              "raw": 570,
+              "rank": 3,
+              "pv": [
+                "h2h4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h2f4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 38,
+          "elapsed_ms": 1457.04
+        },
+        {
+          "ply": 15,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e5f7",
+          "san": "Nxf7",
+          "fen_before": "r1b1kbnr/1p1p1ppp/8/p1p1N3/PnP1Pq2/2N5/1P1P4/R1BQKB2 w Qkq - 0 11",
+          "base_move": "e5f7",
+          "engine_candidates": [
+            {
+              "move": "e5f7",
+              "cp": -900,
+              "mate": null,
+              "raw": -900,
+              "rank": 1,
+              "pv": [
+                "e5f7"
+              ]
+            },
+            {
+              "move": "e5d7",
+              "cp": -910,
+              "mate": null,
+              "raw": -910,
+              "rank": 2,
+              "pv": [
+                "e5d7"
+              ]
+            },
+            {
+              "move": "d2d4",
+              "cp": -990,
+              "mate": null,
+              "raw": -990,
+              "rank": 3,
+              "pv": [
+                "d2d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e5f7",
+            "e5d7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 33.98
+        },
+        {
+          "ply": 16,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f4g3",
+          "san": "Qg3+",
+          "fen_before": "r1b1kbnr/1p1p1Npp/8/p1p5/PnP1Pq2/2N5/1P1P4/R1BQKB2 b Qkq - 0 11",
+          "base_move": "f4g3",
+          "engine_candidates": [
+            {
+              "move": "f4g3",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 1,
+              "pv": [
+                "f4g3"
+              ]
+            },
+            {
+              "move": "f4h4",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 2,
+              "pv": [
+                "f4h4"
+              ]
+            },
+            {
+              "move": "f4f7",
+              "cp": 810,
+              "mate": null,
+              "raw": 810,
+              "rank": 3,
+              "pv": [
+                "f4f7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f4g3",
+            "f4h4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 1061.04
+        },
+        {
+          "ply": 17,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e1e2",
+          "san": "Ke2",
+          "fen_before": "r1b1kbnr/1p1p1Npp/8/p1p5/PnP1P3/2N3q1/1P1P4/R1BQKB2 w Qkq - 1 12",
+          "base_move": "e1e2",
+          "engine_candidates": [
+            {
+              "move": "e1e2",
+              "cp": -910,
+              "mate": null,
+              "raw": -910,
+              "rank": 1,
+              "pv": [
+                "e1e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e1e2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.43
+        },
+        {
+          "ply": 18,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "e8f7",
+          "san": "Kxf7",
+          "fen_before": "r1b1kbnr/1p1p1Npp/8/p1p5/PnP1P3/2N3q1/1P1PK3/R1BQ1B2 b kq - 2 12",
+          "base_move": "e8f7",
+          "engine_candidates": [
+            {
+              "move": "e8f7",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 1,
+              "pv": [
+                "e8f7"
+              ]
+            },
+            {
+              "move": "g3h2",
+              "cp": 880,
+              "mate": null,
+              "raw": 880,
+              "rank": 2,
+              "pv": [
+                "g3h2"
+              ]
+            },
+            {
+              "move": "b4c6",
+              "cp": 590,
+              "mate": null,
+              "raw": 590,
+              "rank": 3,
+              "pv": [
+                "b4c6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e8f7",
+            "g3h2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 776.09
+        },
+        {
+          "ply": 19,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c3b5",
+          "san": "Nb5",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/p1p5/PnP1P3/2N3q1/1P1PK3/R1BQ1B2 w - - 0 13",
+          "base_move": "c3b5",
+          "engine_candidates": [
+            {
+              "move": "c3b5",
+              "cp": -930,
+              "mate": null,
+              "raw": -930,
+              "rank": 1,
+              "pv": [
+                "c3b5"
+              ]
+            },
+            {
+              "move": "c3b1",
+              "cp": -940,
+              "mate": null,
+              "raw": -940,
+              "rank": 2,
+              "pv": [
+                "c3b1"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": -1010,
+              "mate": null,
+              "raw": -1010,
+              "rank": 3,
+              "pv": [
+                "d2d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3b5",
+            "c3b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 16,
+          "elapsed_ms": 19.24
+        },
+        {
+          "ply": 20,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g3g4",
+          "san": "Qg4+",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/pNp5/PnP1P3/6q1/1P1PK3/R1BQ1B2 b - - 1 13",
+          "base_move": "g3g4",
+          "engine_candidates": [
+            {
+              "move": "g3g4",
+              "cp": 1010,
+              "mate": null,
+              "raw": 1010,
+              "rank": 1,
+              "pv": [
+                "g3g4"
+              ]
+            },
+            {
+              "move": "g3d3",
+              "cp": 1000,
+              "mate": null,
+              "raw": 1000,
+              "rank": 2,
+              "pv": [
+                "g3d3"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": 925,
+              "mate": null,
+              "raw": 925,
+              "rank": 3,
+              "pv": [
+                "g8f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g3g4",
+            "g3d3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 47,
+          "elapsed_ms": 1286.13
+        },
+        {
+          "ply": 21,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e2e1",
+          "san": "Ke1",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/pNp5/PnP1P1q1/8/1P1PK3/R1BQ1B2 w - - 2 14",
+          "base_move": "e2e1",
+          "engine_candidates": [
+            {
+              "move": "e2e1",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 1,
+              "pv": [
+                "e2e1"
+              ]
+            },
+            {
+              "move": "e2e3",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 2,
+              "pv": [
+                "e2e3"
+              ]
+            },
+            {
+              "move": "e2f2",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 3,
+              "pv": [
+                "e2f2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e2e1",
+            "e2e3",
+            "e2f2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 3,
+          "elapsed_ms": 3.64
+        },
+        {
+          "ply": 22,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g4e4",
+          "san": "Qxe4+",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/pNp5/PnP1P1q1/8/1P1P4/R1BQKB2 b - - 3 14",
+          "base_move": "g4e4",
+          "engine_candidates": [
+            {
+              "move": "g4e4",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 1,
+              "pv": [
+                "g4e4"
+              ]
+            },
+            {
+              "move": "g4h4",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 2,
+              "pv": [
+                "g4h4"
+              ]
+            },
+            {
+              "move": "g4d1",
+              "cp": 910,
+              "mate": null,
+              "raw": 910,
+              "rank": 3,
+              "pv": [
+                "g4d1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g4e4",
+            "g4h4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 41,
+          "elapsed_ms": 549.95
+        },
+        {
+          "ply": 23,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e1f2",
+          "san": "Kf2",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/pNp5/PnP1q3/8/1P1P4/R1BQKB2 w - - 0 15",
+          "base_move": "e1f2",
+          "engine_candidates": [
+            {
+              "move": "e1f2",
+              "cp": -1130,
+              "mate": null,
+              "raw": -1130,
+              "rank": 1,
+              "pv": [
+                "e1f2"
+              ]
+            },
+            {
+              "move": "f1e2",
+              "cp": -1350,
+              "mate": null,
+              "raw": -1350,
+              "rank": 2,
+              "pv": [
+                "f1e2"
+              ]
+            },
+            {
+              "move": "d1e2",
+              "cp": -1920,
+              "mate": null,
+              "raw": -1920,
+              "rank": 3,
+              "pv": [
+                "d1e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e1f2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 3,
+          "elapsed_ms": 3.6
+        },
+        {
+          "ply": 24,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g8f6",
+          "san": "Nf6",
+          "fen_before": "r1b2bnr/1p1p1kpp/8/pNp5/PnP1q3/8/1P1P1K2/R1BQ1B2 b - - 1 15",
+          "base_move": "g8f6",
+          "engine_candidates": [
+            {
+              "move": "g8f6",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 1,
+              "pv": [
+                "g8f6"
+              ]
+            },
+            {
+              "move": "e4f4",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 2,
+              "pv": [
+                "e4f4"
+              ]
+            },
+            {
+              "move": "e4f5",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 3,
+              "pv": [
+                "e4f5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g8f6",
+            "e4f4",
+            "e4f5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 48,
+          "elapsed_ms": 1925.95
+        },
+        {
+          "ply": 25,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "b5c3",
+          "san": "Nc3",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/pNp5/PnP1q3/8/1P1P1K2/R1BQ1B2 w - - 2 16",
+          "base_move": "b5c3",
+          "engine_candidates": [
+            {
+              "move": "b5c3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 1,
+              "pv": [
+                "b5c3"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -1145,
+              "mate": null,
+              "raw": -1145,
+              "rank": 2,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "d2d4",
+              "cp": -1145,
+              "mate": null,
+              "raw": -1145,
+              "rank": 3,
+              "pv": [
+                "d2d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b5c3",
+            "b2b3",
+            "d2d4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 25,
+          "elapsed_ms": 30.38
+        },
+        {
+          "ply": 26,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "e4d4",
+          "san": "Qd4+",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/PnP1q3/2N5/1P1P1K2/R1BQ1B2 b - - 3 16",
+          "base_move": "e4d4",
+          "engine_candidates": [
+            {
+              "move": "e4d4",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 1,
+              "pv": [
+                "e4d4"
+              ]
+            },
+            {
+              "move": "e4f4",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 2,
+              "pv": [
+                "e4f4"
+              ]
+            },
+            {
+              "move": "e4f5",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 3,
+              "pv": [
+                "e4f5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e4d4",
+            "e4f4",
+            "e4f5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 52,
+          "elapsed_ms": 1634.65
+        },
+        {
+          "ply": 27,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f2e1",
+          "san": "Ke1",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/PnPq4/2N5/1P1P1K2/R1BQ1B2 w - - 4 17",
+          "base_move": "f2e1",
+          "engine_candidates": [
+            {
+              "move": "f2e1",
+              "cp": -1370,
+              "mate": null,
+              "raw": -1370,
+              "rank": 1,
+              "pv": [
+                "f2e1"
+              ]
+            },
+            {
+              "move": "f2e2",
+              "cp": -1370,
+              "mate": null,
+              "raw": -1370,
+              "rank": 2,
+              "pv": [
+                "f2e2"
+              ]
+            },
+            {
+              "move": "f2f3",
+              "cp": -1370,
+              "mate": null,
+              "raw": -1370,
+              "rank": 3,
+              "pv": [
+                "f2f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f2e1",
+            "f2e2",
+            "f2f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 5,
+          "elapsed_ms": 6.33
+        },
+        {
+          "ply": 28,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d4h4",
+          "san": "Qh4+",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/PnPq4/2N5/1P1P4/R1BQKB2 b - - 5 17",
+          "base_move": "d4h4",
+          "engine_candidates": [
+            {
+              "move": "d4h4",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 1,
+              "pv": [
+                "d4h4"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 1045,
+              "mate": null,
+              "raw": 1045,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "f8e7",
+              "cp": 1035,
+              "mate": null,
+              "raw": 1035,
+              "rank": 3,
+              "pv": [
+                "f8e7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d4h4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 45,
+          "elapsed_ms": 1461.37
+        },
+        {
+          "ply": 29,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e1e2",
+          "san": "Ke2",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/PnP4q/2N5/1P1P4/R1BQKB2 w - - 6 18",
+          "base_move": "e1e2",
+          "engine_candidates": [
+            {
+              "move": "e1e2",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 1,
+              "pv": [
+                "e1e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e1e2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.21
+        },
+        {
+          "ply": 30,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "h4c4",
+          "san": "Qxc4+",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/PnP4q/2N5/1P1PK3/R1BQ1B2 b - - 7 18",
+          "base_move": "h4c4",
+          "engine_candidates": [
+            {
+              "move": "h4c4",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 1,
+              "pv": [
+                "h4c4"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": 1035,
+              "mate": null,
+              "raw": 1035,
+              "rank": 3,
+              "pv": [
+                "d7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h4c4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 45,
+          "elapsed_ms": 1278.78
+        },
+        {
+          "ply": 31,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d2d3",
+          "san": "d3",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pnq5/2N5/1P1PK3/R1BQ1B2 w - - 0 19",
+          "base_move": "d2d3",
+          "engine_candidates": [
+            {
+              "move": "d2d3",
+              "cp": -1475,
+              "mate": null,
+              "raw": -1475,
+              "rank": 1,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "e2e1",
+              "cp": -1480,
+              "mate": null,
+              "raw": -1480,
+              "rank": 2,
+              "pv": [
+                "e2e1"
+              ]
+            },
+            {
+              "move": "e2e3",
+              "cp": -1480,
+              "mate": null,
+              "raw": -1480,
+              "rank": 3,
+              "pv": [
+                "e2e3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d2d3",
+            "e2e1",
+            "e2e3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 5,
+          "elapsed_ms": 7.03
+        },
+        {
+          "ply": 32,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "c4g4",
+          "san": "Qg4+",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pnq5/2NP4/1P2K3/R1BQ1B2 b - - 0 19",
+          "base_move": "c4g4",
+          "engine_candidates": [
+            {
+              "move": "c4g4",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 1,
+              "pv": [
+                "c4g4"
+              ]
+            },
+            {
+              "move": "c4e6",
+              "cp": 1125,
+              "mate": null,
+              "raw": 1125,
+              "rank": 2,
+              "pv": [
+                "c4e6"
+              ]
+            },
+            {
+              "move": "b4d3",
+              "cp": 910,
+              "mate": null,
+              "raw": 910,
+              "rank": 3,
+              "pv": [
+                "b4d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c4g4",
+            "c4e6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 44,
+          "elapsed_ms": 965.68
+        },
+        {
+          "ply": 33,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e2d2",
+          "san": "Kd2",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pn4q1/2NP4/1P2K3/R1BQ1B2 w - - 1 20",
+          "base_move": "e2d2",
+          "engine_candidates": [
+            {
+              "move": "e2d2",
+              "cp": -2035,
+              "mate": null,
+              "raw": -2035,
+              "rank": 1,
+              "pv": [
+                "e2d2"
+              ]
+            },
+            {
+              "move": "e2e1",
+              "cp": -2035,
+              "mate": null,
+              "raw": -2035,
+              "rank": 2,
+              "pv": [
+                "e2e1"
+              ]
+            },
+            {
+              "move": "e2e3",
+              "cp": -2035,
+              "mate": null,
+              "raw": -2035,
+              "rank": 3,
+              "pv": [
+                "e2e3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e2d2",
+            "e2e1",
+            "e2e3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 4,
+          "elapsed_ms": 5.12
+        },
+        {
+          "ply": 34,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "g4d1",
+          "san": "Qxd1+",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pn4q1/2NP4/1P1K4/R1BQ1B2 b - - 2 20",
+          "base_move": "g4d1",
+          "engine_candidates": [
+            {
+              "move": "g4d1",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 1,
+              "pv": [
+                "g4d1"
+              ]
+            },
+            {
+              "move": "g4f4",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 2,
+              "pv": [
+                "g4f4"
+              ]
+            },
+            {
+              "move": "g4g5",
+              "cp": 1135,
+              "mate": null,
+              "raw": 1135,
+              "rank": 3,
+              "pv": [
+                "g4g5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g4d1",
+            "g4f4",
+            "g4g5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 48,
+          "elapsed_ms": 1154.03
+        },
+        {
+          "ply": 35,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d2d1",
+          "san": "Kxd1",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pn6/2NP4/1P1K4/R1Bq1B2 w - - 0 21",
+          "base_move": "d2d1",
+          "engine_candidates": [
+            {
+              "move": "d2d1",
+              "cp": -1250,
+              "mate": null,
+              "raw": -1250,
+              "rank": 1,
+              "pv": [
+                "d2d1"
+              ]
+            },
+            {
+              "move": "c3d1",
+              "cp": -1270,
+              "mate": null,
+              "raw": -1270,
+              "rank": 2,
+              "pv": [
+                "c3d1"
+              ]
+            },
+            {
+              "move": "d2e3",
+              "cp": -2365,
+              "mate": null,
+              "raw": -2365,
+              "rank": 3,
+              "pv": [
+                "d2e3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d2d1",
+            "c3d1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 3,
+          "elapsed_ms": 2.92
+        },
+        {
+          "ply": 36,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b4d5",
+          "san": "Nbd5",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1p5/Pn6/2NP4/1P6/R1BK1B2 b - - 0 21",
+          "base_move": "b4d5",
+          "engine_candidates": [
+            {
+              "move": "b4d5",
+              "cp": 1125,
+              "mate": null,
+              "raw": 1125,
+              "rank": 1,
+              "pv": [
+                "b4d5"
+              ]
+            },
+            {
+              "move": "d7d5",
+              "cp": 1120,
+              "mate": null,
+              "raw": 1120,
+              "rank": 2,
+              "pv": [
+                "d7d5"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": 1120,
+              "mate": null,
+              "raw": 1120,
+              "rank": 3,
+              "pv": [
+                "d7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b4d5",
+            "d7d5",
+            "d7d6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 32,
+          "elapsed_ms": 1033.16
+        },
+        {
+          "ply": 37,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c3d5",
+          "san": "Nxd5",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1pn4/P7/2NP4/1P6/R1BK1B2 w - - 1 22",
+          "base_move": "c3d5",
+          "engine_candidates": [
+            {
+              "move": "c3d5",
+              "cp": -1155,
+              "mate": null,
+              "raw": -1155,
+              "rank": 1,
+              "pv": [
+                "c3d5"
+              ]
+            },
+            {
+              "move": "c3b5",
+              "cp": -1185,
+              "mate": null,
+              "raw": -1185,
+              "rank": 2,
+              "pv": [
+                "c3b5"
+              ]
+            },
+            {
+              "move": "c3e2",
+              "cp": -1185,
+              "mate": null,
+              "raw": -1185,
+              "rank": 3,
+              "pv": [
+                "c3e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3d5",
+            "c3b5",
+            "c3e2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 24,
+          "elapsed_ms": 17.8
+        },
+        {
+          "ply": 38,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f6d5",
+          "san": "Nxd5",
+          "fen_before": "r1b2b1r/1p1p1kpp/5n2/p1pN4/P7/3P4/1P6/R1BK1B2 b - - 0 22",
+          "base_move": "f6d5",
+          "engine_candidates": [
+            {
+              "move": "f6d5",
+              "cp": 1035,
+              "mate": null,
+              "raw": 1035,
+              "rank": 1,
+              "pv": [
+                "f6d5"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": 790,
+              "mate": null,
+              "raw": 790,
+              "rank": 2,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "f6g4",
+              "cp": 765,
+              "mate": null,
+              "raw": 765,
+              "rank": 3,
+              "pv": [
+                "f6g4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f6d5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 24,
+          "elapsed_ms": 495.24
+        },
+        {
+          "ply": 39,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c1d2",
+          "san": "Bd2",
+          "fen_before": "r1b2b1r/1p1p1kpp/8/p1pn4/P7/3P4/1P6/R1BK1B2 w - - 0 23",
+          "base_move": "c1d2",
+          "engine_candidates": [
+            {
+              "move": "c1d2",
+              "cp": -1165,
+              "mate": null,
+              "raw": -1165,
+              "rank": 1,
+              "pv": [
+                "c1d2"
+              ]
+            },
+            {
+              "move": "c1g5",
+              "cp": -1165,
+              "mate": null,
+              "raw": -1165,
+              "rank": 2,
+              "pv": [
+                "c1g5"
+              ]
+            },
+            {
+              "move": "f1e2",
+              "cp": -1165,
+              "mate": null,
+              "raw": -1165,
+              "rank": 3,
+              "pv": [
+                "f1e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c1d2",
+            "c1g5",
+            "f1e2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 18,
+          "elapsed_ms": 14.96
+        },
+        {
+          "ply": 40,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d7d6",
+          "san": "d6",
+          "fen_before": "r1b2b1r/1p1p1kpp/8/p1pn4/P7/3P4/1P1B4/R2K1B2 b - - 1 23",
+          "base_move": "d7d6",
+          "engine_candidates": [
+            {
+              "move": "d7d6",
+              "cp": 1060,
+              "mate": null,
+              "raw": 1060,
+              "rank": 1,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 1045,
+              "mate": null,
+              "raw": 1045,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "d5f6",
+              "cp": 1035,
+              "mate": null,
+              "raw": 1035,
+              "rank": 3,
+              "pv": [
+                "d5f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d7d6",
+            "f8d6",
+            "d5f6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 28,
+          "elapsed_ms": 872.31
+        },
+        {
+          "ply": 41,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f1e2",
+          "san": "Be2",
+          "fen_before": "r1b2b1r/1p3kpp/3p4/p1pn4/P7/3P4/1P1B4/R2K1B2 w - - 0 24",
+          "base_move": "f1e2",
+          "engine_candidates": [
+            {
+              "move": "f1e2",
+              "cp": -1160,
+              "mate": null,
+              "raw": -1160,
+              "rank": 1,
+              "pv": [
+                "f1e2"
+              ]
+            },
+            {
+              "move": "f1g2",
+              "cp": -1160,
+              "mate": null,
+              "raw": -1160,
+              "rank": 2,
+              "pv": [
+                "f1g2"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -1165,
+              "mate": null,
+              "raw": -1165,
+              "rank": 3,
+              "pv": [
+                "b2b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f1e2",
+            "f1g2",
+            "b2b3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 23,
+          "elapsed_ms": 19.11
+        },
+        {
+          "ply": 42,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "c8e6",
+          "san": "Be6",
+          "fen_before": "r1b2b1r/1p3kpp/3p4/p1pn4/P7/3P4/1P1BB3/R2K4 b - - 1 24",
+          "base_move": "c8e6",
+          "engine_candidates": [
+            {
+              "move": "c8e6",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 1,
+              "pv": [
+                "c8e6"
+              ]
+            },
+            {
+              "move": "c8f5",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 2,
+              "pv": [
+                "c8f5"
+              ]
+            },
+            {
+              "move": "c8d7",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 3,
+              "pv": [
+                "c8d7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8e6",
+            "c8f5",
+            "c8d7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 861.45
+        },
+        {
+          "ply": 43,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "e2f3",
+          "san": "Bf3",
+          "fen_before": "r4b1r/1p3kpp/3pb3/p1pn4/P7/3P4/1P1BB3/R2K4 w - - 2 25",
+          "base_move": "e2f3",
+          "engine_candidates": [
+            {
+              "move": "e2f3",
+              "cp": -1160,
+              "mate": null,
+              "raw": -1160,
+              "rank": 1,
+              "pv": [
+                "e2f3"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -1165,
+              "mate": null,
+              "raw": -1165,
+              "rank": 2,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "a1a2",
+              "cp": -1170,
+              "mate": null,
+              "raw": -1170,
+              "rank": 3,
+              "pv": [
+                "a1a2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e2f3",
+            "b2b3",
+            "a1a2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 23,
+          "elapsed_ms": 19.27
+        },
+        {
+          "ply": 44,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d5f6",
+          "san": "Nf6",
+          "fen_before": "r4b1r/1p3kpp/3pb3/p1pn4/P7/3P1B2/1P1B4/R2K4 b - - 3 25",
+          "base_move": "d5f6",
+          "engine_candidates": [
+            {
+              "move": "d5f6",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 1,
+              "pv": [
+                "d5f6"
+              ]
+            },
+            {
+              "move": "d5b6",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 2,
+              "pv": [
+                "d5b6"
+              ]
+            },
+            {
+              "move": "d5c7",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 3,
+              "pv": [
+                "d5c7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5f6",
+            "d5b6",
+            "d5c7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 33,
+          "elapsed_ms": 1323.45
+        },
+        {
+          "ply": 45,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "f3b7",
+          "san": "Bxb7",
+          "fen_before": "r4b1r/1p3kpp/3pbn2/p1p5/P7/3P1B2/1P1B4/R2K4 w - - 4 26",
+          "base_move": "f3b7",
+          "engine_candidates": [
+            {
+              "move": "f3b7",
+              "cp": -1060,
+              "mate": null,
+              "raw": -1060,
+              "rank": 1,
+              "pv": [
+                "f3b7"
+              ]
+            },
+            {
+              "move": "d2c3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 2,
+              "pv": [
+                "d2c3"
+              ]
+            },
+            {
+              "move": "d2e3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 3,
+              "pv": [
+                "d2e3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f3b7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 23.27
+        },
+        {
+          "ply": 46,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "a8b8",
+          "san": "Rb8",
+          "fen_before": "r4b1r/1B3kpp/3pbn2/p1p5/P7/3P4/1P1B4/R2K4 b - - 0 26",
+          "base_move": "a8b8",
+          "engine_candidates": [
+            {
+              "move": "a8b8",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 1,
+              "pv": [
+                "a8b8"
+              ]
+            },
+            {
+              "move": "a8a7",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 2,
+              "pv": [
+                "a8a7"
+              ]
+            },
+            {
+              "move": "a8d8",
+              "cp": 940,
+              "mate": null,
+              "raw": 940,
+              "rank": 3,
+              "pv": [
+                "a8d8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a8b8",
+            "a8a7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 34,
+          "elapsed_ms": 713.43
+        },
+        {
+          "ply": 47,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "b7c6",
+          "san": "Bc6",
+          "fen_before": "1r3b1r/1B3kpp/3pbn2/p1p5/P7/3P4/1P1B4/R2K4 w - - 1 27",
+          "base_move": "b7c6",
+          "engine_candidates": [
+            {
+              "move": "b7c6",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 1,
+              "pv": [
+                "b7c6"
+              ]
+            },
+            {
+              "move": "b7f3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 2,
+              "pv": [
+                "b7f3"
+              ]
+            },
+            {
+              "move": "b7g2",
+              "cp": -1150,
+              "mate": null,
+              "raw": -1150,
+              "rank": 3,
+              "pv": [
+                "b7g2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b7c6",
+            "b7f3",
+            "b7g2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 22.91
+        },
+        {
+          "ply": 48,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b8b6",
+          "san": "Rb6",
+          "fen_before": "1r3b1r/5kpp/2Bpbn2/p1p5/P7/3P4/1P1B4/R2K4 b - - 2 27",
+          "base_move": "b8b6",
+          "engine_candidates": [
+            {
+              "move": "b8b6",
+              "cp": 1040,
+              "mate": null,
+              "raw": 1040,
+              "rank": 1,
+              "pv": [
+                "b8b6"
+              ]
+            },
+            {
+              "move": "b8b2",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 2,
+              "pv": [
+                "b8b2"
+              ]
+            },
+            {
+              "move": "b8c8",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 3,
+              "pv": [
+                "b8c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b8b6",
+            "b8b2",
+            "b8c8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 1127.28
+        },
+        {
+          "ply": 49,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c6f3",
+          "san": "Bf3",
+          "fen_before": "5b1r/5kpp/1rBpbn2/p1p5/P7/3P4/1P1B4/R2K4 w - - 3 28",
+          "base_move": "c6f3",
+          "engine_candidates": [
+            {
+              "move": "c6f3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 1,
+              "pv": [
+                "c6f3"
+              ]
+            },
+            {
+              "move": "c6g2",
+              "cp": -1150,
+              "mate": null,
+              "raw": -1150,
+              "rank": 2,
+              "pv": [
+                "c6g2"
+              ]
+            },
+            {
+              "move": "c6a8",
+              "cp": -1160,
+              "mate": null,
+              "raw": -1160,
+              "rank": 3,
+              "pv": [
+                "c6a8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c6f3",
+            "c6g2",
+            "c6a8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 24.13
+        },
+        {
+          "ply": 50,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b6b2",
+          "san": "Rxb2",
+          "fen_before": "5b1r/5kpp/1r1pbn2/p1p5/P7/3P1B2/1P1B4/R2K4 b - - 4 28",
+          "base_move": "b6b2",
+          "engine_candidates": [
+            {
+              "move": "b6b2",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 1,
+              "pv": [
+                "b6b2"
+              ]
+            },
+            {
+              "move": "f8e7",
+              "cp": 960,
+              "mate": null,
+              "raw": 960,
+              "rank": 2,
+              "pv": [
+                "f8e7"
+              ]
+            },
+            {
+              "move": "h7h5",
+              "cp": 960,
+              "mate": null,
+              "raw": 960,
+              "rank": 3,
+              "pv": [
+                "h7h5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b6b2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 1034.33
+        },
+        {
+          "ply": 51,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d2a5",
+          "san": "Bxa5",
+          "fen_before": "5b1r/5kpp/3pbn2/p1p5/P7/3P1B2/1r1B4/R2K4 w - - 0 29",
+          "base_move": "d2a5",
+          "engine_candidates": [
+            {
+              "move": "d2a5",
+              "cp": -1050,
+              "mate": null,
+              "raw": -1050,
+              "rank": 1,
+              "pv": [
+                "d2a5"
+              ]
+            },
+            {
+              "move": "d2c3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 2,
+              "pv": [
+                "d2c3"
+              ]
+            },
+            {
+              "move": "d2e3",
+              "cp": -1140,
+              "mate": null,
+              "raw": -1140,
+              "rank": 3,
+              "pv": [
+                "d2e3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d2a5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 27,
+          "elapsed_ms": 22.49
+        },
+        {
+          "ply": 52,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b2b3",
+          "san": "Rb3",
+          "fen_before": "5b1r/5kpp/3pbn2/B1p5/P7/3P1B2/1r6/R2K4 b - - 0 29",
+          "base_move": "b2b3",
+          "engine_candidates": [
+            {
+              "move": "b2b3",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 1,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "b2f2",
+              "cp": 1030,
+              "mate": null,
+              "raw": 1030,
+              "rank": 2,
+              "pv": [
+                "b2f2"
+              ]
+            },
+            {
+              "move": "e6b3",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 3,
+              "pv": [
+                "e6b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b2b3",
+            "b2f2",
+            "e6b3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 42,
+          "elapsed_ms": 868.13
+        },
+        {
+          "ply": 53,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a5c7",
+          "san": "Bc7",
+          "fen_before": "5b1r/5kpp/3pbn2/B1p5/P7/1r1P1B2/8/R2K4 w - - 1 30",
+          "base_move": "a5c7",
+          "engine_candidates": [
+            {
+              "move": "a5c7",
+              "cp": -1135,
+              "mate": null,
+              "raw": -1135,
+              "rank": 1,
+              "pv": [
+                "a5c7"
+              ]
+            },
+            {
+              "move": "a5d2",
+              "cp": -1135,
+              "mate": null,
+              "raw": -1135,
+              "rank": 2,
+              "pv": [
+                "a5d2"
+              ]
+            },
+            {
+              "move": "a1a2",
+              "cp": -1145,
+              "mate": null,
+              "raw": -1145,
+              "rank": 3,
+              "pv": [
+                "a1a2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a5c7",
+            "a5d2",
+            "a1a2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 27,
+          "elapsed_ms": 21.53
+        },
+        {
+          "ply": 54,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b3d3",
+          "san": "Rxd3+",
+          "fen_before": "5b1r/2B2kpp/3pbn2/2p5/P7/1r1P1B2/8/R2K4 b - - 2 30",
+          "base_move": "b3d3",
+          "engine_candidates": [
+            {
+              "move": "b3d3",
+              "cp": 1025,
+              "mate": null,
+              "raw": 1025,
+              "rank": 1,
+              "pv": [
+                "b3d3"
+              ]
+            },
+            {
+              "move": "c5c4",
+              "cp": 1025,
+              "mate": null,
+              "raw": 1025,
+              "rank": 2,
+              "pv": [
+                "c5c4"
+              ]
+            },
+            {
+              "move": "d6d5",
+              "cp": 1020,
+              "mate": null,
+              "raw": 1020,
+              "rank": 3,
+              "pv": [
+                "d6d5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b3d3",
+            "c5c4",
+            "d6d5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 676.81
+        },
+        {
+          "ply": 55,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d1c1",
+          "san": "Kc1",
+          "fen_before": "5b1r/2B2kpp/3pbn2/2p5/P7/3r1B2/8/R2K4 w - - 0 31",
+          "base_move": "d1c1",
+          "engine_candidates": [
+            {
+              "move": "d1c1",
+              "cp": -1485,
+              "mate": null,
+              "raw": -1485,
+              "rank": 1,
+              "pv": [
+                "d1c1"
+              ]
+            },
+            {
+              "move": "d1c2",
+              "cp": -1485,
+              "mate": null,
+              "raw": -1485,
+              "rank": 2,
+              "pv": [
+                "d1c2"
+              ]
+            },
+            {
+              "move": "d1e1",
+              "cp": -1485,
+              "mate": null,
+              "raw": -1485,
+              "rank": 3,
+              "pv": [
+                "d1e1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d1c1",
+            "d1c2",
+            "d1e1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 4,
+          "elapsed_ms": 3.13
+        },
+        {
+          "ply": 56,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d3f3",
+          "san": "Rxf3",
+          "fen_before": "5b1r/2B2kpp/3pbn2/2p5/P7/3r1B2/8/R1K5 b - - 1 31",
+          "base_move": "d3f3",
+          "engine_candidates": [
+            {
+              "move": "d3f3",
+              "cp": 1480,
+              "mate": null,
+              "raw": 1480,
+              "rank": 1,
+              "pv": [
+                "d3f3"
+              ]
+            },
+            {
+              "move": "d3c3",
+              "cp": 1370,
+              "mate": null,
+              "raw": 1370,
+              "rank": 2,
+              "pv": [
+                "d3c3"
+              ]
+            },
+            {
+              "move": "f8e7",
+              "cp": 1145,
+              "mate": null,
+              "raw": 1145,
+              "rank": 3,
+              "pv": [
+                "f8e7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d3f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 649.53
+        },
+        {
+          "ply": 57,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a4a5",
+          "san": "a5",
+          "fen_before": "5b1r/2B2kpp/3pbn2/2p5/P7/5r2/8/R1K5 w - - 0 32",
+          "base_move": "a4a5",
+          "engine_candidates": [
+            {
+              "move": "a4a5",
+              "cp": -1490,
+              "mate": null,
+              "raw": -1490,
+              "rank": 1,
+              "pv": [
+                "a4a5"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -1495,
+              "mate": null,
+              "raw": -1495,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "c1b1",
+              "cp": -1495,
+              "mate": null,
+              "raw": -1495,
+              "rank": 3,
+              "pv": [
+                "c1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a4a5",
+            "a1b1",
+            "c1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 14,
+          "elapsed_ms": 10.8
+        },
+        {
+          "ply": 58,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f6d5",
+          "san": "Nd5",
+          "fen_before": "5b1r/2B2kpp/3pbn2/P1p5/8/5r2/8/R1K5 b - - 0 32",
+          "base_move": "f6d5",
+          "engine_candidates": [
+            {
+              "move": "f6d5",
+              "cp": 1490,
+              "mate": null,
+              "raw": 1490,
+              "rank": 1,
+              "pv": [
+                "f6d5"
+              ]
+            },
+            {
+              "move": "e6d5",
+              "cp": 1485,
+              "mate": null,
+              "raw": 1485,
+              "rank": 2,
+              "pv": [
+                "e6d5"
+              ]
+            },
+            {
+              "move": "f6e4",
+              "cp": 1485,
+              "mate": null,
+              "raw": 1485,
+              "rank": 3,
+              "pv": [
+                "f6e4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f6d5",
+            "e6d5",
+            "f6e4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 635.05
+        },
+        {
+          "ply": 59,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c7b8",
+          "san": "Bb8",
+          "fen_before": "5b1r/2B2kpp/3pb3/P1pn4/8/5r2/8/R1K5 w - - 1 33",
+          "base_move": "c7b8",
+          "engine_candidates": [
+            {
+              "move": "c7b8",
+              "cp": -1510,
+              "mate": null,
+              "raw": -1510,
+              "rank": 1,
+              "pv": [
+                "c7b8"
+              ]
+            },
+            {
+              "move": "c7d8",
+              "cp": -1510,
+              "mate": null,
+              "raw": -1510,
+              "rank": 2,
+              "pv": [
+                "c7d8"
+              ]
+            },
+            {
+              "move": "c7d6",
+              "cp": -1745,
+              "mate": null,
+              "raw": -1745,
+              "rank": 3,
+              "pv": [
+                "c7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c7b8",
+            "c7d8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 14,
+          "elapsed_ms": 10.52
+        },
+        {
+          "ply": 60,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f8e7",
+          "san": "Be7",
+          "fen_before": "1B3b1r/5kpp/3pb3/P1pn4/8/5r2/8/R1K5 b - - 2 33",
+          "base_move": "f8e7",
+          "engine_candidates": [
+            {
+              "move": "f8e7",
+              "cp": 1510,
+              "mate": null,
+              "raw": 1510,
+              "rank": 1,
+              "pv": [
+                "f8e7"
+              ]
+            },
+            {
+              "move": "g7g5",
+              "cp": 1505,
+              "mate": null,
+              "raw": 1505,
+              "rank": 2,
+              "pv": [
+                "g7g5"
+              ]
+            },
+            {
+              "move": "h7h5",
+              "cp": 1505,
+              "mate": null,
+              "raw": 1505,
+              "rank": 3,
+              "pv": [
+                "h7h5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f8e7",
+            "g7g5",
+            "h7h5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 518.57
+        },
+        {
+          "ply": 61,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "b8a7",
+          "san": "Ba7",
+          "fen_before": "1B5r/4bkpp/3pb3/P1pn4/8/5r2/8/R1K5 w - - 3 34",
+          "base_move": "b8a7",
+          "engine_candidates": [
+            {
+              "move": "b8a7",
+              "cp": -1520,
+              "mate": null,
+              "raw": -1520,
+              "rank": 1,
+              "pv": [
+                "b8a7"
+              ]
+            },
+            {
+              "move": "b8d6",
+              "cp": -1745,
+              "mate": null,
+              "raw": -1745,
+              "rank": 2,
+              "pv": [
+                "b8d6"
+              ]
+            },
+            {
+              "move": "b8c7",
+              "cp": -1820,
+              "mate": null,
+              "raw": -1820,
+              "rank": 3,
+              "pv": [
+                "b8c7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b8a7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 13,
+          "elapsed_ms": 12.15
+        },
+        {
+          "ply": 62,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "e7f6",
+          "san": "Bf6",
+          "fen_before": "7r/B3bkpp/3pb3/P1pn4/8/5r2/8/R1K5 b - - 4 34",
+          "base_move": "e7f6",
+          "engine_candidates": [
+            {
+              "move": "e7f6",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 1,
+              "pv": [
+                "e7f6"
+              ]
+            },
+            {
+              "move": "f3f1",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 2,
+              "pv": [
+                "f3f1"
+              ]
+            },
+            {
+              "move": "e7g5",
+              "cp": 1510,
+              "mate": null,
+              "raw": 1510,
+              "rank": 3,
+              "pv": [
+                "e7g5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e7f6",
+            "f3f1",
+            "e7g5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 46,
+          "elapsed_ms": 718.23
+        },
+        {
+          "ply": 63,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "7r/B4kpp/3pbb2/P1pn4/8/5r2/8/R1K5 w - - 5 35",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -1530,
+              "mate": null,
+              "raw": -1530,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1a4",
+              "cp": -1530,
+              "mate": null,
+              "raw": -1530,
+              "rank": 2,
+              "pv": [
+                "a1a4"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -1530,
+              "mate": null,
+              "raw": -1530,
+              "rank": 3,
+              "pv": [
+                "a1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1a4",
+            "a1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 12,
+          "elapsed_ms": 11.63
+        },
+        {
+          "ply": 64,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f3f1",
+          "san": "Rf1+",
+          "fen_before": "7r/B4kpp/3pbb2/P1pn4/8/5r2/R7/2K5 b - - 6 35",
+          "base_move": "f3f1",
+          "engine_candidates": [
+            {
+              "move": "f3f1",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 1,
+              "pv": [
+                "f3f1"
+              ]
+            },
+            {
+              "move": "f6d4",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 2,
+              "pv": [
+                "f6d4"
+              ]
+            },
+            {
+              "move": "f6e5",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 3,
+              "pv": [
+                "f6e5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f3f1",
+            "f6d4",
+            "f6e5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 49,
+          "elapsed_ms": 1002.71
+        },
+        {
+          "ply": 65,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c1c2",
+          "san": "Kc2",
+          "fen_before": "7r/B4kpp/3pbb2/P1pn4/8/8/R7/2K2r2 w - - 7 36",
+          "base_move": "c1c2",
+          "engine_candidates": [
+            {
+              "move": "c1c2",
+              "cp": -1530,
+              "mate": null,
+              "raw": -1530,
+              "rank": 1,
+              "pv": [
+                "c1c2"
+              ]
+            },
+            {
+              "move": "c1d2",
+              "cp": -1530,
+              "mate": null,
+              "raw": -1530,
+              "rank": 2,
+              "pv": [
+                "c1d2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c1c2",
+            "c1d2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 2,
+          "elapsed_ms": 2.08
+        },
+        {
+          "ply": 66,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "d5b4",
+          "san": "Nb4+",
+          "fen_before": "7r/B4kpp/3pbb2/P1pn4/8/8/R1K5/5r2 b - - 8 36",
+          "base_move": "d5b4",
+          "engine_candidates": [
+            {
+              "move": "d5b4",
+              "cp": 1860,
+              "mate": null,
+              "raw": 1860,
+              "rank": 1,
+              "pv": [
+                "d5b4"
+              ]
+            },
+            {
+              "move": "d5e3",
+              "cp": 1650,
+              "mate": null,
+              "raw": 1650,
+              "rank": 2,
+              "pv": [
+                "d5e3"
+              ]
+            },
+            {
+              "move": "e6f5",
+              "cp": 1520,
+              "mate": null,
+              "raw": 1520,
+              "rank": 3,
+              "pv": [
+                "e6f5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5b4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 49,
+          "elapsed_ms": 620.72
+        },
+        {
+          "ply": 67,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c2d2",
+          "san": "Kd2",
+          "fen_before": "7r/B4kpp/3pbb2/P1p5/1n6/8/R1K5/5r2 w - - 9 37",
+          "base_move": "c2d2",
+          "engine_candidates": [
+            {
+              "move": "c2d2",
+              "cp": -1990,
+              "mate": null,
+              "raw": -1990,
+              "rank": 1,
+              "pv": [
+                "c2d2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c2d2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.08
+        },
+        {
+          "ply": 68,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "b4a2",
+          "san": "Nxa2",
+          "fen_before": "7r/B4kpp/3pbb2/P1p5/1n6/8/R2K4/5r2 b - - 10 37",
+          "base_move": "b4a2",
+          "engine_candidates": [
+            {
+              "move": "b4a2",
+              "cp": 1980,
+              "mate": null,
+              "raw": 1980,
+              "rank": 1,
+              "pv": [
+                "b4a2"
+              ]
+            },
+            {
+              "move": "f6g5",
+              "cp": 1980,
+              "mate": null,
+              "raw": 1980,
+              "rank": 2,
+              "pv": [
+                "f6g5"
+              ]
+            },
+            {
+              "move": "e6a2",
+              "cp": 1970,
+              "mate": null,
+              "raw": 1970,
+              "rank": 3,
+              "pv": [
+                "e6a2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b4a2",
+            "f6g5",
+            "e6a2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 53,
+          "elapsed_ms": 569.84
+        },
+        {
+          "ply": 69,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a7b6",
+          "san": "Bb6",
+          "fen_before": "7r/B4kpp/3pbb2/P1p5/8/8/n2K4/5r2 w - - 0 38",
+          "base_move": "a7b6",
+          "engine_candidates": [
+            {
+              "move": "a7b6",
+              "cp": -2000,
+              "mate": null,
+              "raw": -2000,
+              "rank": 1,
+              "pv": [
+                "a7b6"
+              ]
+            },
+            {
+              "move": "a5a6",
+              "cp": -2005,
+              "mate": null,
+              "raw": -2005,
+              "rank": 2,
+              "pv": [
+                "a5a6"
+              ]
+            },
+            {
+              "move": "d2c2",
+              "cp": -2010,
+              "mate": null,
+              "raw": -2010,
+              "rank": 3,
+              "pv": [
+                "d2c2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a7b6",
+            "a5a6",
+            "d2c2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 8,
+          "elapsed_ms": 7.53
+        },
+        {
+          "ply": 70,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "a2c3",
+          "san": "Nc3",
+          "fen_before": "7r/5kpp/1B1pbb2/P1p5/8/8/n2K4/5r2 b - - 1 38",
+          "base_move": "a2c3",
+          "engine_candidates": [
+            {
+              "move": "a2c3",
+              "cp": 2000,
+              "mate": null,
+              "raw": 2000,
+              "rank": 1,
+              "pv": [
+                "a2c3"
+              ]
+            },
+            {
+              "move": "a2b4",
+              "cp": 1985,
+              "mate": null,
+              "raw": 1985,
+              "rank": 2,
+              "pv": [
+                "a2b4"
+              ]
+            },
+            {
+              "move": "f6d4",
+              "cp": 1985,
+              "mate": null,
+              "raw": 1985,
+              "rank": 3,
+              "pv": [
+                "f6d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2c3",
+            "a2b4",
+            "f6d4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 49,
+          "elapsed_ms": 449.69
+        },
+        {
+          "ply": 71,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a5a6",
+          "san": "a6",
+          "fen_before": "7r/5kpp/1B1pbb2/P1p5/8/2n5/3K4/5r2 w - - 2 39",
+          "base_move": "a5a6",
+          "engine_candidates": [
+            {
+              "move": "a5a6",
+              "cp": -2005,
+              "mate": null,
+              "raw": -2005,
+              "rank": 1,
+              "pv": [
+                "a5a6"
+              ]
+            },
+            {
+              "move": "b6c7",
+              "cp": -2010,
+              "mate": null,
+              "raw": -2010,
+              "rank": 2,
+              "pv": [
+                "b6c7"
+              ]
+            },
+            {
+              "move": "d2c2",
+              "cp": -2010,
+              "mate": null,
+              "raw": -2010,
+              "rank": 3,
+              "pv": [
+                "d2c2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a5a6",
+            "b6c7",
+            "d2c2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 8,
+          "elapsed_ms": 7.98
+        },
+        {
+          "ply": 72,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "e6d5",
+          "san": "Bd5",
+          "fen_before": "7r/5kpp/PB1pbb2/2p5/8/2n5/3K4/5r2 b - - 0 39",
+          "base_move": "e6d5",
+          "engine_candidates": [
+            {
+              "move": "e6d5",
+              "cp": 2005,
+              "mate": null,
+              "raw": 2005,
+              "rank": 1,
+              "pv": [
+                "e6d5"
+              ]
+            },
+            {
+              "move": "f6d4",
+              "cp": 2005,
+              "mate": null,
+              "raw": 2005,
+              "rank": 2,
+              "pv": [
+                "f6d4"
+              ]
+            },
+            {
+              "move": "f6e5",
+              "cp": 2005,
+              "mate": null,
+              "raw": 2005,
+              "rank": 3,
+              "pv": [
+                "f6e5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e6d5",
+            "f6d4",
+            "f6e5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 52,
+          "elapsed_ms": 564.37
+        },
+        {
+          "ply": 73,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "a6a7",
+          "san": "a7",
+          "fen_before": "7r/5kpp/PB1p1b2/2pb4/8/2n5/3K4/5r2 w - - 1 40",
+          "base_move": "a6a7",
+          "engine_candidates": [
+            {
+              "move": "a6a7",
+              "cp": -2010,
+              "mate": null,
+              "raw": -2010,
+              "rank": 1,
+              "pv": [
+                "a6a7"
+              ]
+            },
+            {
+              "move": "b6c7",
+              "cp": -2015,
+              "mate": null,
+              "raw": -2015,
+              "rank": 2,
+              "pv": [
+                "b6c7"
+              ]
+            },
+            {
+              "move": "d2c2",
+              "cp": -2015,
+              "mate": null,
+              "raw": -2015,
+              "rank": 3,
+              "pv": [
+                "d2c2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a6a7",
+            "b6c7",
+            "d2c2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 9,
+          "elapsed_ms": 9.5
+        },
+        {
+          "ply": 74,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "c3e4",
+          "san": "Ne4+",
+          "fen_before": "7r/P4kpp/1B1p1b2/2pb4/8/2n5/3K4/5r2 b - - 0 40",
+          "base_move": "c3e4",
+          "engine_candidates": [
+            {
+              "move": "c3e4",
+              "cp": 2010,
+              "mate": null,
+              "raw": 2010,
+              "rank": 1,
+              "pv": [
+                "c3e4"
+              ]
+            },
+            {
+              "move": "f1d1",
+              "cp": 2000,
+              "mate": null,
+              "raw": 2000,
+              "rank": 2,
+              "pv": [
+                "f1d1"
+              ]
+            },
+            {
+              "move": "f1f2",
+              "cp": 2000,
+              "mate": null,
+              "raw": 2000,
+              "rank": 3,
+              "pv": [
+                "f1f2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3e4",
+            "f1d1",
+            "f1f2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 53,
+          "elapsed_ms": 548.53
+        },
+        {
+          "ply": 75,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "d2c2",
+          "san": "Kc2",
+          "fen_before": "7r/P4kpp/1B1p1b2/2pb4/4n3/8/3K4/5r2 w - - 1 41",
+          "base_move": "d2c2",
+          "engine_candidates": [
+            {
+              "move": "d2c2",
+              "cp": -2020,
+              "mate": null,
+              "raw": -2020,
+              "rank": 1,
+              "pv": [
+                "d2c2"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": -2020,
+              "mate": null,
+              "raw": -2020,
+              "rank": 2,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "d2e2",
+              "cp": -2020,
+              "mate": null,
+              "raw": -2020,
+              "rank": 3,
+              "pv": [
+                "d2e2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d2c2",
+            "d2d3",
+            "d2e2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 4,
+          "elapsed_ms": 3.83
+        },
+        {
+          "ply": 76,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "h8a8",
+          "san": "Ra8",
+          "fen_before": "7r/P4kpp/1B1p1b2/2pb4/4n3/8/2K5/5r2 b - - 2 41",
+          "base_move": "h8a8",
+          "engine_candidates": [
+            {
+              "move": "h8a8",
+              "cp": 2015,
+              "mate": null,
+              "raw": 2015,
+              "rank": 1,
+              "pv": [
+                "h8a8"
+              ]
+            },
+            {
+              "move": "f1f2",
+              "cp": 2010,
+              "mate": null,
+              "raw": 2010,
+              "rank": 2,
+              "pv": [
+                "f1f2"
+              ]
+            },
+            {
+              "move": "h8c8",
+              "cp": 2010,
+              "mate": null,
+              "raw": 2010,
+              "rank": 3,
+              "pv": [
+                "h8c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h8a8",
+            "f1f2",
+            "h8c8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 50,
+          "elapsed_ms": 406.07
+        },
+        {
+          "ply": 77,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "b6c7",
+          "san": "Bc7",
+          "fen_before": "r7/P4kpp/1B1p1b2/2pb4/4n3/8/2K5/5r2 w - - 3 42",
+          "base_move": "b6c7",
+          "engine_candidates": [
+            {
+              "move": "b6c7",
+              "cp": -2135,
+              "mate": null,
+              "raw": -2135,
+              "rank": 1,
+              "pv": [
+                "b6c7"
+              ]
+            },
+            {
+              "move": "c2d3",
+              "cp": -2135,
+              "mate": null,
+              "raw": -2135,
+              "rank": 2,
+              "pv": [
+                "c2d3"
+              ]
+            },
+            {
+              "move": "b6a5",
+              "cp": -2145,
+              "mate": null,
+              "raw": -2145,
+              "rank": 3,
+              "pv": [
+                "b6a5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b6c7",
+            "c2d3",
+            "b6a5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 5,
+          "elapsed_ms": 4.78
+        },
+        {
+          "ply": 78,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "a8a7",
+          "san": "Rxa7",
+          "fen_before": "r7/P1B2kpp/3p1b2/2pb4/4n3/8/2K5/5r2 b - - 4 42",
+          "base_move": "a8a7",
+          "engine_candidates": [
+            {
+              "move": "a8a7",
+              "cp": 2135,
+              "mate": null,
+              "raw": 2135,
+              "rank": 1,
+              "pv": [
+                "a8a7"
+              ]
+            },
+            {
+              "move": "f1f2",
+              "cp": 2020,
+              "mate": null,
+              "raw": 2020,
+              "rank": 2,
+              "pv": [
+                "f1f2"
+              ]
+            },
+            {
+              "move": "f6d4",
+              "cp": 2020,
+              "mate": null,
+              "raw": 2020,
+              "rank": 3,
+              "pv": [
+                "f6d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a8a7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 50,
+          "elapsed_ms": 401.27
+        },
+        {
+          "ply": 79,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c7b6",
+          "san": "Bb6",
+          "fen_before": "8/r1B2kpp/3p1b2/2pb4/4n3/8/2K5/5r2 w - - 0 43",
+          "base_move": "c7b6",
+          "engine_candidates": [
+            {
+              "move": "c7b6",
+              "cp": -2145,
+              "mate": null,
+              "raw": -2145,
+              "rank": 1,
+              "pv": [
+                "c7b6"
+              ]
+            },
+            {
+              "move": "c7b8",
+              "cp": -2155,
+              "mate": null,
+              "raw": -2155,
+              "rank": 2,
+              "pv": [
+                "c7b8"
+              ]
+            },
+            {
+              "move": "c7d6",
+              "cp": -2360,
+              "mate": null,
+              "raw": -2360,
+              "rank": 3,
+              "pv": [
+                "c7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c7b6",
+            "c7b8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 6,
+          "elapsed_ms": 6.29
+        },
+        {
+          "ply": 80,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "a7a2",
+          "san": "Ra2+",
+          "fen_before": "8/r4kpp/1B1p1b2/2pb4/4n3/8/2K5/5r2 b - - 1 43",
+          "base_move": "a7a2",
+          "engine_candidates": [
+            {
+              "move": "a7a2",
+              "cp": null,
+              "mate": 2,
+              "raw": 99997,
+              "rank": 1,
+              "pv": [
+                "a7a2"
+              ]
+            },
+            {
+              "move": "f1f2",
+              "cp": null,
+              "mate": 2,
+              "raw": 99997,
+              "rank": 2,
+              "pv": [
+                "f1f2"
+              ]
+            },
+            {
+              "move": "a7b7",
+              "cp": 2145,
+              "mate": null,
+              "raw": 2145,
+              "rank": 3,
+              "pv": [
+                "a7b7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a7a2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 54,
+          "elapsed_ms": 196.73
+        },
+        {
+          "ply": 81,
+          "side": "white",
+          "engine": "Weak2 (plain)",
+          "uci": "c2d3",
+          "san": "Kd3",
+          "fen_before": "8/5kpp/1B1p1b2/2pb4/4n3/8/r1K5/5r2 w - - 2 44",
+          "base_move": "c2d3",
+          "engine_candidates": [
+            {
+              "move": "c2d3",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 1,
+              "pv": [
+                "c2d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c2d3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.09
+        },
+        {
+          "ply": 82,
+          "side": "black",
+          "engine": "Weak4",
+          "uci": "f1f3",
+          "san": "Rf3#",
+          "fen_before": "8/5kpp/1B1p1b2/2pb4/4n3/3K4/r7/5r2 b - - 3 44",
+          "base_move": "f1f3",
+          "engine_candidates": [
+            {
+              "move": "f1f3",
+              "cp": null,
+              "mate": 1,
+              "raw": 99999,
+              "rank": 1,
+              "pv": [
+                "f1f3"
+              ]
+            },
+            {
+              "move": "a2d2",
+              "cp": null,
+              "mate": 2,
+              "raw": 99997,
+              "rank": 2,
+              "pv": [
+                "a2d2"
+              ]
+            },
+            {
+              "move": "e4f2",
+              "cp": null,
+              "mate": 2,
+              "raw": 99997,
+              "rank": 3,
+              "pv": [
+                "e4f2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f1f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 56,
+          "elapsed_ms": 413.68
+        }
+      ],
+      "plies": 82,
+      "final_fen": "8/5kpp/1B1p1b2/2pb4/4n3/3K1r2/r7/8 w - - 4 45"
+    },
+    {
+      "game": 2,
+      "white": "Weak4",
+      "black": "Weak2 (plain)",
+      "initial_fen": "rnbqkbnr/1p1p1ppp/8/p1p1p3/P1P1P3/8/1P1P1PPP/RNBQKBNR w KQkq - 0 4",
+      "opening_uci": [
+        "a2a4",
+        "a7a5",
+        "c2c4",
+        "c7c5",
+        "e2e4",
+        "e7e5"
+      ],
+      "result": "1-0",
+      "termination": "checkmate",
+      "moves": [
+        {
+          "ply": 1,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "d1h5",
+          "san": "Qh5",
+          "fen_before": "rnbqkbnr/1p1p1ppp/8/p1p1p3/P1P1P3/8/1P1P1PPP/RNBQKBNR w KQkq - 0 4",
+          "base_move": "d1h5",
+          "engine_candidates": [
+            {
+              "move": "d1h5",
+              "cp": -80,
+              "mate": null,
+              "raw": -80,
+              "rank": 1,
+              "pv": [
+                "d1h5"
+              ]
+            },
+            {
+              "move": "b1c3",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 2,
+              "pv": [
+                "b1c3"
+              ]
+            },
+            {
+              "move": "f1d3",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "f1d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d1h5",
+            "b1c3",
+            "f1d3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 1249.65
+        },
+        {
+          "ply": 2,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "b8c6",
+          "san": "Nc6",
+          "fen_before": "rnbqkbnr/1p1p1ppp/8/p1p1p2Q/P1P1P3/8/1P1P1PPP/RNB1KBNR b KQkq - 1 4",
+          "base_move": "b8c6",
+          "engine_candidates": [
+            {
+              "move": "b8c6",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "b8c6"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 3,
+              "pv": [
+                "g8f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b8c6",
+            "f8d6",
+            "g8f6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 23,
+          "elapsed_ms": 25.06
+        },
+        {
+          "ply": 3,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "b1c3",
+          "san": "Nc3",
+          "fen_before": "r1bqkbnr/1p1p1ppp/2n5/p1p1p2Q/P1P1P3/8/1P1P1PPP/RNB1KBNR w KQkq - 2 5",
+          "base_move": "b1c3",
+          "engine_candidates": [
+            {
+              "move": "b1c3",
+              "cp": -140,
+              "mate": null,
+              "raw": -140,
+              "rank": 1,
+              "pv": [
+                "b1c3"
+              ]
+            },
+            {
+              "move": "f1d3",
+              "cp": -140,
+              "mate": null,
+              "raw": -140,
+              "rank": 2,
+              "pv": [
+                "f1d3"
+              ]
+            },
+            {
+              "move": "g1f3",
+              "cp": -140,
+              "mate": null,
+              "raw": -140,
+              "rank": 3,
+              "pv": [
+                "g1f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b1c3",
+            "f1d3",
+            "g1f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 34,
+          "elapsed_ms": 1688.38
+        },
+        {
+          "ply": 4,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "f8d6",
+          "san": "Bd6",
+          "fen_before": "r1bqkbnr/1p1p1ppp/2n5/p1p1p2Q/P1P1P3/2N5/1P1P1PPP/R1B1KBNR b KQkq - 3 5",
+          "base_move": "f8d6",
+          "engine_candidates": [
+            {
+              "move": "f8d6",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 2,
+              "pv": [
+                "g8f6"
+              ]
+            },
+            {
+              "move": "c6d4",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "c6d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f8d6",
+            "g8f6",
+            "c6d4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 27,
+          "elapsed_ms": 33.21
+        },
+        {
+          "ply": 5,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "c3b5",
+          "san": "Nb5",
+          "fen_before": "r1bqk1nr/1p1p1ppp/2nb4/p1p1p2Q/P1P1P3/2N5/1P1P1PPP/R1B1KBNR w KQkq - 4 6",
+          "base_move": "c3b5",
+          "engine_candidates": [
+            {
+              "move": "c3b5",
+              "cp": -20,
+              "mate": null,
+              "raw": -20,
+              "rank": 1,
+              "pv": [
+                "c3b5"
+              ]
+            },
+            {
+              "move": "c3d5",
+              "cp": -45,
+              "mate": null,
+              "raw": -45,
+              "rank": 2,
+              "pv": [
+                "c3d5"
+              ]
+            },
+            {
+              "move": "h5g4",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "h5g4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3b5",
+            "c3d5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 2614.29
+        },
+        {
+          "ply": 6,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "d6e7",
+          "san": "Be7",
+          "fen_before": "r1bqk1nr/1p1p1ppp/2nb4/pNp1p2Q/P1P1P3/8/1P1P1PPP/R1B1KBNR b KQkq - 5 6",
+          "base_move": "d6e7",
+          "engine_candidates": [
+            {
+              "move": "d6e7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "d6e7"
+              ]
+            },
+            {
+              "move": "d6b8",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 2,
+              "pv": [
+                "d6b8"
+              ]
+            },
+            {
+              "move": "d6f8",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "d6f8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d6e7",
+            "d6b8",
+            "d6f8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 27,
+          "elapsed_ms": 33.49
+        },
+        {
+          "ply": 7,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "h5g4",
+          "san": "Qg4",
+          "fen_before": "r1bqk1nr/1p1pbppp/2n5/pNp1p2Q/P1P1P3/8/1P1P1PPP/R1B1KBNR w KQkq - 6 7",
+          "base_move": "h5g4",
+          "engine_candidates": [
+            {
+              "move": "h5g4",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 1,
+              "pv": [
+                "h5g4"
+              ]
+            },
+            {
+              "move": "f1d3",
+              "cp": -140,
+              "mate": null,
+              "raw": -140,
+              "rank": 2,
+              "pv": [
+                "f1d3"
+              ]
+            },
+            {
+              "move": "g1f3",
+              "cp": -140,
+              "mate": null,
+              "raw": -140,
+              "rank": 3,
+              "pv": [
+                "g1f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h5g4",
+            "f1d3",
+            "g1f3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 2007.31
+        },
+        {
+          "ply": 8,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "g8f6",
+          "san": "Nf6",
+          "fen_before": "r1bqk1nr/1p1pbppp/2n5/pNp1p3/P1P1P1Q1/8/1P1P1PPP/R1B1KBNR b KQkq - 7 7",
+          "base_move": "g8f6",
+          "engine_candidates": [
+            {
+              "move": "g8f6",
+              "cp": -60,
+              "mate": null,
+              "raw": -60,
+              "rank": 1,
+              "pv": [
+                "g8f6"
+              ]
+            },
+            {
+              "move": "e7f6",
+              "cp": -70,
+              "mate": null,
+              "raw": -70,
+              "rank": 2,
+              "pv": [
+                "e7f6"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": -75,
+              "mate": null,
+              "raw": -75,
+              "rank": 3,
+              "pv": [
+                "b7b6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g8f6",
+            "e7f6",
+            "b7b6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 31.52
+        },
+        {
+          "ply": 9,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "g4g7",
+          "san": "Qxg7",
+          "fen_before": "r1bqk2r/1p1pbppp/2n2n2/pNp1p3/P1P1P1Q1/8/1P1P1PPP/R1B1KBNR w KQkq - 8 8",
+          "base_move": "g4g7",
+          "engine_candidates": [
+            {
+              "move": "g4g7",
+              "cp": -60,
+              "mate": null,
+              "raw": -60,
+              "rank": 1,
+              "pv": [
+                "g4g7"
+              ]
+            },
+            {
+              "move": "g4e2",
+              "cp": -150,
+              "mate": null,
+              "raw": -150,
+              "rank": 2,
+              "pv": [
+                "g4e2"
+              ]
+            },
+            {
+              "move": "g4f3",
+              "cp": -150,
+              "mate": null,
+              "raw": -150,
+              "rank": 3,
+              "pv": [
+                "g4f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g4g7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 1173.9
+        },
+        {
+          "ply": 10,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "f6e4",
+          "san": "Nxe4",
+          "fen_before": "r1bqk2r/1p1pbpQp/2n2n2/pNp1p3/P1P1P3/8/1P1P1PPP/R1B1KBNR b KQkq - 0 8",
+          "base_move": "f6e4",
+          "engine_candidates": [
+            {
+              "move": "f6e4",
+              "cp": -440,
+              "mate": null,
+              "raw": -440,
+              "rank": 1,
+              "pv": [
+                "f6e4"
+              ]
+            },
+            {
+              "move": "c6d4",
+              "cp": -550,
+              "mate": null,
+              "raw": -550,
+              "rank": 2,
+              "pv": [
+                "c6d4"
+              ]
+            },
+            {
+              "move": "d7d5",
+              "cp": -550,
+              "mate": null,
+              "raw": -550,
+              "rank": 3,
+              "pv": [
+                "d7d5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f6e4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 23,
+          "elapsed_ms": 27.03
+        },
+        {
+          "ply": 11,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "g7h8",
+          "san": "Qxh8+",
+          "fen_before": "r1bqk2r/1p1pbpQp/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR w KQkq - 0 9",
+          "base_move": "g7h8",
+          "engine_candidates": [
+            {
+              "move": "g7h8",
+              "cp": 470,
+              "mate": null,
+              "raw": 470,
+              "rank": 1,
+              "pv": [
+                "g7h8"
+              ]
+            },
+            {
+              "move": "b5c7",
+              "cp": 120,
+              "mate": null,
+              "raw": 120,
+              "rank": 2,
+              "pv": [
+                "b5c7"
+              ]
+            },
+            {
+              "move": "b5d6",
+              "cp": 100,
+              "mate": null,
+              "raw": 100,
+              "rank": 3,
+              "pv": [
+                "b5d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g7h8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 38,
+          "elapsed_ms": 1482.12
+        },
+        {
+          "ply": 12,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e7f8",
+          "san": "Bf8",
+          "fen_before": "r1bqk2Q/1p1pbp1p/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR b KQq - 0 9",
+          "base_move": "e7f8",
+          "engine_candidates": [
+            {
+              "move": "e7f8",
+              "cp": -780,
+              "mate": null,
+              "raw": -780,
+              "rank": 1,
+              "pv": [
+                "e7f8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e7f8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.37
+        },
+        {
+          "ply": 13,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "h8h7",
+          "san": "Qxh7",
+          "fen_before": "r1bqkb1Q/1p1p1p1p/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR w KQq - 1 10",
+          "base_move": "h8h7",
+          "engine_candidates": [
+            {
+              "move": "h8h7",
+              "cp": 540,
+              "mate": null,
+              "raw": 540,
+              "rank": 1,
+              "pv": [
+                "h8h7"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": 465,
+              "mate": null,
+              "raw": 465,
+              "rank": 2,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "f1d3",
+              "cp": 460,
+              "mate": null,
+              "raw": 460,
+              "rank": 3,
+              "pv": [
+                "f1d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h8h7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 32,
+          "elapsed_ms": 1033.46
+        },
+        {
+          "ply": 14,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "f7f5",
+          "san": "f5",
+          "fen_before": "r1bqkb2/1p1p1p1Q/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR b KQq - 0 10",
+          "base_move": "f7f5",
+          "engine_candidates": [
+            {
+              "move": "f7f5",
+              "cp": -650,
+              "mate": null,
+              "raw": -650,
+              "rank": 1,
+              "pv": [
+                "f7f5"
+              ]
+            },
+            {
+              "move": "e4f6",
+              "cp": -660,
+              "mate": null,
+              "raw": -660,
+              "rank": 2,
+              "pv": [
+                "e4f6"
+              ]
+            },
+            {
+              "move": "e4g5",
+              "cp": -670,
+              "mate": null,
+              "raw": -670,
+              "rank": 3,
+              "pv": [
+                "e4g5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f7f5",
+            "e4f6",
+            "e4g5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 33.68
+        },
+        {
+          "ply": 15,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "h7f5",
+          "san": "Qxf5",
+          "fen_before": "r1bqkb2/1p1p3Q/2n5/pNp1pp2/P1P1n3/8/1P1P1PPP/R1B1KBNR w KQq - 0 11",
+          "base_move": "h7f5",
+          "engine_candidates": [
+            {
+              "move": "h7f5",
+              "cp": 640,
+              "mate": null,
+              "raw": 640,
+              "rank": 1,
+              "pv": [
+                "h7f5"
+              ]
+            },
+            {
+              "move": "h7g6",
+              "cp": 570,
+              "mate": null,
+              "raw": 570,
+              "rank": 2,
+              "pv": [
+                "h7g6"
+              ]
+            },
+            {
+              "move": "h7h5",
+              "cp": 570,
+              "mate": null,
+              "raw": 570,
+              "rank": 3,
+              "pv": [
+                "h7h5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7f5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 38,
+          "elapsed_ms": 1452.56
+        },
+        {
+          "ply": 16,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e4f2",
+          "san": "Nxf2",
+          "fen_before": "r1bqkb2/1p1p4/2n5/pNp1pQ2/P1P1n3/8/1P1P1PPP/R1B1KBNR b KQq - 0 11",
+          "base_move": "e4f2",
+          "engine_candidates": [
+            {
+              "move": "e4f2",
+              "cp": -900,
+              "mate": null,
+              "raw": -900,
+              "rank": 1,
+              "pv": [
+                "e4f2"
+              ]
+            },
+            {
+              "move": "e4d2",
+              "cp": -910,
+              "mate": null,
+              "raw": -910,
+              "rank": 2,
+              "pv": [
+                "e4d2"
+              ]
+            },
+            {
+              "move": "d7d5",
+              "cp": -990,
+              "mate": null,
+              "raw": -990,
+              "rank": 3,
+              "pv": [
+                "d7d5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e4f2",
+            "e4d2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 35.28
+        },
+        {
+          "ply": 17,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "f5g6",
+          "san": "Qg6+",
+          "fen_before": "r1bqkb2/1p1p4/2n5/pNp1pQ2/P1P5/8/1P1P1nPP/R1B1KBNR w KQq - 0 12",
+          "base_move": "f5g6",
+          "engine_candidates": [
+            {
+              "move": "f5g6",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 1,
+              "pv": [
+                "f5g6"
+              ]
+            },
+            {
+              "move": "f5h5",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 2,
+              "pv": [
+                "f5h5"
+              ]
+            },
+            {
+              "move": "f5f2",
+              "cp": 810,
+              "mate": null,
+              "raw": 810,
+              "rank": 3,
+              "pv": [
+                "f5f2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f5g6",
+            "f5h5"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 1030.92
+        },
+        {
+          "ply": 18,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e8e7",
+          "san": "Ke7",
+          "fen_before": "r1bqkb2/1p1p4/2n3Q1/pNp1p3/P1P5/8/1P1P1nPP/R1B1KBNR b KQq - 1 12",
+          "base_move": "e8e7",
+          "engine_candidates": [
+            {
+              "move": "e8e7",
+              "cp": -910,
+              "mate": null,
+              "raw": -910,
+              "rank": 1,
+              "pv": [
+                "e8e7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e8e7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.19
+        },
+        {
+          "ply": 19,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "e1f2",
+          "san": "Kxf2",
+          "fen_before": "r1bq1b2/1p1pk3/2n3Q1/pNp1p3/P1P5/8/1P1P1nPP/R1B1KBNR w KQ - 2 13",
+          "base_move": "e1f2",
+          "engine_candidates": [
+            {
+              "move": "e1f2",
+              "cp": 890,
+              "mate": null,
+              "raw": 890,
+              "rank": 1,
+              "pv": [
+                "e1f2"
+              ]
+            },
+            {
+              "move": "g6h7",
+              "cp": 880,
+              "mate": null,
+              "raw": 880,
+              "rank": 2,
+              "pv": [
+                "g6h7"
+              ]
+            },
+            {
+              "move": "b5c3",
+              "cp": 590,
+              "mate": null,
+              "raw": 590,
+              "rank": 3,
+              "pv": [
+                "b5c3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e1f2",
+            "g6h7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 768.95
+        },
+        {
+          "ply": 20,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "c6b4",
+          "san": "Nb4",
+          "fen_before": "r1bq1b2/1p1pk3/2n3Q1/pNp1p3/P1P5/8/1P1P1KPP/R1B2BNR b - - 0 13",
+          "base_move": "c6b4",
+          "engine_candidates": [
+            {
+              "move": "c6b4",
+              "cp": -930,
+              "mate": null,
+              "raw": -930,
+              "rank": 1,
+              "pv": [
+                "c6b4"
+              ]
+            },
+            {
+              "move": "c6b8",
+              "cp": -940,
+              "mate": null,
+              "raw": -940,
+              "rank": 2,
+              "pv": [
+                "c6b8"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": -1010,
+              "mate": null,
+              "raw": -1010,
+              "rank": 3,
+              "pv": [
+                "d7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c6b4",
+            "c6b8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 16,
+          "elapsed_ms": 19.93
+        },
+        {
+          "ply": 21,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "g6g5",
+          "san": "Qg5+",
+          "fen_before": "r1bq1b2/1p1pk3/6Q1/pNp1p3/PnP5/8/1P1P1KPP/R1B2BNR w - - 1 14",
+          "base_move": "g6g5",
+          "engine_candidates": [
+            {
+              "move": "g6g5",
+              "cp": 1010,
+              "mate": null,
+              "raw": 1010,
+              "rank": 1,
+              "pv": [
+                "g6g5"
+              ]
+            },
+            {
+              "move": "g6d6",
+              "cp": 1000,
+              "mate": null,
+              "raw": 1000,
+              "rank": 2,
+              "pv": [
+                "g6d6"
+              ]
+            },
+            {
+              "move": "g1f3",
+              "cp": 925,
+              "mate": null,
+              "raw": 925,
+              "rank": 3,
+              "pv": [
+                "g1f3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g6g5",
+            "g6d6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 47,
+          "elapsed_ms": 1286.12
+        },
+        {
+          "ply": 22,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e7e6",
+          "san": "Ke6",
+          "fen_before": "r1bq1b2/1p1pk3/8/pNp1p1Q1/PnP5/8/1P1P1KPP/R1B2BNR b - - 2 14",
+          "base_move": "e7e6",
+          "engine_candidates": [
+            {
+              "move": "e7e6",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 1,
+              "pv": [
+                "e7e6"
+              ]
+            },
+            {
+              "move": "e7e8",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 2,
+              "pv": [
+                "e7e8"
+              ]
+            },
+            {
+              "move": "e7f7",
+              "cp": -1810,
+              "mate": null,
+              "raw": -1810,
+              "rank": 3,
+              "pv": [
+                "e7f7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e7e6",
+            "e7e8",
+            "e7f7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 3,
+          "elapsed_ms": 3.34
+        },
+        {
+          "ply": 23,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "g5d8",
+          "san": "Qxd8",
+          "fen_before": "r1bq1b2/1p1p4/4k3/pNp1p1Q1/PnP5/8/1P1P1KPP/R1B2BNR w - - 3 15",
+          "base_move": "g5d8",
+          "engine_candidates": [
+            {
+              "move": "g5d8",
+              "cp": 1800,
+              "mate": null,
+              "raw": 1800,
+              "rank": 1,
+              "pv": [
+                "g5d8"
+              ]
+            },
+            {
+              "move": "b5d4",
+              "cp": 1455,
+              "mate": null,
+              "raw": 1455,
+              "rank": 2,
+              "pv": [
+                "b5d4"
+              ]
+            },
+            {
+              "move": "g5g4",
+              "cp": 910,
+              "mate": null,
+              "raw": 910,
+              "rank": 3,
+              "pv": [
+                "g5g4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "g5d8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 41,
+          "elapsed_ms": 738.52
+        },
+        {
+          "ply": 24,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "b4c6",
+          "san": "Nc6",
+          "fen_before": "r1bQ1b2/1p1p4/4k3/pNp1p3/PnP5/8/1P1P1KPP/R1B2BNR b - - 0 15",
+          "base_move": "b4c6",
+          "engine_candidates": [
+            {
+              "move": "b4c6",
+              "cp": -2130,
+              "mate": null,
+              "raw": -2130,
+              "rank": 1,
+              "pv": [
+                "b4c6"
+              ]
+            },
+            {
+              "move": "d7d5",
+              "cp": -2130,
+              "mate": null,
+              "raw": -2130,
+              "rank": 2,
+              "pv": [
+                "d7d5"
+              ]
+            },
+            {
+              "move": "f8g7",
+              "cp": -2130,
+              "mate": null,
+              "raw": -2130,
+              "rank": 3,
+              "pv": [
+                "f8g7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b4c6",
+            "d7d5",
+            "f8g7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 19,
+          "elapsed_ms": 18.83
+        },
+        {
+          "ply": 25,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "d8f8",
+          "san": "Qxf8",
+          "fen_before": "r1bQ1b2/1p1p4/2n1k3/pNp1p3/P1P5/8/1P1P1KPP/R1B2BNR w - - 1 16",
+          "base_move": "d8f8",
+          "engine_candidates": [
+            {
+              "move": "d8f8",
+              "cp": 2120,
+              "mate": null,
+              "raw": 2120,
+              "rank": 1,
+              "pv": [
+                "d8f8"
+              ]
+            },
+            {
+              "move": "b5c7",
+              "cp": 1800,
+              "mate": null,
+              "raw": 1800,
+              "rank": 2,
+              "pv": [
+                "b5c7"
+              ]
+            },
+            {
+              "move": "d8e8",
+              "cp": 1800,
+              "mate": null,
+              "raw": 1800,
+              "rank": 3,
+              "pv": [
+                "d8e8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d8f8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 38,
+          "elapsed_ms": 557.9
+        },
+        {
+          "ply": 26,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "d7d5",
+          "san": "d5",
+          "fen_before": "r1b2Q2/1p1p4/2n1k3/pNp1p3/P1P5/8/1P1P1KPP/R1B2BNR b - - 0 16",
+          "base_move": "d7d5",
+          "engine_candidates": [
+            {
+              "move": "d7d5",
+              "cp": -2450,
+              "mate": null,
+              "raw": -2450,
+              "rank": 1,
+              "pv": [
+                "d7d5"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": -2455,
+              "mate": null,
+              "raw": -2455,
+              "rank": 2,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "e5e4",
+              "cp": -2455,
+              "mate": null,
+              "raw": -2455,
+              "rank": 3,
+              "pv": [
+                "e5e4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d7d5",
+            "d7d6",
+            "e5e4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 13,
+          "elapsed_ms": 14.72
+        },
+        {
+          "ply": 27,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "b5c7",
+          "san": "Nc7+",
+          "fen_before": "r1b2Q2/1p6/2n1k3/pNppp3/P1P5/8/1P1P1KPP/R1B2BNR w - - 0 17",
+          "base_move": "b5c7",
+          "engine_candidates": [
+            {
+              "move": "b5c7",
+              "cp": 2495,
+              "mate": null,
+              "raw": 2495,
+              "rank": 1,
+              "pv": [
+                "b5c7"
+              ]
+            },
+            {
+              "move": "f8c5",
+              "cp": 2235,
+              "mate": null,
+              "raw": 2235,
+              "rank": 2,
+              "pv": [
+                "f8c5"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 2215,
+              "mate": null,
+              "raw": 2215,
+              "rank": 3,
+              "pv": [
+                "f8d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b5c7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 402.04
+        },
+        {
+          "ply": 28,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e6d7",
+          "san": "Kd7",
+          "fen_before": "r1b2Q2/1pN5/2n1k3/p1ppp3/P1P5/8/1P1P1KPP/R1B2BNR b - - 1 17",
+          "base_move": "e6d7",
+          "engine_candidates": [
+            {
+              "move": "e6d7",
+              "cp": -2610,
+              "mate": null,
+              "raw": -2610,
+              "rank": 1,
+              "pv": [
+                "e6d7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e6d7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 1,
+          "elapsed_ms": 1.18
+        },
+        {
+          "ply": 29,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "c7a8",
+          "san": "Nxa8",
+          "fen_before": "r1b2Q2/1pNk4/2n5/p1ppp3/P1P5/8/1P1P1KPP/R1B2BNR w - - 2 18",
+          "base_move": "c7a8",
+          "engine_candidates": [
+            {
+              "move": "c7a8",
+              "cp": 2620,
+              "mate": null,
+              "raw": 2620,
+              "rank": 1,
+              "pv": [
+                "c7a8"
+              ]
+            },
+            {
+              "move": "f8f7",
+              "cp": 2495,
+              "mate": null,
+              "raw": 2495,
+              "rank": 2,
+              "pv": [
+                "f8f7"
+              ]
+            },
+            {
+              "move": "f8g7",
+              "cp": 2495,
+              "mate": null,
+              "raw": 2495,
+              "rank": 3,
+              "pv": [
+                "f8g7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c7a8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 43,
+          "elapsed_ms": 465.18
+        },
+        {
+          "ply": 30,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "d5c4",
+          "san": "dxc4",
+          "fen_before": "N1b2Q2/1p1k4/2n5/p1ppp3/P1P5/8/1P1P1KPP/R1B2BNR b - - 0 18",
+          "base_move": "d5c4",
+          "engine_candidates": [
+            {
+              "move": "d5c4",
+              "cp": -2825,
+              "mate": null,
+              "raw": -2825,
+              "rank": 1,
+              "pv": [
+                "d5c4"
+              ]
+            },
+            {
+              "move": "b7b5",
+              "cp": -2930,
+              "mate": null,
+              "raw": -2930,
+              "rank": 2,
+              "pv": [
+                "b7b5"
+              ]
+            },
+            {
+              "move": "c6d4",
+              "cp": -2930,
+              "mate": null,
+              "raw": -2930,
+              "rank": 3,
+              "pv": [
+                "c6d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5c4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 12,
+          "elapsed_ms": 13.24
+        },
+        {
+          "ply": 31,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "a8b6",
+          "san": "Nb6+",
+          "fen_before": "N1b2Q2/1p1k4/2n5/p1p1p3/P1p5/8/1P1P1KPP/R1B2BNR w - - 0 19",
+          "base_move": "a8b6",
+          "engine_candidates": [
+            {
+              "move": "a8b6",
+              "cp": 2815,
+              "mate": null,
+              "raw": 2815,
+              "rank": 1,
+              "pv": [
+                "a8b6"
+              ]
+            },
+            {
+              "move": "f8c5",
+              "cp": 2700,
+              "mate": null,
+              "raw": 2700,
+              "rank": 2,
+              "pv": [
+                "f8c5"
+              ]
+            },
+            {
+              "move": "f1c4",
+              "cp": 2650,
+              "mate": null,
+              "raw": 2650,
+              "rank": 3,
+              "pv": [
+                "f1c4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a8b6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 39,
+          "elapsed_ms": 252.51
+        },
+        {
+          "ply": 32,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "d7c7",
+          "san": "Kc7",
+          "fen_before": "2b2Q2/1p1k4/1Nn5/p1p1p3/P1p5/8/1P1P1KPP/R1B2BNR b - - 1 19",
+          "base_move": "d7c7",
+          "engine_candidates": [
+            {
+              "move": "d7c7",
+              "cp": -2835,
+              "mate": null,
+              "raw": -2835,
+              "rank": 1,
+              "pv": [
+                "d7c7"
+              ]
+            },
+            {
+              "move": "d7e6",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 2,
+              "pv": [
+                "d7e6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d7c7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 2,
+          "elapsed_ms": 2.1
+        },
+        {
+          "ply": 33,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "b6c8",
+          "san": "Nxc8",
+          "fen_before": "2b2Q2/1pk5/1Nn5/p1p1p3/P1p5/8/1P1P1KPP/R1B2BNR w - - 2 20",
+          "base_move": "b6c8",
+          "engine_candidates": [
+            {
+              "move": "b6c8",
+              "cp": 2920,
+              "mate": null,
+              "raw": 2920,
+              "rank": 1,
+              "pv": [
+                "b6c8"
+              ]
+            },
+            {
+              "move": "b6d5",
+              "cp": 2650,
+              "mate": null,
+              "raw": 2650,
+              "rank": 2,
+              "pv": [
+                "b6d5"
+              ]
+            },
+            {
+              "move": "f1c4",
+              "cp": 2630,
+              "mate": null,
+              "raw": 2630,
+              "rank": 3,
+              "pv": [
+                "f1c4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b6c8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 42,
+          "elapsed_ms": 402.93
+        },
+        {
+          "ply": 34,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "c4c3",
+          "san": "c3",
+          "fen_before": "2N2Q2/1pk5/2n5/p1p1p3/P1p5/8/1P1P1KPP/R1B2BNR b - - 0 20",
+          "base_move": "c4c3",
+          "engine_candidates": [
+            {
+              "move": "c4c3",
+              "cp": -2945,
+              "mate": null,
+              "raw": -2945,
+              "rank": 1,
+              "pv": [
+                "c4c3"
+              ]
+            },
+            {
+              "move": "b7b5",
+              "cp": -2950,
+              "mate": null,
+              "raw": -2950,
+              "rank": 2,
+              "pv": [
+                "b7b5"
+              ]
+            },
+            {
+              "move": "c6d4",
+              "cp": -2950,
+              "mate": null,
+              "raw": -2950,
+              "rank": 3,
+              "pv": [
+                "c6d4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c4c3",
+            "b7b5",
+            "c6d4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 12,
+          "elapsed_ms": 12.18
+        },
+        {
+          "ply": 35,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "b2c3",
+          "san": "bxc3",
+          "fen_before": "2N2Q2/1pk5/2n5/p1p1p3/P7/2p5/1P1P1KPP/R1B2BNR w - - 0 21",
+          "base_move": "b2c3",
+          "engine_candidates": [
+            {
+              "move": "b2c3",
+              "cp": 2950,
+              "mate": null,
+              "raw": 2950,
+              "rank": 1,
+              "pv": [
+                "b2c3"
+              ]
+            },
+            {
+              "move": "d2c3",
+              "cp": 2950,
+              "mate": null,
+              "raw": 2950,
+              "rank": 2,
+              "pv": [
+                "d2c3"
+              ]
+            },
+            {
+              "move": "c8d6",
+              "cp": 2845,
+              "mate": null,
+              "raw": 2845,
+              "rank": 3,
+              "pv": [
+                "c8d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b2c3",
+            "d2c3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 44,
+          "elapsed_ms": 527.37
+        },
+        {
+          "ply": 36,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e5e4",
+          "san": "e4",
+          "fen_before": "2N2Q2/1pk5/2n5/p1p1p3/P7/2P5/3P1KPP/R1B2BNR b - - 0 21",
+          "base_move": "e5e4",
+          "engine_candidates": [
+            {
+              "move": "e5e4",
+              "cp": -3050,
+              "mate": null,
+              "raw": -3050,
+              "rank": 1,
+              "pv": [
+                "e5e4"
+              ]
+            },
+            {
+              "move": "b7b5",
+              "cp": -3055,
+              "mate": null,
+              "raw": -3055,
+              "rank": 2,
+              "pv": [
+                "b7b5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": -3055,
+              "mate": null,
+              "raw": -3055,
+              "rank": 3,
+              "pv": [
+                "b7b6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e5e4",
+            "b7b5",
+            "b7b6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 12,
+          "elapsed_ms": 13.29
+        },
+        {
+          "ply": 37,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "c8d6",
+          "san": "Nd6",
+          "fen_before": "2N2Q2/1pk5/2n5/p1p5/P3p3/2P5/3P1KPP/R1B2BNR w - - 0 22",
+          "base_move": "c8d6",
+          "engine_candidates": [
+            {
+              "move": "c8d6",
+              "cp": 3060,
+              "mate": null,
+              "raw": 3060,
+              "rank": 1,
+              "pv": [
+                "c8d6"
+              ]
+            },
+            {
+              "move": "f2e3",
+              "cp": 3040,
+              "mate": null,
+              "raw": 3040,
+              "rank": 2,
+              "pv": [
+                "f2e3"
+              ]
+            },
+            {
+              "move": "f1c4",
+              "cp": 2965,
+              "mate": null,
+              "raw": 2965,
+              "rank": 3,
+              "pv": [
+                "f1c4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8d6",
+            "f2e3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 42,
+          "elapsed_ms": 421.23
+        },
+        {
+          "ply": 38,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "b7b5",
+          "san": "b5",
+          "fen_before": "5Q2/1pk5/2nN4/p1p5/P3p3/2P5/3P1KPP/R1B2BNR b - - 1 22",
+          "base_move": "b7b5",
+          "engine_candidates": [
+            {
+              "move": "b7b5",
+              "cp": -3075,
+              "mate": null,
+              "raw": -3075,
+              "rank": 1,
+              "pv": [
+                "b7b5"
+              ]
+            },
+            {
+              "move": "c6e5",
+              "cp": -3075,
+              "mate": null,
+              "raw": -3075,
+              "rank": 2,
+              "pv": [
+                "c6e5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": -3080,
+              "mate": null,
+              "raw": -3080,
+              "rank": 3,
+              "pv": [
+                "b7b6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b7b5",
+            "c6e5",
+            "b7b6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 13,
+          "elapsed_ms": 14.91
+        },
+        {
+          "ply": 39,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "f1b5",
+          "san": "Bxb5",
+          "fen_before": "5Q2/2k5/2nN4/ppp5/P3p3/2P5/3P1KPP/R1B2BNR w - - 0 23",
+          "base_move": "f1b5",
+          "engine_candidates": [
+            {
+              "move": "f1b5",
+              "cp": 3090,
+              "mate": null,
+              "raw": 3090,
+              "rank": 1,
+              "pv": [
+                "f1b5"
+              ]
+            },
+            {
+              "move": "a4b5",
+              "cp": 3085,
+              "mate": null,
+              "raw": 3085,
+              "rank": 2,
+              "pv": [
+                "a4b5"
+              ]
+            },
+            {
+              "move": "d6e4",
+              "cp": 3065,
+              "mate": null,
+              "raw": 3065,
+              "rank": 3,
+              "pv": [
+                "d6e4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f1b5",
+            "a4b5",
+            "d6e4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 47,
+          "elapsed_ms": 365.68
+        },
+        {
+          "ply": 40,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "c6e5",
+          "san": "Ne5",
+          "fen_before": "5Q2/2k5/2nN4/pBp5/P3p3/2P5/3P1KPP/R1B3NR b - - 0 23",
+          "base_move": "c6e5",
+          "engine_candidates": [
+            {
+              "move": "c6e5",
+              "cp": -3185,
+              "mate": null,
+              "raw": -3185,
+              "rank": 1,
+              "pv": [
+                "c6e5"
+              ]
+            },
+            {
+              "move": "e4e3",
+              "cp": -3190,
+              "mate": null,
+              "raw": -3190,
+              "rank": 2,
+              "pv": [
+                "e4e3"
+              ]
+            },
+            {
+              "move": "c6a7",
+              "cp": -3215,
+              "mate": null,
+              "raw": -3215,
+              "rank": 3,
+              "pv": [
+                "c6a7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c6e5",
+            "e4e3",
+            "c6a7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 11,
+          "elapsed_ms": 12.78
+        },
+        {
+          "ply": 41,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "f8e7",
+          "san": "Qe7+",
+          "fen_before": "5Q2/2k5/3N4/pBp1n3/P3p3/2P5/3P1KPP/R1B3NR w - - 1 24",
+          "base_move": "f8e7",
+          "engine_candidates": [
+            {
+              "move": "f8e7",
+              "cp": 3410,
+              "mate": null,
+              "raw": 3410,
+              "rank": 1,
+              "pv": [
+                "f8e7"
+              ]
+            },
+            {
+              "move": "d6e4",
+              "cp": 3115,
+              "mate": null,
+              "raw": 3115,
+              "rank": 2,
+              "pv": [
+                "d6e4"
+              ]
+            },
+            {
+              "move": "h2h4",
+              "cp": 3070,
+              "mate": null,
+              "raw": 3070,
+              "rank": 3,
+              "pv": [
+                "h2h4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f8e7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 50,
+          "elapsed_ms": 389.95
+        },
+        {
+          "ply": 42,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "e5d7",
+          "san": "Nd7",
+          "fen_before": "8/2k1Q3/3N4/pBp1n3/P3p3/2P5/3P1KPP/R1B3NR b - - 2 24",
+          "base_move": "e5d7",
+          "engine_candidates": [
+            {
+              "move": "e5d7",
+              "cp": -3410,
+              "mate": null,
+              "raw": -3410,
+              "rank": 1,
+              "pv": [
+                "e5d7"
+              ]
+            },
+            {
+              "move": "c7b6",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 2,
+              "pv": [
+                "c7b6"
+              ]
+            },
+            {
+              "move": "c7b8",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 3,
+              "pv": [
+                "c7b8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e5d7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 3,
+          "elapsed_ms": 4.13
+        },
+        {
+          "ply": 43,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "e7d7",
+          "san": "Qxd7+",
+          "fen_before": "8/2knQ3/3N4/pBp5/P3p3/2P5/3P1KPP/R1B3NR w - - 3 25",
+          "base_move": "e7d7",
+          "engine_candidates": [
+            {
+              "move": "e7d7",
+              "cp": null,
+              "mate": 2,
+              "raw": 99997,
+              "rank": 1,
+              "pv": [
+                "e7d7"
+              ]
+            },
+            {
+              "move": "d6e4",
+              "cp": 3530,
+              "mate": null,
+              "raw": 3530,
+              "rank": 2,
+              "pv": [
+                "d6e4"
+              ]
+            },
+            {
+              "move": "b5d7",
+              "cp": 3525,
+              "mate": null,
+              "raw": 3525,
+              "rank": 3,
+              "pv": [
+                "b5d7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e7d7"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 47,
+          "elapsed_ms": 198.02
+        },
+        {
+          "ply": 44,
+          "side": "black",
+          "engine": "Weak2 (plain)",
+          "uci": "c7b6",
+          "san": "Kb6",
+          "fen_before": "8/2kQ4/3N4/pBp5/P3p3/2P5/3P1KPP/R1B3NR b - - 0 25",
+          "base_move": "c7b6",
+          "engine_candidates": [
+            {
+              "move": "c7b6",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 1,
+              "pv": [
+                "c7b6"
+              ]
+            },
+            {
+              "move": "c7b8",
+              "cp": null,
+              "mate": -1,
+              "raw": -99998,
+              "rank": 2,
+              "pv": [
+                "c7b8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c7b6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "plain",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 2,
+          "elapsed_ms": 2.56
+        },
+        {
+          "ply": 45,
+          "side": "white",
+          "engine": "Weak4",
+          "uci": "d6c4",
+          "san": "Nc4#",
+          "fen_before": "8/3Q4/1k1N4/pBp5/P3p3/2P5/3P1KPP/R1B3NR w - - 1 26",
+          "base_move": "d6c4",
+          "engine_candidates": [
+            {
+              "move": "d6c4",
+              "cp": null,
+              "mate": 1,
+              "raw": 99999,
+              "rank": 1,
+              "pv": [
+                "d6c4"
+              ]
+            },
+            {
+              "move": "d6c8",
+              "cp": null,
+              "mate": 1,
+              "raw": 99999,
+              "rank": 2,
+              "pv": [
+                "d6c8"
+              ]
+            },
+            {
+              "move": "d7b7",
+              "cp": null,
+              "mate": 1,
+              "raw": 99999,
+              "rank": 3,
+              "pv": [
+                "d7b7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d6c4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 4,
+          "nodes": null,
+          "searched_root_moves": 48,
+          "elapsed_ms": 133.47
+        }
+      ],
+      "plies": 45,
+      "final_fen": "8/3Q4/1k6/pBp5/P1N1p3/2P5/3P1KPP/R1B3NR b - - 2 26"
+    }
+  ],
+  "summary": {
+    "points": {
+      "Weak2 (plain)": 0,
+      "Weak4": 2
+    },
+    "calls": 0,
+    "interventions": 0,
+    "jev_total_ms": 0,
+    "jev_mean_ms": null,
+    "tokens": 0,
+    "random_picks": 0,
+    "random_interventions": 0,
+    "finished_games": 2
+  },
+  "points": {
+    "Weak2 (plain)": 0,
+    "Weak4": 2
+  },
+  "elapsed_seconds": 60.96
+}

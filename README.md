@@ -17,7 +17,12 @@ Jev로 하는 실험은 전부 이 저장소에 모은다. 라이브러리 하�
 | `experiments/<이름>/` | 측정 실험 하나당 폴더. 스크립트 + 결과 + `README.md`(질문·방법·수치). `branches`, `limits`, `hangul`, `chess`, `vision`. |
 | `tetris/` | Jev가 플레이하는 테트리스 (Node). 자체 `README.md`와 `docs/neurons-spec.md`. |
 | `guardrail/` | 튜닙 Safety Check를 흉내낸 한국어 유해성 가드레일 (Python). 문장 → 카테고리 12개 확률 + 심각도 4단계. 자체 `README.md`. |
+| `2048-puzzle/` | Jev가 플레이하는 2048, 타일이 그림 조각 (Node). **종료된 실패 실험** — 성적이 전부 엔진과 프롬프트에서 나왔다. 사유와 측정표는 자체 `README.md`. |
 | `bug-hunter/` | Python 함수를 주루룩 먹이면 버그 냄새 10개 확률 + 심각도로 위험한 순서로 정렬하는 버그헌터. 자체 `README.md`. |
+| `gomoku/` | Jev가 백을 두는 오목 (Python). 엔진이 후보 자리마다 사실 한 줄을 붙인 정답지를 주고 Jev가 고른다. 상대는 사람·엔진 봇·Claude Opus·Gomocup 엔진 Rapfi. 자체 `README.md`. |
+| `chess/` | Jev 체스 판독과 엔진 대결 실험. Lichess CC0 국면 판독 화면은 :3461, 엔진 수와 Jev 개입을 분리해 보여주는 3D 아레나는 :3470. 자체 `README.md`. |
+| `sliding-puzzle/` | 그림을 5×6으로 자른 슬라이딩 퍼즐 (Python). Jev는 "다음에 벗길 줄"만 고르고 밀기는 코드가 BFS로. 숫자는 정확히 따르지만 어느 숫자가 중요한지는 못 찾고, 지시문에 규칙을 적어 주면 따른다. 3×3 한 칸씩 버전부터의 과정이 자체 `README.md`. |
+| `research/` | Jev 같은 모델이 어떻게 만들어지는지 조사한 자료. 복제본 카탈로그와 원리 정리. |
 
 새 데모 프로젝트는 `tetris/`처럼 루트에 폴더 하나로, 새 측정 실험은 `experiments/` 아래에 둔다.
 키는 어디서든 1Password 참조(`op run`)로만 주입하고 디스크에 쓰지 않는다.
@@ -70,7 +75,7 @@ API 키는 1Password에 있고 디스크에 쓰지 않는다.
 
 ```sh
 op run \
-  --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+  --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python examples/demo.py
 ```
 

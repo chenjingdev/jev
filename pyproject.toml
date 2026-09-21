@@ -6,13 +6,24 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=2.2.6",
-    "pyobjc-framework-applicationservices>=12.2.2",
-    "pyobjc-framework-cocoa>=12.2.2",
-    "pyobjc-framework-quartz>=12.2.2",
-    "pyobjc-framework-vision>=12.2.2",
+    "pyobjc-framework-applicationservices>=12.2.2; sys_platform == 'darwin'",
+    "pyobjc-framework-cocoa>=12.2.2; sys_platform == 'darwin'",
+    "pyobjc-framework-quartz>=12.2.2; sys_platform == 'darwin'",
+    "pyobjc-framework-vision>=12.2.2; sys_platform == 'darwin'",
     "python-chess>=1.999",
     "typesafe-sdk",
     "ultralytics>=8.4.123",
+]
+
+[project.optional-dependencies]
+perception = [
+    "huggingface-hub>=0.30,<1",
+    "pillow>=11",
+    "safetensors>=0.5",
+    "transformers>=4.49,<5",
+]
+portable = [
+    "easyocr==1.7.2",
 ]
 
 [build-system]

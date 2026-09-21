@@ -37,7 +37,7 @@ Jev는 "정답이 하나인 입력"에서는 갈래 수·문서 길이·표면 �
 
 ```sh
 uv run python experiments/limits/run.py --dry-run
-op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python experiments/limits/run.py
 uv run python experiments/limits/report.py
 ```

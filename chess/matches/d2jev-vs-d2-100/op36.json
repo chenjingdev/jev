@@ -1,0 +1,4542 @@
+{
+  "created_at": "2026-09-20T17:55:01.120500+00:00",
+  "status": "complete",
+  "model": "jev-1.13.0",
+  "design": "Two color-swapped games from the same configured opening. Both sides use the same deterministic depth-2 material+PST engine (weak_engine.py); it leaves tactical mistakes a selector could avoid. The selector (Jev or seeded uniform random) picks among the top-3 root moves within margin of the best, in the weak engine's own units. No scores/ranks/base sent to Jev. Jev adds API time.",
+  "selector": "jev",
+  "base_engine": "weak",
+  "config": {
+    "engine": "weak_engine.py",
+    "nodes": null,
+    "margin_cp": 30,
+    "max_plies": 400,
+    "multipv": 3,
+    "threads": 1,
+    "hash_mb": 16,
+    "seed": 423419,
+    "opening_uci": [
+      "b1c3",
+      "b8c6",
+      "a2a4",
+      "a7a5",
+      "g1f3",
+      "f7f5"
+    ],
+    "selector": "jev",
+    "base_engine": "weak",
+    "depth": 2,
+    "opponent_depth": 2,
+    "margin_units": 30
+  },
+  "engine_a": {
+    "name": "Weak2 + Jev",
+    "nodes": null
+  },
+  "engine_b": {
+    "name": "Weak2",
+    "nodes": null
+  },
+  "games": [
+    {
+      "game": 1,
+      "white": "Weak2 + Jev",
+      "black": "Weak2",
+      "initial_fen": "r1bqkbnr/1pppp1pp/2n5/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R w KQkq - 0 4",
+      "opening_uci": [
+        "b1c3",
+        "b8c6",
+        "a2a4",
+        "a7a5",
+        "g1f3",
+        "f7f5"
+      ],
+      "result": "1/2-1/2",
+      "termination": "threefold_repetition",
+      "moves": [
+        {
+          "ply": 1,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "c3d5",
+          "san": "Nd5",
+          "fen_before": "r1bqkbnr/1pppp1pp/2n5/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R w KQkq - 0 4",
+          "base_move": "c3d5",
+          "engine_candidates": [
+            {
+              "move": "c3d5",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "c3d5"
+              ]
+            },
+            {
+              "move": "h2h4",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "h2h4"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -5,
+              "mate": null,
+              "raw": -5,
+              "rank": 3,
+              "pv": [
+                "b2b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3d5",
+            "h2h4",
+            "b2b3"
+          ],
+          "jev": {
+            "base_move": "c3d5",
+            "selected_move": "c3d5",
+            "intervention": false,
+            "enabled": true,
+            "latency_ms": 584.61,
+            "confidence": 0.77,
+            "candidates": [
+              {
+                "move": "h2h4",
+                "probability": 0.06,
+                "selected": false
+              },
+              {
+                "move": "b2b3",
+                "probability": 0.09,
+                "selected": false
+              },
+              {
+                "move": "c3d5",
+                "probability": 0.85,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "c3": "white knight",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "a5": "black pawn",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": "f6"
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c3d5": null,
+                    "b2b3": null,
+                    "h2h4": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "c3d5",
+                  "confidence": 0.77,
+                  "probabilities": {
+                    "h2h4": 0.06,
+                    "b2b3": 0.09,
+                    "c3d5": 0.85
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 734,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 24,
+          "elapsed_ms": 16.13
+        },
+        {
+          "ply": 2,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "h7h5",
+          "san": "h5",
+          "fen_before": "r1bqkbnr/1pppp1pp/2n5/p2N1p2/P7/5N2/1PPPPPPP/R1BQKB1R b KQkq - 1 4",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 2,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "e7e6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 3,
+              "pv": [
+                "e7e6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "d7d6",
+            "e7e6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 21,
+          "elapsed_ms": 18.91
+        },
+        {
+          "ply": 3,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "c2c4",
+          "san": "c4",
+          "fen_before": "r1bqkbnr/1pppp1p1/2n5/p2N1p1p/P7/5N2/1PPPPPPP/R1BQKB1R w KQkq - 0 5",
+          "base_move": "c2c4",
+          "engine_candidates": [
+            {
+              "move": "c2c4",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "c2c4"
+              ]
+            },
+            {
+              "move": "h2h4",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "h2h4"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -5,
+              "mate": null,
+              "raw": -5,
+              "rank": 3,
+              "pv": [
+                "b2b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c2c4",
+            "h2h4",
+            "b2b3"
+          ],
+          "jev": {
+            "base_move": "c2c4",
+            "selected_move": "c2c4",
+            "intervention": false,
+            "enabled": true,
+            "latency_ms": 257.33,
+            "confidence": 0.35,
+            "candidates": [
+              {
+                "move": "h2h4",
+                "probability": 0.26,
+                "selected": false
+              },
+              {
+                "move": "c2c4",
+                "probability": 0.57,
+                "selected": true
+              },
+              {
+                "move": "b2b3",
+                "probability": 0.17,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "a5": "black pawn",
+                  "d5": "white knight",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": "h6"
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c2c4": null,
+                    "b2b3": null,
+                    "h2h4": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "c2c4",
+                  "confidence": 0.35,
+                  "probabilities": {
+                    "h2h4": 0.26,
+                    "c2c4": 0.57,
+                    "b2b3": 0.17
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 734,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 18.29
+        },
+        {
+          "ply": 4,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "d7d6",
+          "san": "d6",
+          "fen_before": "r1bqkbnr/1pppp1p1/2n5/p2N1p1p/P1P5/5N2/1P1PPPPP/R1BQKB1R b KQkq - 0 5",
+          "base_move": "d7d6",
+          "engine_candidates": [
+            {
+              "move": "d7d6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 1,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "e7e6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 2,
+              "pv": [
+                "e7e6"
+              ]
+            },
+            {
+              "move": "g7g6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 3,
+              "pv": [
+                "g7g6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d7d6",
+            "e7e6",
+            "g7g6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 22,
+          "elapsed_ms": 20.41
+        },
+        {
+          "ply": 5,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "d2d3",
+          "san": "d3",
+          "fen_before": "r1bqkbnr/1pp1p1p1/2np4/p2N1p1p/P1P5/5N2/1P1PPPPP/R1BQKB1R w KQkq - 0 6",
+          "base_move": "h2h4",
+          "engine_candidates": [
+            {
+              "move": "h2h4",
+              "cp": 5,
+              "mate": null,
+              "raw": 5,
+              "rank": 1,
+              "pv": [
+                "h2h4"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 3,
+              "pv": [
+                "d2d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h2h4",
+            "b2b3",
+            "d2d3"
+          ],
+          "jev": {
+            "base_move": "h2h4",
+            "selected_move": "d2d3",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 304.31,
+            "confidence": 0.27,
+            "candidates": [
+              {
+                "move": "h2h4",
+                "probability": 0.3,
+                "selected": false
+              },
+              {
+                "move": "b2b3",
+                "probability": 0.19,
+                "selected": false
+              },
+              {
+                "move": "d2d3",
+                "probability": 0.51,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "c4": "white pawn",
+                  "a5": "black pawn",
+                  "d5": "white knight",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "h2h4": null,
+                    "b2b3": null,
+                    "d2d3": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d2d3",
+                  "confidence": 0.27,
+                  "probabilities": {
+                    "h2h4": 0.3,
+                    "b2b3": 0.19,
+                    "d2d3": 0.51
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 22.0
+        },
+        {
+          "ply": 6,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "c8e6",
+          "san": "Be6",
+          "fen_before": "r1bqkbnr/1pp1p1p1/2np4/p2N1p1p/P1P5/3P1N2/1P2PPPP/R1BQKB1R b KQkq - 0 6",
+          "base_move": "c8e6",
+          "engine_candidates": [
+            {
+              "move": "c8e6",
+              "cp": -80,
+              "mate": null,
+              "raw": -80,
+              "rank": 1,
+              "pv": [
+                "c8e6"
+              ]
+            },
+            {
+              "move": "c8d7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 2,
+              "pv": [
+                "c8d7"
+              ]
+            },
+            {
+              "move": "e7e6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 3,
+              "pv": [
+                "e7e6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8e6",
+            "c8d7",
+            "e7e6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 25,
+          "elapsed_ms": 28.79
+        },
+        {
+          "ply": 7,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "d5f4",
+          "san": "Nf4",
+          "fen_before": "r2qkbnr/1pp1p1p1/2npb3/p2N1p1p/P1P5/3P1N2/1P2PPPP/R1BQKB1R w KQkq - 1 7",
+          "base_move": "d5c3",
+          "engine_candidates": [
+            {
+              "move": "d5c3",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 1,
+              "pv": [
+                "d5c3"
+              ]
+            },
+            {
+              "move": "d5e3",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 2,
+              "pv": [
+                "d5e3"
+              ]
+            },
+            {
+              "move": "d5f4",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 3,
+              "pv": [
+                "d5f4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5c3",
+            "d5e3",
+            "d5f4"
+          ],
+          "jev": {
+            "base_move": "d5c3",
+            "selected_move": "d5f4",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 281.14,
+            "confidence": 0.22,
+            "candidates": [
+              {
+                "move": "d5c3",
+                "probability": 0.21,
+                "selected": false
+              },
+              {
+                "move": "d5f4",
+                "probability": 0.48,
+                "selected": true
+              },
+              {
+                "move": "d5e3",
+                "probability": 0.31,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "c4": "white pawn",
+                  "a5": "black pawn",
+                  "d5": "white knight",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black bishop",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "d5c3": null,
+                    "d5f4": null,
+                    "d5e3": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d5f4",
+                  "confidence": 0.22,
+                  "probabilities": {
+                    "d5c3": 0.21,
+                    "d5f4": 0.48,
+                    "d5e3": 0.31
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 30.35
+        },
+        {
+          "ply": 8,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "e6d7",
+          "san": "Bd7",
+          "fen_before": "r2qkbnr/1pp1p1p1/2npb3/p4p1p/P1P2N2/3P1N2/1P2PPPP/R1BQKB1R b KQkq - 2 7",
+          "base_move": "e6d7",
+          "engine_candidates": [
+            {
+              "move": "e6d7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "e6d7"
+              ]
+            },
+            {
+              "move": "e6f7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 2,
+              "pv": [
+                "e6f7"
+              ]
+            },
+            {
+              "move": "e6c8",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "e6c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e6d7",
+            "e6f7",
+            "e6c8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 29.57
+        },
+        {
+          "ply": 9,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "f4d5",
+          "san": "Nd5",
+          "fen_before": "r2qkbnr/1ppbp1p1/2np4/p4p1p/P1P2N2/3P1N2/1P2PPPP/R1BQKB1R w KQkq - 3 8",
+          "base_move": "c1e3",
+          "engine_candidates": [
+            {
+              "move": "c1e3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "c1e3"
+              ]
+            },
+            {
+              "move": "c1d2",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 2,
+              "pv": [
+                "c1d2"
+              ]
+            },
+            {
+              "move": "f4d5",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 3,
+              "pv": [
+                "f4d5"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c1e3",
+            "c1d2",
+            "f4d5"
+          ],
+          "jev": {
+            "base_move": "c1e3",
+            "selected_move": "f4d5",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 236.69,
+            "confidence": 0.57,
+            "candidates": [
+              {
+                "move": "c1e3",
+                "probability": 0.19,
+                "selected": false
+              },
+              {
+                "move": "f4d5",
+                "probability": 0.72,
+                "selected": true
+              },
+              {
+                "move": "c1d2",
+                "probability": 0.09,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "c4": "white pawn",
+                  "f4": "white knight",
+                  "a5": "black pawn",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c1d2": null,
+                    "f4d5": null,
+                    "c1e3": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "f4d5",
+                  "confidence": 0.57,
+                  "probabilities": {
+                    "c1e3": 0.19,
+                    "f4d5": 0.72,
+                    "c1d2": 0.09
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 25.21
+        },
+        {
+          "ply": 10,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "d7e6",
+          "san": "Be6",
+          "fen_before": "r2qkbnr/1ppbp1p1/2np4/p2N1p1p/P1P5/3P1N2/1P2PPPP/R1BQKB1R b KQkq - 4 8",
+          "base_move": "d7e6",
+          "engine_candidates": [
+            {
+              "move": "d7e6",
+              "cp": -80,
+              "mate": null,
+              "raw": -80,
+              "rank": 1,
+              "pv": [
+                "d7e6"
+              ]
+            },
+            {
+              "move": "e7e6",
+              "cp": -85,
+              "mate": null,
+              "raw": -85,
+              "rank": 2,
+              "pv": [
+                "e7e6"
+              ]
+            },
+            {
+              "move": "g7g6",
+              "cp": -85,
+              "mate": null,
+              "raw": -85,
+              "rank": 3,
+              "pv": [
+                "g7g6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d7e6",
+            "e7e6",
+            "g7g6"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 29.61
+        },
+        {
+          "ply": 11,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "d5f4",
+          "san": "Nf4",
+          "fen_before": "r2qkbnr/1pp1p1p1/2npb3/p2N1p1p/P1P5/3P1N2/1P2PPPP/R1BQKB1R w KQkq - 5 9",
+          "base_move": "d5c3",
+          "engine_candidates": [
+            {
+              "move": "d5c3",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 1,
+              "pv": [
+                "d5c3"
+              ]
+            },
+            {
+              "move": "d5e3",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 2,
+              "pv": [
+                "d5e3"
+              ]
+            },
+            {
+              "move": "d5f4",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 3,
+              "pv": [
+                "d5f4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5c3",
+            "d5e3",
+            "d5f4"
+          ],
+          "jev": {
+            "base_move": "d5c3",
+            "selected_move": "d5f4",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 264.63,
+            "confidence": 0.2,
+            "candidates": [
+              {
+                "move": "d5c3",
+                "probability": 0.21,
+                "selected": false
+              },
+              {
+                "move": "d5e3",
+                "probability": 0.32,
+                "selected": false
+              },
+              {
+                "move": "d5f4",
+                "probability": 0.47,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "c4": "white pawn",
+                  "a5": "black pawn",
+                  "d5": "white knight",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black bishop",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "d5c3": null,
+                    "d5f4": null,
+                    "d5e3": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d5f4",
+                  "confidence": 0.2,
+                  "probabilities": {
+                    "d5c3": 0.21,
+                    "d5e3": 0.32,
+                    "d5f4": 0.47
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 31.74
+        },
+        {
+          "ply": 12,
+          "side": "black",
+          "engine": "Weak2",
+          "uci": "e6d7",
+          "san": "Bd7",
+          "fen_before": "r2qkbnr/1pp1p1p1/2npb3/p4p1p/P1P2N2/3P1N2/1P2PPPP/R1BQKB1R b KQkq - 6 9",
+          "base_move": "e6d7",
+          "engine_candidates": [
+            {
+              "move": "e6d7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "e6d7"
+              ]
+            },
+            {
+              "move": "e6f7",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 2,
+              "pv": [
+                "e6f7"
+              ]
+            },
+            {
+              "move": "e6c8",
+              "cp": -100,
+              "mate": null,
+              "raw": -100,
+              "rank": 3,
+              "pv": [
+                "e6c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "e6d7",
+            "e6f7",
+            "e6c8"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 27.42
+        },
+        {
+          "ply": 13,
+          "side": "white",
+          "engine": "Weak2 + Jev",
+          "uci": "f4d5",
+          "san": "Nd5",
+          "fen_before": "r2qkbnr/1ppbp1p1/2np4/p4p1p/P1P2N2/3P1N2/1P2PPPP/R1BQKB1R w KQkq - 7 10",
+          "base_move": "c1e3",
+          "engine_candidates": [
+            {
+              "move": "c1e3",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "c1e3"
+              ]
+            },
+            {
+              "move": "f4d5",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "f4d5"
+              ]
+            },
+            {
+              "move": "c1d2",
+              "cp": -10,
+              "mate": null,
+              "raw": -10,
+              "rank": 3,
+              "pv": [
+                "c1d2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c1e3",
+            "f4d5",
+            "c1d2"
+          ],
+          "jev": {
+            "base_move": "c1e3",
+            "selected_move": "f4d5",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 311.31,
+            "confidence": 0.57,
+            "candidates": [
+              {
+                "move": "c1e3",
+                "probability": 0.19,
+                "selected": false
+              },
+              {
+                "move": "c1d2",
+                "probability": 0.1,
+                "selected": false
+              },
+              {
+                "move": "f4d5",
+                "probability": 0.71,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "white",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "c4": "white pawn",
+                  "f4": "white knight",
+                  "a5": "black pawn",
+                  "f5": "black pawn",
+                  "h5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c1d2": null,
+                    "f4d5": null,
+                    "c1e3": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "f4d5",
+                  "confidence": 0.57,
+                  "probabilities": {
+                    "c1e3": 0.19,
+                    "c1d2": 0.1,
+                    "f4d5": 0.71
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 24.7
+        }
+      ],
+      "plies": 13,
+      "final_fen": "r2qkbnr/1ppbp1p1/2np4/p2N1p1p/P1P5/3P1N2/1P2PPPP/R1BQKB1R b KQkq - 8 10"
+    },
+    {
+      "game": 2,
+      "white": "Weak2",
+      "black": "Weak2 + Jev",
+      "initial_fen": "r1bqkbnr/1pppp1pp/2n5/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R w KQkq - 0 4",
+      "opening_uci": [
+        "b1c3",
+        "b8c6",
+        "a2a4",
+        "a7a5",
+        "g1f3",
+        "f7f5"
+      ],
+      "result": "1/2-1/2",
+      "termination": "threefold_repetition",
+      "moves": [
+        {
+          "ply": 1,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "c3d5",
+          "san": "Nd5",
+          "fen_before": "r1bqkbnr/1pppp1pp/2n5/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R w KQkq - 0 4",
+          "base_move": "c3d5",
+          "engine_candidates": [
+            {
+              "move": "c3d5",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "c3d5"
+              ]
+            },
+            {
+              "move": "h2h4",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 2,
+              "pv": [
+                "h2h4"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -5,
+              "mate": null,
+              "raw": -5,
+              "rank": 3,
+              "pv": [
+                "b2b3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c3d5",
+            "h2h4",
+            "b2b3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 24,
+          "elapsed_ms": 16.51
+        },
+        {
+          "ply": 2,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "e7e6",
+          "san": "e6",
+          "fen_before": "r1bqkbnr/1pppp1pp/2n5/p2N1p2/P7/5N2/1PPPPPPP/R1BQKB1R b KQkq - 1 4",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": -90,
+              "mate": null,
+              "raw": -90,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 2,
+              "pv": [
+                "d7d6"
+              ]
+            },
+            {
+              "move": "e7e6",
+              "cp": -95,
+              "mate": null,
+              "raw": -95,
+              "rank": 3,
+              "pv": [
+                "e7e6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "d7d6",
+            "e7e6"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "e7e6",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 305.74,
+            "confidence": 0.29,
+            "candidates": [
+              {
+                "move": "e7e6",
+                "probability": 0.53,
+                "selected": true
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.09,
+                "selected": false
+              },
+              {
+                "move": "d7d6",
+                "probability": 0.38,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "a5": "black pawn",
+                  "d5": "white knight",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "e7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "e7e6": null,
+                    "d7d6": null,
+                    "h7h5": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "e7e6",
+                  "confidence": 0.29,
+                  "probabilities": {
+                    "e7e6": 0.53,
+                    "h7h5": 0.09,
+                    "d7d6": 0.38
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 21,
+          "elapsed_ms": 21.32
+        },
+        {
+          "ply": 3,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "d5c3",
+          "san": "Nc3",
+          "fen_before": "r1bqkbnr/1ppp2pp/2n1p3/p2N1p2/P7/5N2/1PPPPPPP/R1BQKB1R w KQkq - 0 5",
+          "base_move": "d5c3",
+          "engine_candidates": [
+            {
+              "move": "d5c3",
+              "cp": -15,
+              "mate": null,
+              "raw": -15,
+              "rank": 1,
+              "pv": [
+                "d5c3"
+              ]
+            },
+            {
+              "move": "d5e3",
+              "cp": -15,
+              "mate": null,
+              "raw": -15,
+              "rank": 2,
+              "pv": [
+                "d5e3"
+              ]
+            },
+            {
+              "move": "d5f4",
+              "cp": -15,
+              "mate": null,
+              "raw": -15,
+              "rank": 3,
+              "pv": [
+                "d5f4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d5c3",
+            "d5e3",
+            "d5f4"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 25.47
+        },
+        {
+          "ply": 4,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "g8f6",
+          "san": "Nf6",
+          "fen_before": "r1bqkbnr/1ppp2pp/2n1p3/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R b KQkq - 1 5",
+          "base_move": "f8c5",
+          "engine_candidates": [
+            {
+              "move": "f8c5",
+              "cp": 5,
+              "mate": null,
+              "raw": 5,
+              "rank": 1,
+              "pv": [
+                "f8c5"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 5,
+              "mate": null,
+              "raw": 5,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "g8f6",
+              "cp": 5,
+              "mate": null,
+              "raw": 5,
+              "rank": 3,
+              "pv": [
+                "g8f6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f8c5",
+            "f8d6",
+            "g8f6"
+          ],
+          "jev": {
+            "base_move": "f8c5",
+            "selected_move": "g8f6",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 268.85,
+            "confidence": 0.18,
+            "candidates": [
+              {
+                "move": "g8f6",
+                "probability": 0.46,
+                "selected": true
+              },
+              {
+                "move": "f8d6",
+                "probability": 0.25,
+                "selected": false
+              },
+              {
+                "move": "f8c5",
+                "probability": 0.29,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "h2": "white pawn",
+                  "c3": "white knight",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "a5": "black pawn",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "e6": "black pawn",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "g8": "black knight",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "g8f6": null,
+                    "f8d6": null,
+                    "f8c5": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "g8f6",
+                  "confidence": 0.18,
+                  "probabilities": {
+                    "g8f6": 0.46,
+                    "f8d6": 0.25,
+                    "f8c5": 0.29
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 33,
+          "elapsed_ms": 25.08
+        },
+        {
+          "ply": 5,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "h2h4",
+          "san": "h4",
+          "fen_before": "r1bqkb1r/1ppp2pp/2n1pn2/p4p2/P7/2N2N2/1PPPPPPP/R1BQKB1R w KQkq - 2 6",
+          "base_move": "h2h4",
+          "engine_candidates": [
+            {
+              "move": "h2h4",
+              "cp": -25,
+              "mate": null,
+              "raw": -25,
+              "rank": 1,
+              "pv": [
+                "h2h4"
+              ]
+            },
+            {
+              "move": "b2b3",
+              "cp": -30,
+              "mate": null,
+              "raw": -30,
+              "rank": 2,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": -30,
+              "mate": null,
+              "raw": -30,
+              "rank": 3,
+              "pv": [
+                "d2d3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h2h4",
+            "b2b3",
+            "d2d3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 24,
+          "elapsed_ms": 22.78
+        },
+        {
+          "ply": 6,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "f8c5",
+          "san": "Bc5",
+          "fen_before": "r1bqkb1r/1ppp2pp/2n1pn2/p4p2/P6P/2N2N2/1PPPPPP1/R1BQKB1R b KQkq - 0 6",
+          "base_move": "f8c5",
+          "engine_candidates": [
+            {
+              "move": "f8c5",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 1,
+              "pv": [
+                "f8c5"
+              ]
+            },
+            {
+              "move": "f8d6",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 2,
+              "pv": [
+                "f8d6"
+              ]
+            },
+            {
+              "move": "f8b4",
+              "cp": 5,
+              "mate": null,
+              "raw": 5,
+              "rank": 3,
+              "pv": [
+                "f8b4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "f8c5",
+            "f8d6",
+            "f8b4"
+          ],
+          "jev": {
+            "base_move": "f8c5",
+            "selected_move": "f8c5",
+            "intervention": false,
+            "enabled": true,
+            "latency_ms": 223.66,
+            "confidence": 0.04,
+            "candidates": [
+              {
+                "move": "f8d6",
+                "probability": 0.35,
+                "selected": false
+              },
+              {
+                "move": "f8b4",
+                "probability": 0.29,
+                "selected": false
+              },
+              {
+                "move": "f8c5",
+                "probability": 0.36,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white pawn",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "c3": "white knight",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "f8": "black bishop",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": "h3"
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "f8d6": null,
+                    "f8c5": null,
+                    "f8b4": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "f8c5",
+                  "confidence": 0.04,
+                  "probabilities": {
+                    "f8d6": 0.35,
+                    "f8b4": 0.29,
+                    "f8c5": 0.36
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 734,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 33,
+          "elapsed_ms": 24.53
+        },
+        {
+          "ply": 7,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "b2b3",
+          "san": "b3",
+          "fen_before": "r1bqk2r/1ppp2pp/2n1pn2/p1b2p2/P6P/2N2N2/1PPPPPP1/R1BQKB1R w KQkq - 1 7",
+          "base_move": "b2b3",
+          "engine_candidates": [
+            {
+              "move": "b2b3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 1,
+              "pv": [
+                "b2b3"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 2,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "g2g3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 3,
+              "pv": [
+                "g2g3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b2b3",
+            "d2d3",
+            "g2g3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 25,
+          "elapsed_ms": 30.78
+        },
+        {
+          "ply": 8,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "d7d6",
+          "san": "d6",
+          "fen_before": "r1bqk2r/1ppp2pp/2n1pn2/p1b2p2/P6P/1PN2N2/2PPPPP1/R1BQKB1R b KQkq - 0 7",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": 20,
+              "mate": null,
+              "raw": 20,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 2,
+              "pv": [
+                "b7b6"
+              ]
+            },
+            {
+              "move": "d7d6",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 3,
+              "pv": [
+                "d7d6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "b7b6",
+            "d7d6"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "d7d6",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 282.1,
+            "confidence": 0.35,
+            "candidates": [
+              {
+                "move": "d7d6",
+                "probability": 0.57,
+                "selected": true
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.17,
+                "selected": false
+              },
+              {
+                "move": "b7b6",
+                "probability": 0.26,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "c1": "white bishop",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "h7h5": null,
+                    "d7d6": null,
+                    "b7b6": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d7d6",
+                  "confidence": 0.35,
+                  "probabilities": {
+                    "d7d6": 0.57,
+                    "h7h5": 0.17,
+                    "b7b6": 0.26
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 41,
+          "elapsed_ms": 31.87
+        },
+        {
+          "ply": 9,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "c1b2",
+          "san": "Bb2",
+          "fen_before": "r1bqk2r/1pp3pp/2nppn2/p1b2p2/P6P/1PN2N2/2PPPPP1/R1BQKB1R w KQkq - 0 8",
+          "base_move": "c1b2",
+          "engine_candidates": [
+            {
+              "move": "c1b2",
+              "cp": -105,
+              "mate": null,
+              "raw": -105,
+              "rank": 1,
+              "pv": [
+                "c1b2"
+              ]
+            },
+            {
+              "move": "d2d3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 2,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "g2g3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 3,
+              "pv": [
+                "g2g3"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c1b2",
+            "d2d3",
+            "g2g3"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 26,
+          "elapsed_ms": 32.33
+        },
+        {
+          "ply": 10,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "c8d7",
+          "san": "Bd7",
+          "fen_before": "r1bqk2r/1pp3pp/2nppn2/p1b2p2/P6P/1PN2N2/1BPPPPP1/R2QKB1R b KQkq - 1 8",
+          "base_move": "c8d7",
+          "engine_candidates": [
+            {
+              "move": "c8d7",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 1,
+              "pv": [
+                "c8d7"
+              ]
+            },
+            {
+              "move": "h7h5",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 2,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": 10,
+              "mate": null,
+              "raw": 10,
+              "rank": 3,
+              "pv": [
+                "b7b6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8d7",
+            "h7h5",
+            "b7b6"
+          ],
+          "jev": {
+            "base_move": "c8d7",
+            "selected_move": "c8d7",
+            "intervention": false,
+            "enabled": true,
+            "latency_ms": 250.4,
+            "confidence": 0.16,
+            "candidates": [
+              {
+                "move": "h7h5",
+                "probability": 0.24,
+                "selected": false
+              },
+              {
+                "move": "b7b6",
+                "probability": 0.32,
+                "selected": false
+              },
+              {
+                "move": "c8d7",
+                "probability": 0.44,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "d2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "c8": "black bishop",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c8d7": null,
+                    "h7h5": null,
+                    "b7b6": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "c8d7",
+                  "confidence": 0.16,
+                  "probabilities": {
+                    "h7h5": 0.24,
+                    "b7b6": 0.32,
+                    "c8d7": 0.44
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 41,
+          "elapsed_ms": 35.09
+        },
+        {
+          "ply": 11,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "d2d3",
+          "san": "d3",
+          "fen_before": "r2qk2r/1ppb2pp/2nppn2/p1b2p2/P6P/1PN2N2/1BPPPPP1/R2QKB1R w KQkq - 2 9",
+          "base_move": "d2d3",
+          "engine_candidates": [
+            {
+              "move": "d2d3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 1,
+              "pv": [
+                "d2d3"
+              ]
+            },
+            {
+              "move": "g2g3",
+              "cp": -110,
+              "mate": null,
+              "raw": -110,
+              "rank": 2,
+              "pv": [
+                "g2g3"
+              ]
+            },
+            {
+              "move": "a1a2",
+              "cp": -115,
+              "mate": null,
+              "raw": -115,
+              "rank": 3,
+              "pv": [
+                "a1a2"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d2d3",
+            "g2g3",
+            "a1a2"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 35.4
+        },
+        {
+          "ply": 12,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "f5f4",
+          "san": "f4",
+          "fen_before": "r2qk2r/1ppb2pp/2nppn2/p1b2p2/P6P/1PNP1N2/1BP1PPP1/R2QKB1R b KQkq - 0 9",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": 20,
+              "mate": null,
+              "raw": 20,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 2,
+              "pv": [
+                "b7b6"
+              ]
+            },
+            {
+              "move": "f5f4",
+              "cp": 15,
+              "mate": null,
+              "raw": 15,
+              "rank": 3,
+              "pv": [
+                "f5f4"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "b7b6",
+            "f5f4"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "f5f4",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 312.92,
+            "confidence": 0.43,
+            "candidates": [
+              {
+                "move": "b7b6",
+                "probability": 0.28,
+                "selected": false
+              },
+              {
+                "move": "f5f4",
+                "probability": 0.62,
+                "selected": true
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.1,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "f5": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "KQkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "h7h5": null,
+                    "b7b6": null,
+                    "f5f4": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "f5f4",
+                  "confidence": 0.43,
+                  "probabilities": {
+                    "b7b6": 0.28,
+                    "f5f4": 0.62,
+                    "h7h5": 0.1
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 731,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 41,
+          "elapsed_ms": 37.2
+        },
+        {
+          "ply": 13,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "r2qk2r/1ppb2pp/2nppn2/p1b5/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R w KQkq - 0 10",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -115,
+              "mate": null,
+              "raw": -115,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -115,
+              "mate": null,
+              "raw": -115,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "a1c1",
+              "cp": -115,
+              "mate": null,
+              "raw": -115,
+              "rank": 3,
+              "pv": [
+                "a1c1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1b1",
+            "a1c1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 38.55
+        },
+        {
+          "ply": 14,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "b7b6",
+          "san": "b6",
+          "fen_before": "r2qk2r/1ppb2pp/2nppn2/p1b5/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R b Kkq - 1 10",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": 25,
+              "mate": null,
+              "raw": 25,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "b7b6",
+              "cp": 20,
+              "mate": null,
+              "raw": 20,
+              "rank": 2,
+              "pv": [
+                "b7b6"
+              ]
+            },
+            {
+              "move": "g7g6",
+              "cp": 20,
+              "mate": null,
+              "raw": 20,
+              "rank": 3,
+              "pv": [
+                "g7g6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "b7b6",
+            "g7g6"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "b7b6",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 320.15,
+            "confidence": 0.09,
+            "candidates": [
+              {
+                "move": "b7b6",
+                "probability": 0.4,
+                "selected": true
+              },
+              {
+                "move": "g7g6",
+                "probability": 0.39,
+                "selected": false
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.21,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "a2": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "b7": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "g7g6": null,
+                    "h7h5": null,
+                    "b7b6": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "b7b6",
+                  "confidence": 0.09,
+                  "probabilities": {
+                    "b7b6": 0.4,
+                    "g7g6": 0.39,
+                    "h7h5": 0.21
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 730,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 40,
+          "elapsed_ms": 35.09
+        },
+        {
+          "ply": 15,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a2a1",
+          "san": "Ra1",
+          "fen_before": "r2qk2r/2pb2pp/1pnppn2/p1b5/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R w Kkq - 0 11",
+          "base_move": "a2a1",
+          "engine_candidates": [
+            {
+              "move": "a2a1",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 1,
+              "pv": [
+                "a2a1"
+              ]
+            },
+            {
+              "move": "d1a1",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 2,
+              "pv": [
+                "d1a1"
+              ]
+            },
+            {
+              "move": "d1b1",
+              "cp": -120,
+              "mate": null,
+              "raw": -120,
+              "rank": 3,
+              "pv": [
+                "d1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2a1",
+            "d1a1",
+            "d1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 33.56
+        },
+        {
+          "ply": 16,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "g7g6",
+          "san": "g6",
+          "fen_before": "r2qk2r/2pb2pp/1pnppn2/p1b5/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R b Kkq - 1 11",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": 30,
+              "mate": null,
+              "raw": 30,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "g7g6",
+              "cp": 25,
+              "mate": null,
+              "raw": 25,
+              "rank": 2,
+              "pv": [
+                "g7g6"
+              ]
+            },
+            {
+              "move": "h7h6",
+              "cp": 25,
+              "mate": null,
+              "raw": 25,
+              "rank": 3,
+              "pv": [
+                "h7h6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "g7g6",
+            "h7h6"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "g7g6",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 223.26,
+            "confidence": 0.33,
+            "candidates": [
+              {
+                "move": "h7h6",
+                "probability": 0.25,
+                "selected": false
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.2,
+                "selected": false
+              },
+              {
+                "move": "g7g6",
+                "probability": 0.55,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "g7": "black pawn",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "h7h5": null,
+                    "g7g6": null,
+                    "h7h6": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "g7g6",
+                  "confidence": 0.33,
+                  "probabilities": {
+                    "h7h6": 0.25,
+                    "h7h5": 0.2,
+                    "g7g6": 0.55
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 730,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 37,
+          "elapsed_ms": 33.32
+        },
+        {
+          "ply": 17,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "r2qk2r/2pb3p/1pnppnp1/p1b5/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R w Kkq - 0 12",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -125,
+              "mate": null,
+              "raw": -125,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -125,
+              "mate": null,
+              "raw": -125,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "a1c1",
+              "cp": -125,
+              "mate": null,
+              "raw": -125,
+              "rank": 3,
+              "pv": [
+                "a1c1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1b1",
+            "a1c1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 37.11
+        },
+        {
+          "ply": 18,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "h7h5",
+          "san": "h5",
+          "fen_before": "r2qk2r/2pb3p/1pnppnp1/p1b5/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R b Kkq - 1 12",
+          "base_move": "h7h5",
+          "engine_candidates": [
+            {
+              "move": "h7h5",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "h7h5"
+              ]
+            },
+            {
+              "move": "h7h6",
+              "cp": 30,
+              "mate": null,
+              "raw": 30,
+              "rank": 2,
+              "pv": [
+                "h7h6"
+              ]
+            },
+            {
+              "move": "a8a6",
+              "cp": 25,
+              "mate": null,
+              "raw": 25,
+              "rank": 3,
+              "pv": [
+                "a8a6"
+              ]
+            }
+          ],
+          "shortlist": [
+            "h7h5",
+            "h7h6",
+            "a8a6"
+          ],
+          "jev": {
+            "base_move": "h7h5",
+            "selected_move": "h7h5",
+            "intervention": false,
+            "enabled": true,
+            "latency_ms": 294.91,
+            "confidence": 0.03,
+            "candidates": [
+              {
+                "move": "h7h6",
+                "probability": 0.34,
+                "selected": false
+              },
+              {
+                "move": "a8a6",
+                "probability": 0.31,
+                "selected": false
+              },
+              {
+                "move": "h7h5",
+                "probability": 0.35,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "a2": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "h7": "black pawn",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "a8a6": null,
+                    "h7h5": null,
+                    "h7h6": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "h7h5",
+                  "confidence": 0.03,
+                  "probabilities": {
+                    "h7h6": 0.34,
+                    "a8a6": 0.31,
+                    "h7h5": 0.35
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 730,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 31.55
+        },
+        {
+          "ply": 19,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a2a1",
+          "san": "Ra1",
+          "fen_before": "r2qk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R w Kkq - 0 13",
+          "base_move": "a2a1",
+          "engine_candidates": [
+            {
+              "move": "a2a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a2a1"
+              ]
+            },
+            {
+              "move": "d1a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "d1a1"
+              ]
+            },
+            {
+              "move": "d1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "d1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2a1",
+            "d1a1",
+            "d1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 37.31
+        },
+        {
+          "ply": 20,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "a8b8",
+          "san": "Rb8",
+          "fen_before": "r2qk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R b Kkq - 1 13",
+          "base_move": "a8a6",
+          "engine_candidates": [
+            {
+              "move": "a8a6",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "a8a6"
+              ]
+            },
+            {
+              "move": "a8a7",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "a8a7"
+              ]
+            },
+            {
+              "move": "a8b8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "a8b8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a8a6",
+            "a8a7",
+            "a8b8"
+          ],
+          "jev": {
+            "base_move": "a8a6",
+            "selected_move": "a8b8",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 229.82,
+            "confidence": 0.22,
+            "candidates": [
+              {
+                "move": "a8b8",
+                "probability": 0.48,
+                "selected": true
+              },
+              {
+                "move": "a8a6",
+                "probability": 0.32,
+                "selected": false
+              },
+              {
+                "move": "a8a7",
+                "probability": 0.2,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "a8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kkq",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "a8a6": null,
+                    "a8a7": null,
+                    "a8b8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "a8b8",
+                  "confidence": 0.22,
+                  "probabilities": {
+                    "a8b8": 0.48,
+                    "a8a6": 0.32,
+                    "a8a7": 0.2
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 730,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 32.52
+        },
+        {
+          "ply": 21,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "1r1qk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R w Kk - 2 14",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "a1c1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "a1c1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1b1",
+            "a1c1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 31.37
+        },
+        {
+          "ply": 22,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "b8c8",
+          "san": "Rc8",
+          "fen_before": "1r1qk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R b Kk - 3 14",
+          "base_move": "b8a8",
+          "engine_candidates": [
+            {
+              "move": "b8a8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "b8a8"
+              ]
+            },
+            {
+              "move": "b8b7",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "b8b7"
+              ]
+            },
+            {
+              "move": "b8c8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "b8c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "b8a8",
+            "b8b7",
+            "b8c8"
+          ],
+          "jev": {
+            "base_move": "b8a8",
+            "selected_move": "b8c8",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 308.73,
+            "confidence": 0.48,
+            "candidates": [
+              {
+                "move": "b8c8",
+                "probability": 0.65,
+                "selected": true
+              },
+              {
+                "move": "b8a8",
+                "probability": 0.2,
+                "selected": false
+              },
+              {
+                "move": "b8b7",
+                "probability": 0.15,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "a2": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "b8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kk",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "b8b7": null,
+                    "b8c8": null,
+                    "b8a8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "b8c8",
+                  "confidence": 0.48,
+                  "probabilities": {
+                    "b8c8": 0.65,
+                    "b8a8": 0.2,
+                    "b8b7": 0.15
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 729,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 33,
+          "elapsed_ms": 39.95
+        },
+        {
+          "ply": 23,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a2a1",
+          "san": "Ra1",
+          "fen_before": "2rqk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R w Kk - 4 15",
+          "base_move": "a2a1",
+          "engine_candidates": [
+            {
+              "move": "a2a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a2a1"
+              ]
+            },
+            {
+              "move": "d1a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "d1a1"
+              ]
+            },
+            {
+              "move": "d1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "d1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2a1",
+            "d1a1",
+            "d1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 28.21
+        },
+        {
+          "ply": 24,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "d8e7",
+          "san": "Qe7",
+          "fen_before": "2rqk2r/2pb4/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R b Kk - 5 15",
+          "base_move": "c8a8",
+          "engine_candidates": [
+            {
+              "move": "c8a8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "c8a8"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "c8b8"
+              ]
+            },
+            {
+              "move": "d8e7",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "d8e7"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8a8",
+            "c8b8",
+            "d8e7"
+          ],
+          "jev": {
+            "base_move": "c8a8",
+            "selected_move": "d8e7",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 293.19,
+            "confidence": 0.08,
+            "candidates": [
+              {
+                "move": "c8a8",
+                "probability": 0.34,
+                "selected": false
+              },
+              {
+                "move": "d8e7",
+                "probability": 0.39,
+                "selected": true
+              },
+              {
+                "move": "c8b8",
+                "probability": 0.27,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "c8": "black rook",
+                  "d8": "black queen",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kk",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c8b8": null,
+                    "d8e7": null,
+                    "c8a8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d8e7",
+                  "confidence": 0.08,
+                  "probabilities": {
+                    "c8a8": 0.34,
+                    "d8e7": 0.39,
+                    "c8b8": 0.27
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 729,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 31,
+          "elapsed_ms": 27.48
+        },
+        {
+          "ply": 25,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "2r1k2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R w Kk - 6 16",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "a1c1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "a1c1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1b1",
+            "a1c1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 35.71
+        },
+        {
+          "ply": 26,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "c8d8",
+          "san": "Rd8",
+          "fen_before": "2r1k2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R b Kk - 7 16",
+          "base_move": "c8a8",
+          "engine_candidates": [
+            {
+              "move": "c8a8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "c8a8"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "c8b8"
+              ]
+            },
+            {
+              "move": "c8d8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "c8d8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8a8",
+            "c8b8",
+            "c8d8"
+          ],
+          "jev": {
+            "base_move": "c8a8",
+            "selected_move": "c8d8",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 257.52,
+            "confidence": 0.38,
+            "candidates": [
+              {
+                "move": "c8d8",
+                "probability": 0.58,
+                "selected": true
+              },
+              {
+                "move": "c8b8",
+                "probability": 0.21,
+                "selected": false
+              },
+              {
+                "move": "c8a8",
+                "probability": 0.21,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "a2": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "e7": "black queen",
+                  "c8": "black rook",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kk",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c8b8": null,
+                    "c8a8": null,
+                    "c8d8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "c8d8",
+                  "confidence": 0.38,
+                  "probabilities": {
+                    "c8d8": 0.58,
+                    "c8b8": 0.21,
+                    "c8a8": 0.21
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 729,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 32.7
+        },
+        {
+          "ply": 27,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a2a1",
+          "san": "Ra1",
+          "fen_before": "3rk2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R w Kk - 8 17",
+          "base_move": "a2a1",
+          "engine_candidates": [
+            {
+              "move": "a2a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a2a1"
+              ]
+            },
+            {
+              "move": "d1a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "d1a1"
+              ]
+            },
+            {
+              "move": "d1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "d1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2a1",
+            "d1a1",
+            "d1b1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 31.7
+        },
+        {
+          "ply": 28,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "d8c8",
+          "san": "Rc8",
+          "fen_before": "3rk2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R b Kk - 9 17",
+          "base_move": "d8a8",
+          "engine_candidates": [
+            {
+              "move": "d8a8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "d8a8"
+              ]
+            },
+            {
+              "move": "d8b8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "d8b8"
+              ]
+            },
+            {
+              "move": "d8c8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "d8c8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "d8a8",
+            "d8b8",
+            "d8c8"
+          ],
+          "jev": {
+            "base_move": "d8a8",
+            "selected_move": "d8c8",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 347.93,
+            "confidence": 0.09,
+            "candidates": [
+              {
+                "move": "d8b8",
+                "probability": 0.36,
+                "selected": false
+              },
+              {
+                "move": "d8a8",
+                "probability": 0.25,
+                "selected": false
+              },
+              {
+                "move": "d8c8",
+                "probability": 0.39,
+                "selected": true
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "a1": "white rook",
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "e7": "black queen",
+                  "d8": "black rook",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kk",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "d8b8": null,
+                    "d8a8": null,
+                    "d8c8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "d8c8",
+                  "confidence": 0.09,
+                  "probabilities": {
+                    "d8b8": 0.36,
+                    "d8a8": 0.25,
+                    "d8c8": 0.39
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 729,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 34,
+          "elapsed_ms": 32.45
+        },
+        {
+          "ply": 29,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a1a2",
+          "san": "Ra2",
+          "fen_before": "2r1k2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R w Kk - 10 18",
+          "base_move": "a1a2",
+          "engine_candidates": [
+            {
+              "move": "a1a2",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 1,
+              "pv": [
+                "a1a2"
+              ]
+            },
+            {
+              "move": "a1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "a1b1"
+              ]
+            },
+            {
+              "move": "a1c1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "a1c1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a1a2",
+            "a1b1",
+            "a1c1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 30,
+          "elapsed_ms": 33.82
+        },
+        {
+          "ply": 30,
+          "side": "black",
+          "engine": "Weak2 + Jev",
+          "uci": "c8d8",
+          "san": "Rd8",
+          "fen_before": "2r1k2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R b Kk - 11 18",
+          "base_move": "c8a8",
+          "engine_candidates": [
+            {
+              "move": "c8a8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 1,
+              "pv": [
+                "c8a8"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 2,
+              "pv": [
+                "c8b8"
+              ]
+            },
+            {
+              "move": "c8d8",
+              "cp": 35,
+              "mate": null,
+              "raw": 35,
+              "rank": 3,
+              "pv": [
+                "c8d8"
+              ]
+            }
+          ],
+          "shortlist": [
+            "c8a8",
+            "c8b8",
+            "c8d8"
+          ],
+          "jev": {
+            "base_move": "c8a8",
+            "selected_move": "c8d8",
+            "intervention": true,
+            "enabled": true,
+            "latency_ms": 249.64,
+            "confidence": 0.34,
+            "candidates": [
+              {
+                "move": "c8d8",
+                "probability": 0.56,
+                "selected": true
+              },
+              {
+                "move": "c8b8",
+                "probability": 0.22,
+                "selected": false
+              },
+              {
+                "move": "c8a8",
+                "probability": 0.22,
+                "selected": false
+              }
+            ],
+            "request": {
+              "model": "jev-1.13.0",
+              "state": {
+                "side_to_move": "black",
+                "pieces": {
+                  "d1": "white queen",
+                  "e1": "white king",
+                  "f1": "white bishop",
+                  "h1": "white rook",
+                  "a2": "white rook",
+                  "b2": "white bishop",
+                  "c2": "white pawn",
+                  "e2": "white pawn",
+                  "f2": "white pawn",
+                  "g2": "white pawn",
+                  "b3": "white pawn",
+                  "c3": "white knight",
+                  "d3": "white pawn",
+                  "f3": "white knight",
+                  "a4": "white pawn",
+                  "f4": "black pawn",
+                  "h4": "white pawn",
+                  "a5": "black pawn",
+                  "c5": "black bishop",
+                  "h5": "black pawn",
+                  "b6": "black pawn",
+                  "c6": "black knight",
+                  "d6": "black pawn",
+                  "e6": "black pawn",
+                  "f6": "black knight",
+                  "g6": "black pawn",
+                  "c7": "black pawn",
+                  "d7": "black bishop",
+                  "e7": "black queen",
+                  "c8": "black rook",
+                  "e8": "black king",
+                  "h8": "black rook"
+                },
+                "castling_rights": "Kk",
+                "en_passant": null
+              },
+              "questions": {
+                "move": {
+                  "type": "choice",
+                  "instructions": "You are playing standard chess as `side_to_move`. Choose the move that gives your side the best practical position, considering king safety, piece activity, coordination and useful threats. `pieces` lists the current occupied squares. Options are moves in UCI notation: origin square followed by destination square, with an optional promotion letter. Choose one option using the supplied position.",
+                  "criteria": {
+                    "c8d8": null,
+                    "c8a8": null,
+                    "c8b8": null
+                  }
+                }
+              }
+            },
+            "response": {
+              "model": "jev-1.13.0",
+              "answers": {
+                "move": {
+                  "type": "choice",
+                  "choice": "c8d8",
+                  "confidence": 0.34,
+                  "probabilities": {
+                    "c8d8": 0.56,
+                    "c8b8": 0.22,
+                    "c8a8": 0.22
+                  }
+                }
+              },
+              "usage": {
+                "input_tokens": 729,
+                "output_tokens": 50
+              }
+            }
+          },
+          "random_control": null,
+          "jev_skip": null,
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 36,
+          "elapsed_ms": 31.47
+        },
+        {
+          "ply": 31,
+          "side": "white",
+          "engine": "Weak2",
+          "uci": "a2a1",
+          "san": "Ra1",
+          "fen_before": "3rk2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/RBP1PPP1/3QKB1R w Kk - 12 19",
+          "base_move": "a2a1",
+          "engine_candidates": [
+            {
+              "move": "a2a1",
+              "cp": 0,
+              "mate": null,
+              "raw": 0,
+              "rank": 1,
+              "pv": [
+                "a2a1"
+              ]
+            },
+            {
+              "move": "d1a1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 2,
+              "pv": [
+                "d1a1"
+              ]
+            },
+            {
+              "move": "d1b1",
+              "cp": -135,
+              "mate": null,
+              "raw": -135,
+              "rank": 3,
+              "pv": [
+                "d1b1"
+              ]
+            }
+          ],
+          "shortlist": [
+            "a2a1"
+          ],
+          "jev": null,
+          "random_control": null,
+          "jev_skip": "control",
+          "depth": 2,
+          "nodes": null,
+          "searched_root_moves": 29,
+          "elapsed_ms": 31.63
+        }
+      ],
+      "plies": 31,
+      "final_fen": "3rk2r/2pbq3/1pnppnp1/p1b4p/P4p1P/1PNP1N2/1BP1PPP1/R2QKB1R b Kk - 13 19"
+    }
+  ],
+  "summary": {
+    "points": {
+      "Weak2 + Jev": 1.0,
+      "Weak2": 1.0
+    },
+    "calls": 22,
+    "interventions": 17,
+    "jev_total_ms": 6408.84,
+    "jev_mean_ms": 291.31,
+    "tokens": 17177,
+    "random_picks": 0,
+    "random_interventions": 0,
+    "finished_games": 2
+  },
+  "points": {
+    "Weak2 + Jev": 1.0,
+    "Weak2": 1.0
+  },
+  "elapsed_seconds": 7.78
+}

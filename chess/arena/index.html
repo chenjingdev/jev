@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eceae4" />
+  <meta name="description" content="Jev 체스 실험을 담는 세로형 3D 관전 화면." />
+  <title>Jev Chess</title>
+</head>
+<body>
+  <div id="app">
+    <nav class="studio-bar" aria-label="게시물 도구">
+      <span class="studio-name">jev<span> / chess studio</span></span>
+      <div class="studio-actions">
+        <span class="format-label">9:16</span>
+        <button id="export-button" class="export-button">이미지 저장 <span aria-hidden="true">↗</span></button>
+      </div>
+    </nav>
+    <main class="workspace">
+      <div class="capture-wrap">
+        <article id="share-frame" class="share-frame" aria-label="9대16 체스 게시물">
+          <section class="board-stage" aria-label="정사각형 체스판">
+            <div id="scene" class="scene" aria-label="3D 체스 보드"></div>
+            <div id="loading" class="loading"><span></span><p>체스판을 준비하고 있어요</p></div>
+          </section>
+          <section class="players" aria-label="대국 엔진">
+            <div class="player"><i class="stone white"></i><div><b id="white-name">—</b></div></div>
+            <span class="versus">vs</span>
+            <div class="player black-player"><div><b id="black-name">—</b></div><i class="stone black"></i></div>
+          </section>
+          <section class="jev-panel" id="jev-panel" data-state="inactive" role="status" aria-live="polite">
+            <div class="jev-signal" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M24 7v17M14 13a16 16 0 1 0 20 0" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            </div>
+            <h2 id="jev-state">Jev 비활성</h2>
+            <div id="route-comparison" class="route-comparison" hidden aria-label="착수 경로 비교">
+              <div class="route-base"><span><i></i>엔진 원래</span><b id="route-base-move"></b></div>
+              <div class="route-selected"><span><i></i>Jev 선택</span><b id="route-selected-move"></b></div>
+            </div>
+            <span id="visual-badge" class="visual-badge" hidden>효과 미리보기 · 실제 판단 아님</span>
+          </section>
+        </article>
+        <section class="transport" aria-label="리플레이 조작">
+          <div class="timeline-wrap"><input type="range" id="timeline" aria-label="재생 위치" min="0" max="1" value="0"/><span id="timeline-time">0수</span></div>
+          <div class="control-row">
+            <div class="controls">
+              <button id="prev-button" aria-label="이전 수">‹</button>
+              <button class="play-button" id="play-button" aria-label="재생">▶</button>
+              <button id="next-button" aria-label="다음 수">›</button>
+            </div>
+          </div>
+          <details class="settings">
+            <summary>설정</summary>
+            <div class="options-row"><select id="game-select" aria-label="게임 선택"></select><button id="fx-button" aria-pressed="false">✳ 효과 미리보기</button></div>
+            <div class="view-controls"><button id="camera-button" aria-label="시점 전환">시점</button><button id="fullscreen-button" aria-label="게시물만 보기">⛶</button></div>
+          </details>
+          <p id="export-status" role="status" class="export-status"></p>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

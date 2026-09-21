@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev는 판을 보는가</title>
+<style>
+  :root { --bg: #f6f6f4; --panel: #fff; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e3e3df; --bar: #ececea;
+    --jev: #1f6feb; --hot: #c8283a; --ok: #1a8f4a; --wood: #dcb877; --wood-line: #6b4f1d; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #131313; --panel: #1c1c1c; --ink: #ececea; --muted: #8f8f8a; --line: #2a2a28; --bar: #2b2b29;
+    --jev: #4c8dff; --hot: #ff4d5e; --ok: #3ccf74; --wood: #c9a35f; --wood-line: #4a3612; } }
+  :root[data-theme="dark"] { --bg: #131313; --panel: #1c1c1c; --ink: #ececea; --muted: #8f8f8a; --line: #2a2a28; --bar: #2b2b29;
+    --jev: #4c8dff; --hot: #ff4d5e; --ok: #3ccf74; --wood: #c9a35f; --wood-line: #4a3612; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; padding: 16px; max-width: 1400px; margin: 0 auto; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  canvas { width: 100%; max-width: 760px; aspect-ratio: 1; display: block; margin: 0 auto; border-radius: 8px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  h1 { font-size: 16px; margin: 0 0 8px; }
+  h1 span { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 6px; }
+  label { display: block; margin: 6px 0; }
+  select, button, input { font: inherit; }
+  button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bar); color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--jev); color: #fff; border-color: transparent; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hit { color: var(--ok); } .miss { color: var(--hot); }
+  .muted { color: var(--muted); font-size: 12.5px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  td, th { text-align: left; padding: 3px 4px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  th { color: var(--muted); font-weight: 500; }
+  pre { font-size: 11px; line-height: 1.25; margin: 6px 0 0; color: var(--muted); max-height: 200px; overflow: auto; }
+  .tally { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 10px; font-size: 12.5px; }
+</style>
+</head>
+<body>
+<main>
+  <div><canvas id="board" width="800" height="800"></canvas><div class="card"><h1>실제 착수 순서</h1><div id="history" class="muted"></div></div></div>
+  <aside>
+    <div class="card">
+      <p><a href="/basics">기초 단계별 실험: 좌표 찾기 → 다섯 완성</a></p>
+      <h1>Jev는 판을 보는가 <span>내 돌 넷. 합법적인 다섯 자리를 찾을까</span></h1>
+      <div class="muted">중앙 첫 수부터 흑백이 번갈아 공격·방어한 대국에서 뽑은 국면이다. 이번 차례의 돌 네 개가 이어져 있고 다섯을 완성하는 빈칸은 딱 하나(초록 테두리). Jev에게 "그 자리를 골라라"라고 묻고, 답으로 온 확률 분포를 파란 원으로 찍는다. 빨간 테두리가 Jev의 선택.</div>
+    </div>
+    <div class="card">
+      <label>Jev 차례 <select id="player"><option value="black" selected>흑 · 금수 적용</option><option value="white">백 · 금수 없음</option></select></label>
+      <label>선택지 <select id="kind">
+        <option value="five" selected>5개: 정답 + 다양한 착수 후보</option>
+        <option value="all">빈칸 전체</option>
+        <option value="near">돌에서 두 칸 안</option>
+        <option value="sheet">정답지 24개, 좌표만</option>
+      </select></label>
+      <label>보드 표기 <select id="rep">
+        <option value="rows">ASCII 격자 (게임이 쓰는 것)</option>
+        <option value="stones">좌표 목록 (white_stones: [h8, h9, …])</option>
+        <option value="record">기보 + 색 단어 (1. black h8, 2. white i9, …)</option>
+        <option value="sequence">착수 기보 (1.h8 2.i9 3.g7 …)</option>
+        <option value="compact" selected>번호 없는 연속 수순 (h8i9g7…)</option>
+        <option value="spaced">번호 없는 공백 수순 (h8 i9 g7 …)</option>
+        <option value="sgf">SGF 기보 → a1 좌표 선택</option>
+        <option value="sgf_native">SGF 기보 → SGF 좌표 선택</option>
+      </select></label>
+      <label>판 회전 <select id="rotation"><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></label>
+      <label><input id="shuffle" type="checkbox"> 후보 순서 섞기</label>
+      <label>seed <input id="seed" type="number" value="1" style="width:80px"> <span class="muted">국면을 정함</span></label>
+      <div class="row">
+        <button class="primary" id="ask">묻기</button>
+        <button id="next">다음 국면 →</button>
+        <button id="auto">자동 10개</button>
+      </div>
+    </div>
+    <div class="card">
+      <h1>결과</h1>
+      <div class="row"><div class="big" id="verdict">–</div><div class="muted" id="detail"></div></div>
+      <table id="top"></table>
+    </div>
+    <div class="card">
+      <h1>이 세션 누적 <span>정답이 후보에 있을 때만 집계</span></h1>
+      <div class="tally" id="tally"></div>
+    </div>
+    <div class="card">
+      <h1>Jev가 받은 보드 <span>state 그대로</span></h1>
+      <pre id="state"></pre>
+    </div>
+  </aside>
+</main>
+<script>
+const SIZE = 15, COLS = "abcdefghijklmno";
+const $ = id => document.getElementById(id);
+const cv = $("board"), ctx = cv.getContext("2d");
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+let last = null;
+const tally = {};
+
+function coord(r, c) { return COLS[c] + (SIZE - r); }  // renju notation: row 1 at the bottom
+function parse(id) { return [SIZE - parseInt(id.slice(1)), COLS.indexOf(id[0])]; }
+
+function draw(res) {
+  const W = cv.width, pad = 40, px = (W - 2 * pad) / (SIZE - 1);
+  ctx.clearRect(0, 0, W, W);
+  ctx.fillStyle = css("--wood"); ctx.fillRect(0, 0, W, W);
+  ctx.strokeStyle = css("--wood-line"); ctx.lineWidth = 1;
+  ctx.font = "13px system-ui"; ctx.fillStyle = css("--wood-line"); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (let i = 0; i < SIZE; i++) {
+    ctx.beginPath(); ctx.moveTo(pad, pad + i * px); ctx.lineTo(W - pad, pad + i * px); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad + i * px, pad); ctx.lineTo(pad + i * px, W - pad); ctx.stroke();
+    ctx.fillText(COLS[i], pad + i * px, pad / 2); ctx.fillText(String(SIZE - i), pad / 2, pad + i * px);
+  }
+  if (!res) return;
+  const at = (r, c) => [pad + c * px, pad + r * px];
+  // options offered: faint dots
+  for (const id of Object.keys(res.probabilities)) { const [r, c] = parse(id); const [x, y] = at(r, c); ctx.fillStyle = "rgba(0,0,0,.18)"; ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill(); }
+  // probability heat
+  const max = Math.max(...Object.values(res.probabilities));
+  for (const [id, p] of Object.entries(res.probabilities)) {
+    if (p < 0.005) continue;
+    const [r, c] = parse(id); const [x, y] = at(r, c);
+    ctx.fillStyle = css("--jev"); ctx.globalAlpha = 0.15 + 0.75 * (p / max);
+    ctx.beginPath(); ctx.arc(x, y, px * 0.22 + px * 0.28 * Math.sqrt(p / max), 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+    if (p >= 0.05) { ctx.fillStyle = "#fff"; ctx.font = "bold 11px system-ui"; ctx.fillText(Math.round(p * 100) + "%", x, y); }
+  }
+  // stones
+  for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
+    const v = res.board[r][c]; if (!v) continue;
+    const [x, y] = at(r, c);
+    ctx.beginPath(); ctx.arc(x, y, px * 0.44, 0, 7); ctx.fillStyle = v === 1 ? "#111" : "#f4f4f4"; ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,.5)"; ctx.stroke();
+    ctx.fillStyle = v === 1 ? "#fff" : "#111"; ctx.font = "11px system-ui";
+    ctx.fillText(String(res.moves.indexOf(coord(r, c)) + 1), x, y);
+  }
+  const ring = (id, colour, w) => { const [r, c] = parse(id); const [x, y] = at(r, c); ctx.strokeStyle = colour; ctx.lineWidth = w; ctx.beginPath(); ctx.arc(x, y, px * 0.46, 0, 7); ctx.stroke(); };
+  ring(res.target, css("--ok"), 4);
+  ring(res.pick, css("--hot"), 3);
+}
+
+async function ask() {
+  const controls = [$("ask"), $("next"), $("auto"), $("rep"), $("kind"), $("seed"), $("rotation"), $("shuffle"), $("player")];
+  controls.forEach(el => el.disabled = true);
+  try {
+    const body = { player: $("player").value, kind: $("kind").value, rep: $("rep").value, seed: +$("seed").value, rotation: +$("rotation").value, shuffle: $("shuffle").checked };
+    $("verdict").textContent = "…"; $("verdict").className = "big"; $("detail").textContent = "";
+    const res = await (await fetch("/api/sight", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })).json();
+    if (res.error) throw new Error(res.error);
+    last = res; draw(res);
+    $("history").textContent = res.moves.map((at, i) => `${i + 1}.${at}`).join(" ");
+    $("verdict").textContent = !res.target_offered ? "정답 후보 없음" : res.hit ? "적중" : "빗나감"; $("verdict").className = "big " + (res.hit ? "hit" : "miss");
+    $("detail").innerHTML = `정답 <b>${res.target}</b> · 선택 <b>${res.pick}</b> (${Math.round(res.p_pick * 100)}%) · 정답에 실린 확률 ${Math.round(res.p_target * 100)}% · 거리 ${res.distance} · 선택지 ${res.options}개 · ${res.latency_ms} ms`;
+    const top = Object.entries(res.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    $("top").innerHTML = "<tr><th>자리</th><th>확률</th><th></th></tr>" + top.map(([id, p]) => `<tr><td>${id}${id === res.target ? " ✓" : ""}</td><td>${(p * 100).toFixed(1)}%</td><td><div style="height:8px;width:${Math.round(p * 160)}px;background:var(--jev);border-radius:4px"></div></td></tr>`).join("");
+    const key = `${body.player === "black" ? "흑" : "백"} · ${$("kind").options[$("kind").selectedIndex].text} · ${$("rep").options[$("rep").selectedIndex].text} · ${body.rotation}° · ${body.shuffle ? "섞음" : "기본 순서"}`;
+    tally[key] = tally[key] || { n: 0, hit: 0 }; if (res.target_offered) { tally[key].n++; tally[key].hit += res.hit ? 1 : 0; }
+    $("tally").innerHTML = Object.entries(tally).map(([k, v]) => `<div>${k}</div><div>${v.hit}/${v.n}</div><div class="muted">${v.n ? Math.round(100 * v.hit / v.n) + "%" : "평가 제외"}</div>`).join("");
+    $("state").textContent = Object.entries(res.state).filter(([k]) => k !== "game" && k !== "to_move")
+      .map(([k, v]) => k + ": " + (Array.isArray(v) ? "\n" + v.join("\n") : v)).join("\n");
+  } catch (error) {
+    $("verdict").textContent = "오류"; $("detail").textContent = error.message;
+  } finally { controls.forEach(el => el.disabled = false); }
+}
+$("ask").addEventListener("click", ask);
+$("next").addEventListener("click", () => { $("seed").value = +$("seed").value + 1; ask(); });
+$("auto").addEventListener("click", async () => { for (let i = 0; i < 10; i++) { await ask(); $("seed").value = +$("seed").value + 1; await new Promise(r => setTimeout(r, 900)); } });
+draw(null);
+const params = new URLSearchParams(location.search);
+if (params.get("kind")) $("kind").value = params.get("kind");
+if (params.get("rep")) $("rep").value = params.get("rep");
+ask();
+</script>
+</body>
+</html>

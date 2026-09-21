@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev 오목</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #fff; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e3e3df; --bar: #ececea;
+    --jev: #1f6feb; --jev-soft: rgba(31,111,235,.14); --hot: #c8283a; --wood: #dcb877; --wood-line: #6b4f1d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #131313; --panel: #1c1c1c; --ink: #ececea; --muted: #8f8f8a; --line: #2a2a28; --bar: #2b2b29;
+      --jev: #4c8dff; --jev-soft: rgba(76,141,255,.18); --hot: #ff4d5e; --wood: #c9a35f; --wood-line: #4a3612; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; overflow: hidden; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 14px; height: 100%; padding: 14px; }
+  #boardwrap { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; }
+  canvas { border-radius: 8px; box-shadow: 0 2px 14px rgba(0,0,0,.18); cursor: pointer; display: block; }
+  canvas.busy { cursor: progress; }
+  aside { display: flex; flex-direction: column; min-height: 0; gap: 8px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; }
+  .card h1 { margin: 0; font-size: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+  .card h1 span { font-size: 11px; color: var(--muted); font-weight: 400; }
+  #status { font-size: 15px; margin-top: 6px; min-height: 22px; }
+  #status.jev { color: var(--jev); }
+  #status.over { color: var(--hot); font-weight: 600; }
+
+  .meter { display: grid; grid-template-columns: 74px 1fr 40px; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; color: var(--muted); }
+  .meter .track { height: 8px; background: var(--bar); border-radius: 4px; overflow: hidden; position: relative; }
+  .meter .fill { height: 100%; background: var(--jev); width: 0; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+  .meter .fill.hot { background: var(--hot); }
+  .meter .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .meter .pin { position: absolute; top: -3px; width: 3px; height: 14px; background: var(--ink); border-radius: 2px; left: 50%; transition: left .5s cubic-bezier(.2,.8,.2,1); }
+  .meter .scale { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  #top { flex: 1; min-height: 0; overflow: auto; }
+  .cand { display: grid; grid-template-columns: 34px 1fr; gap: 2px 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 12px; }
+  .cand:first-of-type { border-top: 0; }
+  .cand .id { font: 600 13px ui-monospace, "SF Mono", Menlo, monospace; color: var(--ink); }
+  .cand.pick .id { color: var(--jev); }
+  .cand .track { height: 6px; background: var(--bar); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  .cand .fill { height: 100%; background: var(--jev); width: 0; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .cand .desc { grid-column: 2; color: var(--muted); line-height: 1.35; }
+  .cand .p { grid-column: 1; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .cand.pick .p { color: var(--jev); font-weight: 600; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px 10px; }
+  .stat .k { font-size: 10px; color: var(--muted); }
+  .stat .v { font-size: 14px; font-variant-numeric: tabular-nums; }
+  .controls { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+  .controls button { border: 1px solid var(--line); background: none; color: var(--ink); font: inherit; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  .controls .grow { flex: 1; }
+  .controls label { display: flex; gap: 4px; align-items: center; cursor: pointer; }
+  .fine { font-size: 11px; color: var(--muted); }
+
+  /* cortex: the three layers as bands in one SVG (tetris neurons-spec 6.3), built once */
+  #cx { width: 100%; height: auto; display: block; margin-top: 6px; font-family: inherit; }
+  #cx .band .frame { fill: var(--bar); fill-opacity: .45; stroke: var(--line); }
+  #cx .band .head { font-size: 9.5px; font-weight: 700; fill: var(--muted); letter-spacing: .08em; }
+  #cx .band { transition: opacity .25s; }
+  #cx[data-phase="sense"] .band-motor, #cx[data-phase="sense"] .band-verdict { opacity: .25; }
+  #cx[data-phase="motor"] .band-verdict { opacity: .25; }
+  #cx[data-phase="idle"] .band { opacity: .45; }
+  #cx .orb { fill: var(--bar); stroke: var(--line); stroke-width: 2; transition: fill .15s, stroke .15s, r .15s; }
+  #cx .orb.fired { stroke: var(--c); fill: var(--c); filter: drop-shadow(0 0 6px var(--c)); }
+  #cx .orb.lit { stroke: var(--c); fill: color-mix(in srgb, var(--c) 40%, var(--bar)); }
+  #cx .olabel { font-size: 10px; fill: var(--muted); text-anchor: middle; }
+  #cx .oval { font-size: 10px; fill: var(--ink); text-anchor: middle; font-variant-numeric: tabular-nums; }
+  #cx .sline { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; stroke-opacity: 0; }
+  #cx.inflight-sense .sline { stroke-opacity: .8; animation: cx-flow .5s linear infinite; }
+  #cx .mline { fill: none; stroke-width: 2; stroke-linecap: round; stroke-opacity: 0; transition: stroke-opacity .2s; }
+  #cx .mline.pending { stroke-dasharray: 4 4; stroke-opacity: .35; }
+  #cx.inflight-motor .mline.pending { stroke-opacity: .9; animation: cx-flow .5s linear infinite; }
+  #cx .mline.on { stroke-opacity: .9; }
+  #cx .chip .box { fill: var(--panel); stroke: var(--line); rx: 6; transition: stroke .2s; }
+  #cx .chip.pick .box { stroke: var(--ink); stroke-width: 2; }
+  #cx .chip.vetoed .box { stroke: var(--hot); }
+  #cx .chip .id { font: 600 12px ui-monospace, "SF Mono", Menlo, monospace; fill: var(--ink); }
+  #cx .chip .p { font-size: 9.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  #cx .chip.vetoed .id { text-decoration: line-through; fill: var(--hot); }
+  #cx .bar .track { fill: var(--bar); }
+  #cx .bar .A { transition: width .25s; }
+  #cx .bar .V { fill: var(--hot); fill-opacity: .55; transition: width .25s, x .25s; }
+  #cx .bar .lab { font-size: 9.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  #cx .bar .tag { font-size: 9px; font-weight: 800; fill: var(--hot); }
+  #cx .arrow { fill: var(--muted); opacity: .4; }
+  #cx.inflight-verdict .arrow { animation: cx-pulse .6s ease-in-out infinite alternate; }
+  @keyframes cx-flow { to { stroke-dashoffset: -16; } }
+  @keyframes cx-pulse { from { opacity: .3; } to { opacity: 1; } }
+  #phase { font-size: 11.5px; color: var(--muted); margin-top: 6px; min-height: 16px; font-variant-numeric: tabular-nums; }
+  #phase b { color: var(--ink); font-weight: 600; }
+  body.single #cortex { display: none; }
+  #opusCard { display: none; }
+  body.opus #opusCard { display: block; }
+  #opusCard .think { font-size: 11.5px; color: var(--muted); line-height: 1.35; max-height: 64px; overflow: hidden; white-space: pre-wrap; margin-top: 4px; }
+  #opusCard .timer { font-variant-numeric: tabular-nums; font-size: 20px; }
+  .ff { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 10px; background: var(--hot); color: #fff; font-size: 11px; font-weight: 700; vertical-align: middle; visibility: hidden; }
+  .ff.on { visibility: visible; animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .55; } }
+  body:not(.single) #top { display: none; }  /* the proposals card already lists what Jev chose */
+  body.clean .controls, body.clean .fine { display: none; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow: auto; } body { overflow: auto; } }
+</style>
+</head>
+<body>
+<main>
+  <div id="boardwrap"><canvas id="board"></canvas></div>
+  <aside>
+    <div class="card">
+      <h1>Jev가 두는 오목 <span id="model">jev</span></h1>
+      <div id="status">흑을 두세요. 백은 Jev가 둡니다.</div>
+      <div class="meter"><div>위협 감지</div><div class="track"><div class="fill hot" id="threatFill"></div></div><div class="v" id="threatV">–</div></div>
+      <div class="meter"><div>형세</div><div><div class="track" style="background:linear-gradient(90deg,#333,var(--bar),#ddd)"><div class="pin" id="standPin"></div></div><div class="scale"><span>흑 우세</span><span>백 우세</span></div></div><div class="v" id="standV">–</div></div>
+    </div>
+    <div class="card" id="opusCard">
+      <h1><span id="oppName">Opus</span> (흑) <span id="opusInfo">claude -p · 보드를 직접 읽음</span></h1>
+      <div><span class="timer" id="opusTimer">–</span><span class="ff" id="ff">⏩ 배속</span></div>
+      <div class="think" id="opusThink"></div>
+    </div>
+    <div class="card" id="cortex">
+      <h1>피질 <span id="cxinfo">요청 3회 · 감각 → 운동 → 판정</span></h1>
+      <svg id="cx" viewBox="0 0 400 268" data-phase="idle"></svg>
+      <div id="phase"></div>
+    </div>
+    <div class="card" id="top" >
+      <h1>Jev가 고른 자리 <span id="candcount"></span></h1>
+      <div id="cands"><div class="fine" style="margin-top:8px">엔진이 둘 만한 빈 자리를 잘라 사실 한 줄씩 붙이면, Jev는 그중 하나를 고릅니다. 확률이 보드 위에 파랗게 찍힙니다.</div></div>
+    </div>
+    <div class="card">
+      <div class="stats">
+        <div class="stat"><div class="k">응답</div><div class="v" id="stLat">–</div></div>
+        <div class="stat"><div class="k">입력 · 출력 토큰</div><div class="v" id="stTok">–</div></div>
+        <div class="stat"><div class="k">이 수 비용</div><div class="v" id="stCost">–</div></div>
+        <div class="stat"><div class="k">Jev 수</div><div class="v" id="stMoves">0</div></div>
+        <div class="stat"><div class="k">엔진 1순위와 일치</div><div class="v" id="stAgree">–</div></div>
+        <div class="stat"><div class="k">누적 비용</div><div class="v" id="stCostAll">$0</div></div>
+        <div class="stat"><div class="k">습관을 뒤집음</div><div class="v" id="stFlip">–</div></div>
+        <div class="stat"><div class="k">거부권</div><div class="v" id="stVeto">–</div></div>
+        <div class="stat"><div class="k">발화 (위험·공격·수비·전개)</div><div class="v" id="stFired">–</div></div>
+      </div>
+    </div>
+    <div class="card controls">
+      <button id="reset">새 판</button>
+      <label>흑: <select id="black"><option value="human">사람</option><option value="bot">엔진 봇</option><option value="opus">Opus</option><option value="opus-sheet">Opus + 정답지</option><option value="rapfi">Rapfi (Gomocup 엔진)</option></select></label>
+      <label><input type="checkbox" id="neurons"> 뉴런망 (요청 3회)</label>
+      <span class="grow"></span>
+      <span class="fine">?clean=1 촬영 · ?demo=1 자동 · ?black=opus|rapfi · ?depth=1 · ?ff=8 · ?brain=single</span>
+    </div>
+  </aside>
+</main>
+<script>
+const SIZE = 15, EMPTY = 0, BLACK = 1, WHITE = 2;
+const COLS = "abcdefghijklmno";
+const params = new URLSearchParams(location.search);
+const DEMO = params.get("demo") === "1";
+if (params.get("clean") === "1" || DEMO) document.body.classList.add("clean");
+if (params.get("scale")) document.documentElement.style.zoom = params.get("scale");  // headless takes: 1920x1080 laid out like 1280x720
+
+const G = {
+  board: Array.from({ length: SIZE }, () => Array(SIZE).fill(EMPTY)), turn: BLACK, over: false, busy: false, history: [], heat: null, outline: null, pick: null, win: [],
+  moves: 0, agree: 0, cost: 0, black: params.get("black") || (DEMO ? "bot" : "human"), neurons: params.get("brain") !== "single",
+  ff: +(params.get("ff") || 0), depth: +(params.get("depth") || 0), phase: "idle", timeline: [], t0: performance.now(), t0wall: Date.now(),
+  flips: 0, vetoes: 0, fired: { danger: 0, attack: 0, defend: 0, develop: 0 }, proposals: null, ghosts: null, scan: null,
+};
+const NEURON_COLOR = { danger: "#ff4d6d", attack: "#ffd166", defend: "#2ee6d6", develop: "#7c8cff", habit: "#9aa3b8" };
+const NEURON_KO = { danger: "위험", attack: "공격", defend: "수비", develop: "전개", habit: "습관" };
+window.__jev = G;
+
+const cv = document.getElementById("board"), ctx = cv.getContext("2d");
+const $ = id => document.getElementById(id);
+let px = 40, pad = 30, dpr = 1;
+document.body.classList.toggle("single", !G.neurons);
+const outside = () => G.black.startsWith("opus") || G.black === "rapfi";
+document.body.classList.toggle("opus", outside());
+if (G.ff) $("ff").textContent = `⏩ ${G.ff}배속`;
+function setPhase(ph) { G.phase = ph; G.timeline.push({ t: (performance.now() - G.t0) / 1000, phase: ph }); }
+
+function newGame() {
+  G.board = Array.from({ length: SIZE }, () => Array(SIZE).fill(EMPTY));
+  G.turn = BLACK; G.over = false; G.busy = false; G.history = []; G.heat = null; G.outline = null; G.pick = null; G.win = []; G.proposals = null;
+  $("status").textContent = G.black === "rapfi" ? "Rapfi(흑) 대 Jev(백)" : G.black.startsWith("opus") ? "Opus(흑) 대 Jev(백)" : G.black === "bot" ? "봇(흑) 대 Jev(백)" : "흑을 두세요. 백은 Jev가 둡니다. (렌주: 흑 삼삼·사사·장목 금수)";
+  $("oppName").textContent = G.black === "rapfi" ? "Rapfi" : "Opus";
+  $("opusInfo").textContent = G.black === "rapfi" ? `Gomocup 우승 엔진 · 수당 1초${G.depth ? ` · 깊이 ${G.depth} 제한` : ""}` : G.black === "opus-sheet" ? "claude -p · Jev와 같은 정답지 12개를 받음" : "claude -p · 보드를 직접 읽음";
+  $("opusThink").textContent = ""; $("opusTimer").textContent = "–"; $("ff").classList.remove("on");
+  G.ghosts = null; G.proposals = null; if (typeof cxReset === "function") { cxReset(); cxPhase("idle"); phaseNote(""); }
+  $("status").className = "";
+  $("cands").innerHTML = ""; $("candcount").textContent = "";
+  cv.classList.remove("busy");
+  draw();
+  if (G.black !== "human") setTimeout(botMove, 700);
+}
+
+function resize() {
+  const wrap = $("boardwrap");
+  const s = Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight));
+  dpr = window.devicePixelRatio || 1;
+  cv.style.width = cv.style.height = s + "px";
+  cv.width = cv.height = Math.floor(s * dpr);
+  pad = s / (SIZE + 1) * 0.9; px = (s - pad * 2) / (SIZE - 1);
+  draw();
+}
+const X = c => pad + c * px, Y = r => pad + r * px;
+
+function draw() {
+  const s = cv.width / dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--wood");
+  ctx.fillRect(0, 0, s, s);
+  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--wood-line");
+  ctx.lineWidth = 1;
+  for (let i = 0; i < SIZE; i++) {
+    ctx.beginPath(); ctx.moveTo(X(0), Y(i)); ctx.lineTo(X(SIZE - 1), Y(i)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X(i), Y(0)); ctx.lineTo(X(i), Y(SIZE - 1)); ctx.stroke();
+  }
+  ctx.fillStyle = ctx.strokeStyle;
+  for (const [r, c] of [[3,3],[3,11],[11,3],[11,11],[7,7]]) { ctx.beginPath(); ctx.arc(X(c), Y(r), px * 0.09, 0, 7); ctx.fill(); }
+  ctx.font = `${Math.max(9, px * 0.28)}px ui-monospace, Menlo, monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "rgba(60,40,10,.55)";
+  for (let i = 0; i < SIZE; i++) { ctx.fillText(COLS[i], X(i), pad * 0.4); ctx.fillText(String(SIZE - i), pad * 0.4, Y(i)); }
+
+  // the cut-out candidates: squares the engine handed to Jev
+  if (G.outline) {
+    ctx.strokeStyle = "rgba(31,111,235,.75)"; ctx.lineWidth = 1.5;
+    for (const a of G.outline) ctx.strokeRect(X(a.c) - px * 0.46, Y(a.r) - px * 0.46, px * 0.92, px * 0.92);
+  }
+  // heat: probability per candidate
+  if (G.heat) {
+    const max = Math.max(...Object.values(G.heat.p), 0.01);
+    for (const a of G.heat.cands) {
+      const p = G.heat.p[a.id] || 0; if (p < 0.005) continue;
+      const rad = px * (0.18 + 0.3 * Math.sqrt(p / max));
+      ctx.fillStyle = `rgba(31,111,235,${0.18 + 0.72 * (p / max)})`;
+      ctx.beginPath(); ctx.arc(X(a.c), Y(a.r), rad, 0, 7); ctx.fill();
+      if (p >= 0.08) { ctx.fillStyle = "#fff"; ctx.font = `600 ${Math.max(8, px * 0.26)}px -apple-system, system-ui, sans-serif`; ctx.fillText(p.toFixed(2).slice(1), X(a.c), Y(a.r)); }
+    }
+  }
+  // R2 landed: the motor neurons' proposals as wire outlines, one ring per backer, a pill with the backer names
+  if (G.proposals) {
+    for (const pr of G.proposals) {
+      pr.backers.forEach((b, i) => {
+        ctx.strokeStyle = NEURON_COLOR[b]; ctx.lineWidth = b === "habit" ? 1.5 : 2.5; ctx.setLineDash(b === "habit" ? [4, 3] : []);
+        ctx.beginPath(); ctx.arc(X(pr.c), Y(pr.r), px * (0.46 + i * 0.1), 0, 7); ctx.stroke();
+      });
+      ctx.setLineDash([]);
+      pill(X(pr.c), Y(pr.r) - px * 0.62, pr.backers.map(b => NEURON_KO[b]).join("·"), NEURON_COLOR[pr.backers[0]]);
+    }
+  }
+  // R3 landed: ghosts, alpha by the final distribution, % counting up; VETO hatch; the pick pulses
+  if (G.ghosts) {
+    const now = performance.now();
+    for (const g of G.ghosts) {
+      const k = Math.min(1, (now - g.t0) / 200);
+      const p = g.final * k;
+      const rad = px * 0.44;
+      ctx.fillStyle = `rgba(255,255,255,${g.vetoed ? 0.12 : 0.18 + 0.7 * p})`;
+      ctx.beginPath(); ctx.arc(X(g.c), Y(g.r), rad, 0, 7); ctx.fill();
+      g.backers.forEach((b, i) => { ctx.strokeStyle = NEURON_COLOR[b]; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(X(g.c), Y(g.r), rad + 2 + i * 3, 0, 7); ctx.stroke(); });
+      if (g.vetoed) {
+        ctx.save(); ctx.beginPath(); ctx.arc(X(g.c), Y(g.r), rad, 0, 7); ctx.clip();
+        ctx.strokeStyle = "rgba(200,40,58,.85)"; ctx.lineWidth = 2;
+        for (let d = -rad * 2; d < rad * 2; d += 7) { ctx.beginPath(); ctx.moveTo(X(g.c) + d - rad, Y(g.r) - rad); ctx.lineTo(X(g.c) + d + rad, Y(g.r) + rad); ctx.stroke(); }
+        ctx.restore();
+        ctx.strokeStyle = "rgba(200,40,58,.95)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X(g.c), Y(g.r), rad, 0, 7); ctx.stroke();
+        pill(X(g.c), Y(g.r) - px * 0.62, "VETO", "#c8283a");
+      } else {
+        ctx.fillStyle = p > 0.45 ? "#1c1c1c" : "#fff";
+        ctx.font = `700 ${Math.max(9, px * 0.3)}px -apple-system, system-ui, sans-serif`;
+        ctx.fillText(Math.round(p * 100) + "%", X(g.c), Y(g.r));
+      }
+      if (g.pick) {
+        const pulse = 0.6 + 0.4 * Math.sin(now / 120);
+        ctx.strokeStyle = `rgba(255,255,255,${pulse})`; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(X(g.c), Y(g.r), rad + 6, 0, 7); ctx.stroke();
+      }
+      if (k < 1 || g.pick) requestAnimationFrame(draw);
+    }
+  }
+  // R1 going out: a white scanline sweeps the board once (200ms)
+  if (G.scan) {
+    const k = (performance.now() - G.scan) / 200;
+    if (k < 1) {
+      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(X(0) - px / 2, Y(0) - px / 2 + k * (px * (SIZE))); ctx.lineTo(X(SIZE - 1) + px / 2, Y(0) - px / 2 + k * (px * (SIZE))); ctx.stroke();
+      requestAnimationFrame(draw);
+    } else G.scan = null;
+  }
+  // renju: points black may not play, as small red crosses while it is black's turn
+  if (G.forbidden && G.turn === BLACK && !G.over) {
+    ctx.strokeStyle = "rgba(200,40,58,.7)"; ctx.lineWidth = 2; const d = px * 0.14;
+    for (const id of Object.keys(G.forbidden)) {
+      const c3 = COLS.indexOf(id[0]), r3 = +id.slice(1) - 1;
+      ctx.beginPath(); ctx.moveTo(X(c3) - d, Y(r3) - d); ctx.lineTo(X(c3) + d, Y(r3) + d); ctx.moveTo(X(c3) + d, Y(r3) - d); ctx.lineTo(X(c3) - d, Y(r3) + d); ctx.stroke();
+    }
+  }
+  // stones
+  for (let r = 0; r < SIZE; r++) for (let c2 = 0; c2 < SIZE; c2++) {
+    const v = G.board[r][c2]; if (!v) continue;
+    const grow = G.pick && G.pick.r === r && G.pick.c === c2 ? G.pick.scale : 1;
+    const rad = px * 0.44 * grow;
+    const g = ctx.createRadialGradient(X(c2) - rad * 0.3, Y(r) - rad * 0.3, rad * 0.1, X(c2), Y(r), rad);
+    if (v === BLACK) { g.addColorStop(0, "#555"); g.addColorStop(1, "#050505"); } else { g.addColorStop(0, "#fff"); g.addColorStop(1, "#cfcfcf"); }
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(X(c2), Y(r), rad, 0, 7); ctx.fill();
+  }
+  const last = G.history[G.history.length - 1];
+  if (last) { ctx.fillStyle = G.board[last.r][last.c] === BLACK ? "#fff" : "#1f6feb"; ctx.beginPath(); ctx.arc(X(last.c), Y(last.r), px * 0.1, 0, 7); ctx.fill(); }
+  if (G.win.length) {
+    ctx.strokeStyle = "rgba(200,40,58,.9)"; ctx.lineWidth = 4; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(X(G.win[0][1]), Y(G.win[0][0])); const e = G.win[G.win.length - 1]; ctx.lineTo(X(e[1]), Y(e[0])); ctx.stroke();
+  }
+}
+
+function coord(r, c) { return COLS[c] + (SIZE - r); }  // renju notation: row 1 at the bottom
+
+function pill(x, y, label, color) {
+  ctx.font = `700 ${Math.max(8, px * 0.24)}px -apple-system, system-ui, sans-serif`;
+  const w = ctx.measureText(label).width + 10, h = px * 0.36;
+  ctx.fillStyle = color; ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, h / 2); ctx.fill();
+  ctx.fillStyle = "#111"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(label, x, y + 0.5);
+}
+
+// renju: black's forbidden points (3-3, 4-4, overline), asked from the engine after every move
+async function refreshForbidden() {
+  try { const { forbidden } = await post("/api/forbidden", { board: G.board }); G.forbidden = forbidden; }
+  catch { G.forbidden = {}; }
+  draw();
+}
+
+// ------------------------------------------------------------ rules (client side, mirrors engine.py)
+const DIRS = [[0,1],[1,0],[1,1],[1,-1]];
+function lineCells(r, c, p) {
+  for (const [dr, dc] of DIRS) {
+    const cells = [[r, c]];
+    for (const s of [1, -1]) { let rr = r + dr * s, cc = c + dc * s; while (rr >= 0 && rr < SIZE && cc >= 0 && cc < SIZE && G.board[rr][cc] === p) { cells.push([rr, cc]); rr += dr * s; cc += dc * s; } }
+    if (p === BLACK ? cells.length === 5 : cells.length >= 5) return cells.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  }
+  return null;
+}
+
+function place(r, c, p) {
+  G.board[r][c] = p; G.history.push({ r, c, p });
+  const win = lineCells(r, c, p);
+  if (win) { G.win = win; G.over = true; }
+  else if (G.history.length === SIZE * SIZE) G.over = true;
+  G.turn = p === BLACK ? WHITE : BLACK;
+  G.forbidden = null;
+  draw();
+  if (!G.over && G.turn === BLACK) refreshForbidden();
+  if (G.over) {
+    G.result = win ? (p === WHITE ? "white" : "black") : "draw"; G.games = (G.games || 0) + 1;
+    $("status").textContent = win ? (p === WHITE ? "백(Jev) 승" : "흑 승") : "무승부";
+    $("status").className = "over";
+    cv.classList.remove("busy");
+    if (DEMO) setTimeout(newGame, 4000);
+  }
+  return G.over;
+}
+
+async function post(url, body) {
+  const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function jevMove() {
+  if (G.over) return;
+  if (G.neurons) return jevMoveNeurons();
+  G.busy = true; cv.classList.add("busy"); setPhase("jev");
+  $("status").textContent = "Jev가 보는 중…"; $("status").className = "jev";
+  const last = G.history[G.history.length - 1];
+  let res;
+  try {
+    res = await post("/api/jev", { board: G.board, player: WHITE, last: last ? coord(last.r, last.c) : null, move_number: G.history.length + 1, brain: "single" });
+  } catch (e) {
+    $("status").textContent = "Jev 오류: " + e.message; $("status").className = "over"; G.busy = false; cv.classList.remove("busy"); return;
+  }
+  G.outline = res.candidates; G.heat = null; draw(); await sleep(350);
+  G.heat = { cands: res.candidates, p: res.probabilities }; draw();
+  showAnswer(res); await sleep(res.asked ? 750 : 200);
+  await dropStone(res.candidates.find(a => a.id === res.choice) || res.candidates[0]);
+}
+
+// The three-layer brain, one request per layer (tetris neurons-spec 6.5): what moves on
+// screen before an answer lands is only the dashed "request out" flow; every light after
+// that is a number that came back.
+async function jevMoveNeurons() {
+  G.busy = true; cv.classList.add("busy"); setPhase("jev");
+  $("status").textContent = "Jev가 보는 중…"; $("status").className = "jev";
+  const last = G.history[G.history.length - 1];
+  const req = { board: G.board, player: WHITE, last: last ? coord(last.r, last.c) : null, move_number: G.history.length + 1 };
+  const fail = e => { $("status").textContent = "Jev 오류: " + e.message; $("status").className = "over"; G.busy = false; cv.classList.remove("busy"); cxInflight(null); };
+  const t0 = performance.now();
+  // R1 sense
+  cxReset(); cxPhase("sense"); cxInflight("sense"); G.scan = performance.now(); G.outline = null; G.heat = null; G.proposals = null; G.ghosts = null; draw();
+  phaseNote("감각 · 센서 4개에 자극 전달 중…");
+  let r1; try { r1 = await post("/api/sense", req); } catch (e) { return fail(e); }
+  cxInflight(null); cxSense(r1);
+  G.outline = r1.candidates; draw();
+  if (r1.candidates.length === 1) { await sleep(300); return dropStone(r1.candidates[0]); }
+  const firedKo = r1.fired.map(n => `${NEURON_KO[n]} ${r1.activations[n].toFixed(2)}`).join(" · ");
+  phaseNote(`감각 · <b>${firedKo || "발화 없음"}</b> · ${r1.latency_ms}ms`);
+  $("threatFill").style.width = (r1.activations.danger * 100).toFixed(0) + "%"; $("threatV").textContent = r1.activations.danger.toFixed(2);
+  $("standPin").style.left = (r1.standing / 2 * 100).toFixed(0) + "%"; $("standV").textContent = r1.standing.toFixed(2);
+  await sleep(250);
+  // R2 motor
+  cxPhase("motor"); cxMotorPending(r1.fired); cxInflight("motor");
+  phaseNote(`운동 · ${r1.fired.length + 1}개 뉴런이 자리를 고르는 중…`);
+  let r2; try { r2 = await post("/api/motor", { ...req, activations: r1.activations, fired: r1.fired }); } catch (e) { return fail(e); }
+  cxInflight(null);
+  const byId = Object.fromEntries(r1.candidates.map(a => [a.id, a]));
+  const props = Object.entries(r2.proposals).map(([id, backers]) => ({ id, r: byId[id].r, c: byId[id].c, backers }));
+  cxMotor(props, r2.motor);
+  // wires land staggered, 80ms apart
+  G.proposals = []; draw();
+  for (const pr of props) { G.proposals.push(pr); draw(); await sleep(80); }
+  phaseNote(`운동 · ${props.map(pr => `${pr.backers.map(b => NEURON_KO[b]).join("·")} ${pr.id}`).join(" · ")} → 제안 ${props.length}개`);
+  const wireHold = sleep(500);
+  // R3 verdict
+  cxPhase("verdict"); cxInflight("verdict");
+  let r3; try { r3 = await post("/api/verdict", { ...req, activations: r1.activations, fired: r1.fired, directive: r1.directive, proposals: r2.proposals }); } catch (e) { return fail(e); }
+  await wireHold; cxInflight(null);
+  // reveal: wires cross-fade into ghosts, % counts up, VETO, the pick pulses
+  const now = performance.now();
+  G.proposals = null;
+  G.ghosts = props.map(pr => ({ ...pr, final: r3.final[pr.id] || 0, vetoed: r3.vetoed.includes(pr.id), pick: pr.id === r3.choice, t0: now }));
+  draw(); cxVerdict(props, r3);
+  const pick = props.find(pr => pr.id === r3.choice);
+  const pickKo = pick.backers.map(b => NEURON_KO[b]).join("·");
+  const vetoKo = r3.vetoed.length ? ` · ${r3.vetoed.join(", ")} 거부` : "";
+  phaseNote(`판정 · <b>${pickKo} ${r3.choice} ${Math.round((r3.final[r3.choice] || 0) * 100)}% 선택</b>${vetoKo}`);
+  const habitPick = r2.motor.habit && r2.motor.habit.choice;
+  const layers = { activations: r1.activations, fired: r1.fired, directive: r1.directive, motor: r2.motor, proposals: r2.proposals, arbiter: r3.arbiter, vetoes: r3.vetoes, vetoed: r3.vetoed, changed_habit: habitPick != null && habitPick !== r3.choice };
+  const tokens_in = r1.input_tokens + r2.input_tokens + r3.input_tokens, tokens_out = r1.output_tokens + r2.output_tokens + r3.output_tokens;
+  showAnswer({ asked: true, model: "jev-1.13.0", candidates: r1.candidates, probabilities: r3.final, choice: r3.choice, threat: r1.activations.danger, standing: r1.standing,
+    latency_ms: Math.round(performance.now() - t0), input_tokens: tokens_in, output_tokens: tokens_out, cost_usd: (tokens_in + tokens_out) * 42 / 1e9, layers });
+  await sleep(600);
+  G.ghosts = null;
+  await dropStone(byId[r3.choice]);
+}
+
+async function dropStone(pick) {
+  G.outline = null; G.proposals = null; G.ghosts = null;
+  G.pick = { r: pick.r, c: pick.c, scale: 0.3 };
+  const over = place(pick.r, pick.c, WHITE);
+  for (let i = 1; i <= 8; i++) { G.pick.scale = 0.3 + 0.7 * (1 - Math.pow(1 - i / 8, 2)); draw(); await sleep(16); }
+  G.pick = null; draw();
+  G.busy = false; cv.classList.remove("busy");
+  setPhase("idle");
+  if (!over) {
+    $("status").textContent = G.black === "rapfi" ? "Rapfi(흑) 차례" : G.black.startsWith("opus") ? "Opus(흑) 차례" : G.black === "bot" ? "봇(흑) 차례" : "흑을 두세요.";
+    $("status").className = "";
+    if (G.black !== "human") setTimeout(botMove, 900);
+  }
+}
+
+async function botMove() {
+  if (G.over || G.black === "human" || G.turn !== BLACK) return;
+  G.heat = null; G.outline = null; G.proposals = null; G.ghosts = null;
+  if (outside()) {
+    const who = G.black === "rapfi" ? "Rapfi" : "Opus";
+    G.busy = true; setPhase("opus");
+    $("status").textContent = `${who}(흑)가 생각하는 중…`; $("status").className = "";
+    $("ff").classList.toggle("on", !!G.ff && who === "Opus");
+    const started = performance.now();
+    const tick = setInterval(() => { $("opusTimer").textContent = ((performance.now() - started) / 1000).toFixed(1) + " s"; }, 100);
+    let res;
+    try {
+      res = who === "Rapfi"
+        ? await post("/api/rapfi", { board: G.board, ms: 1000, depth: G.depth })
+        : await post("/api/opus", { board: G.board, last: G.history.length ? coord(G.history.at(-1).r, G.history.at(-1).c) : null, sheet: G.black === "opus-sheet" });
+    }
+    catch (e) { clearInterval(tick); $("status").textContent = `${who} 오류: ` + e.message; G.busy = false; return; }
+    clearInterval(tick); $("ff").classList.remove("on");
+    $("opusTimer").textContent = res.seconds.toFixed(1) + " s" + (res.legal ? "" : " · 불법수 → 랜덤");
+    $("opusThink").textContent = who === "Rapfi"
+      ? (res.depth ? `깊이 ${res.depth} · 평가 ${res.eval} (흑 기준, +M은 외통)` : "즉답") + (res.text ? ` · ${res.text}` : "")
+      : (res.text || "").replace(/\s*MOVE:.*$/s, "").trim().slice(-420);
+    G.busy = false;
+    if (!place(res.move.r, res.move.c, BLACK)) jevMove();
+    return;
+  }
+  const { move } = await post("/api/bot", { board: G.board, player: BLACK });
+  if (!place(move.r, move.c, BLACK)) jevMove();
+}
+
+// ------------------------------------------------------------ cortex SVG (built once)
+const NS = "http://www.w3.org/2000/svg";
+const SENSORS = ["danger", "attack", "defend", "develop"];
+const ORB_X = { danger: 55, attack: 140, defend: 225, develop: 310, habit: 370 }, ORB_Y = 56;
+const CHIP_Y = 132, CHIP_W = 88, CHIP_H = 34, chipX = k => 10 + 97 * k;
+const BAR_Y0 = 212, BAR_STEP = 15, BAR_X = 50, BAR_W = 250;
+const cx = { svg: $("cx"), orbs: {}, ovals: {}, slines: [], mlines: [], chips: [], bars: [] };
+function mk(tag, attrs, parent) { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); (parent || cx.svg).appendChild(n); return n; }
+function txt(x, y, cls, content, parent) { const t = mk("text", { x, y, class: cls }, parent); t.textContent = content; return t; }
+(function buildCortex() {
+  const bands = [["sense", 6, 96, "R1 감각층"], ["motor", 108, 70, "R2 운동층"], ["verdict", 184, 80, "R3 판정층"]];
+  for (const [name, y, h, label] of bands) {
+    const g = mk("g", { class: `band band-${name}` });
+    mk("rect", { class: "frame", x: 2, y, width: 396, height: h, rx: 8 }, g);
+    txt(10, y + 13, "head", label, g);
+  }
+  for (const n of [...SENSORS, "habit"]) {
+    const x = ORB_X[n];
+    if (n !== "habit") cx.slines.push(mk("line", { class: "sline", x1: x, y1: 24, x2: x, y2: ORB_Y - 18 }));
+    const orb = mk("circle", { class: "orb", cx: x, cy: ORB_Y, r: n === "habit" ? 9 : 15, style: `--c:${NEURON_COLOR[n]}` });
+    cx.orbs[n] = orb;
+    txt(x, ORB_Y + (n === "habit" ? 22 : 30), "olabel", NEURON_KO[n]);
+    cx.ovals[n] = n === "habit" ? null : txt(x, ORB_Y + 42, "oval", "–");
+  }
+  for (let k = 0; k < 4; k++) {
+    const g = mk("g", { class: "chip", visibility: "hidden" });
+    mk("rect", { class: "box", x: chipX(k), y: CHIP_Y, width: CHIP_W, height: CHIP_H }, g);
+    const id = txt(chipX(k) + 8, CHIP_Y + 15, "id", "", g);
+    const p = txt(chipX(k) + 8, CHIP_Y + 28, "p", "", g);
+    const dots = mk("g", {}, g);
+    cx.chips.push({ g, id, p, dots, k });
+    const bar = mk("g", { class: "bar", visibility: "hidden" });
+    const y = BAR_Y0 + k * BAR_STEP;
+    const lab = txt(BAR_X - 6, y + 10, "lab", "", bar); lab.setAttribute("text-anchor", "end");
+    mk("rect", { class: "track", x: BAR_X, y, width: BAR_W, height: 12, rx: 3 }, bar);
+    const A = mk("rect", { class: "A", x: BAR_X, y, width: 0, height: 12, rx: 3 }, bar);
+    const V = mk("rect", { class: "V", x: BAR_X + BAR_W, y, width: 0, height: 12, rx: 3 }, bar);
+    const val = txt(BAR_X + BAR_W + 6, y + 10, "lab", "", bar);
+    const tag = txt(BAR_X + BAR_W + 40, y + 10, "tag", "", bar);
+    cx.bars.push({ g: bar, lab, A, V, val, tag });
+  }
+  const arrows = mk("g", { class: "arrow" });
+  txt(200, 197, "head", "▼ 중재 · 코치 (같은 요청, 서로 못 봄)", arrows).setAttribute("text-anchor", "middle");
+})();
+function cxPhase(ph) { cx.svg.setAttribute("data-phase", ph); }
+function cxInflight(stage) { cx.svg.className.baseVal = stage ? `inflight-${stage}` : ""; }
+function cxReset() {
+  for (const n of SENSORS) { cx.orbs[n].classList.remove("fired", "lit"); cx.ovals[n].textContent = "–"; }
+  cx.orbs.habit.classList.add("lit");
+  for (const l of cx.mlines) l.remove(); cx.mlines = [];
+  for (const c of cx.chips) { c.g.setAttribute("visibility", "hidden"); c.g.classList.remove("pick", "vetoed"); c.dots.innerHTML = ""; }
+  for (const b of cx.bars) { b.g.setAttribute("visibility", "hidden"); b.A.setAttribute("width", 0); b.V.setAttribute("width", 0); b.tag.textContent = ""; }
+}
+function cxSense(r1) {
+  for (const n of SENSORS) {
+    const a = r1.activations[n];
+    cx.ovals[n].textContent = a.toFixed(2);
+    cx.orbs[n].classList.toggle("fired", r1.fired.includes(n));
+    cx.orbs[n].classList.toggle("lit", !r1.fired.includes(n) && a >= 0.25);
+  }
+}
+function cxMotorPending(fired) {
+  // dashed lines from every fired orb (and habit) down to the chip row, before the answer
+  for (const n of [...fired, "habit"]) {
+    const l = mk("path", { class: "mline pending", d: `M${ORB_X[n]},${ORB_Y + 16} C${ORB_X[n]},${CHIP_Y - 30} 200,${CHIP_Y - 30} 200,${CHIP_Y - 2}`, stroke: NEURON_COLOR[n] });
+    cx.mlines.push(l);
+  }
+}
+function cxMotor(props, motor) {
+  for (const l of cx.mlines) l.remove(); cx.mlines = [];
+  props.slice(0, 4).forEach((pr, k) => {
+    const c = cx.chips[k];
+    c.g.setAttribute("visibility", "visible"); c.id.textContent = pr.id;
+    c.p.textContent = pr.backers.map(b => `${NEURON_KO[b]} .${String(Math.round((motor[b]?.p || 0) * 100)).padStart(2, "0")}`).join(" ");
+    c.dots.innerHTML = "";
+    pr.backers.forEach((b, i) => mk("circle", { cx: chipX(k) + CHIP_W - 10 - i * 9, cy: CHIP_Y + 10, r: 3.5, fill: NEURON_COLOR[b] }, c.dots));
+    const tx = chipX(k) + CHIP_W / 2;
+    for (const b of pr.backers) cx.mlines.push(mk("path", { class: "mline on", d: `M${ORB_X[b]},${ORB_Y + 16} C${ORB_X[b]},${CHIP_Y - 30} ${tx},${CHIP_Y - 30} ${tx},${CHIP_Y}`, stroke: NEURON_COLOR[b] }));
+  });
+}
+function cxVerdict(props, r3) {
+  props.slice(0, 4).forEach((pr, k) => {
+    const b = cx.bars[k], A = r3.arbiter[pr.id] ?? 1, V = r3.vetoes[pr.id] ?? 0, vetoed = r3.vetoed.includes(pr.id);
+    b.g.setAttribute("visibility", "visible"); b.lab.textContent = pr.id;
+    b.A.setAttribute("fill", NEURON_COLOR[pr.backers[0]]); b.A.setAttribute("width", (BAR_W * A).toFixed(1));
+    b.V.setAttribute("x", (BAR_X + BAR_W * (1 - V)).toFixed(1)); b.V.setAttribute("width", (BAR_W * V).toFixed(1));
+    b.val.textContent = `${Math.round((r3.final[pr.id] || 0) * 100)}%`;
+    b.tag.textContent = vetoed ? "VETO" : pr.id === r3.choice ? "선택" : "";
+    if (!vetoed && pr.id === r3.choice) b.tag.setAttribute("fill", "var(--ink)"); else b.tag.removeAttribute("fill");
+    cx.chips[k].g.classList.toggle("pick", pr.id === r3.choice); cx.chips[k].g.classList.toggle("vetoed", vetoed);
+  });
+}
+function phaseNote(html) { $("phase").innerHTML = html; }
+function showSensors() {}
+function showProposals() {}
+
+function showAnswer(res) {
+  $("model").textContent = res.model || "";
+  const ranked = Object.entries(res.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const byId = Object.fromEntries(res.candidates.map(a => [a.id, a]));
+  $("candcount").textContent = `후보 ${res.candidates.length}개`;
+  $("cands").innerHTML = ranked.map(([id, p]) => `
+    <div class="cand ${id === res.choice ? "pick" : ""}">
+      <div class="id">${id}</div><div class="track"><div class="fill" data-w="${(p * 100).toFixed(1)}"></div></div>
+      <div class="p">${p.toFixed(2)}</div><div class="desc">${byId[id] ? byId[id].desc : ""}</div>
+    </div>`).join("");
+  requestAnimationFrame(() => document.querySelectorAll(".cand .fill").forEach(el => { el.style.width = el.dataset.w + "%"; }));
+  $("threatFill").style.width = (res.threat * 100).toFixed(0) + "%"; $("threatV").textContent = res.threat.toFixed(2);
+  $("standPin").style.left = (res.standing / 2 * 100).toFixed(0) + "%"; $("standV").textContent = res.standing.toFixed(2);
+  showProposals(res);
+  if (res.asked) {
+    G.moves++; G.cost += res.cost_usd;
+    if (res.layers) {
+      if (res.layers.changed_habit) G.flips++;
+      G.vetoes += res.layers.vetoed.length;
+      for (const n of res.layers.fired) G.fired[n]++;
+      $("stFlip").textContent = `${G.flips}/${G.moves}`;
+      $("stVeto").textContent = G.vetoes;
+      $("stFired").textContent = ["danger", "attack", "defend", "develop"].map(n => G.fired[n]).join(" · ");
+    }
+    if (res.choice === res.candidates[0].id) G.agree++;
+    $("stLat").textContent = res.latency_ms + " ms";
+    $("stTok").textContent = `${res.input_tokens.toLocaleString()} · ${res.output_tokens.toLocaleString()}`;
+    $("stCost").textContent = "$" + res.cost_usd.toFixed(5);
+    $("stMoves").textContent = G.moves;
+    $("stAgree").textContent = `${G.agree}/${G.moves}`;
+    $("stCostAll").textContent = "$" + G.cost.toFixed(4);
+  }
+}
+
+cv.addEventListener("click", ev => {
+  if (G.over || G.busy || G.turn !== BLACK || G.black !== "human") return;
+  const rect = cv.getBoundingClientRect();
+  const c = Math.round((ev.clientX - rect.left - pad) / px), r = Math.round((ev.clientY - rect.top - pad) / px);
+  if (r < 0 || r >= SIZE || c < 0 || c >= SIZE || G.board[r][c]) return;
+  G.heat = null; G.outline = null;
+  if (!place(r, c, BLACK)) jevMove();
+});
+$("reset").addEventListener("click", newGame);
+$("black").value = G.black;
+$("black").addEventListener("change", ev => { G.black = ev.target.value; document.body.classList.toggle("opus", outside()); $("oppName").textContent = G.black === "rapfi" ? "Rapfi" : "Opus"; if (G.black !== "human" && !G.busy && !G.over && G.turn === BLACK) botMove(); });
+$("neurons").checked = G.neurons;
+$("neurons").addEventListener("change", ev => { G.neurons = ev.target.checked; document.body.classList.toggle("single", !G.neurons); });
+window.addEventListener("resize", resize);
+resize(); newGame();
+</script>
+</body>
+</html>

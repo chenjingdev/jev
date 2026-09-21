@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev가 맞추는 2048 그림 퍼즐</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #12151d;
+    --panel-2: #171b25;
+    --line: #232838;
+    --text: #e6e9f2;
+    --muted: #7d859c;
+    --accent: #c084fc;
+    --accent-2: #22d3ee;
+    --warn: #f87171;
+    --ok: #4ade80;
+    --gold: #ffd166;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Pretendard", "Apple SD Gothic Neo", system-ui, "Segoe UI", sans-serif;
+    font-size: 13px; line-height: 1.45; overflow: hidden;
+  }
+  .mono { font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+  header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 14px 24px 8px; }
+  header h1 { margin: 0; font-size: 20px; letter-spacing: -.01em; font-weight: 800; }
+  header h1 em { font-style: normal; color: var(--accent); }
+  header .hook { color: var(--text); font-size: 13px; opacity: .85; }
+  header .sub { color: var(--muted); font-size: 12px; margin-left: auto; }
+  header .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display: inline-block; margin-right: 5px; transition: background .2s; }
+  header .dot.live { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  header .dot.busy { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  header .dot.err { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+
+  main { display: flex; gap: 24px; padding: 6px 24px 16px; height: calc(100% - 52px); align-items: flex-start; justify-content: center; }
+  .col { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+  .col-board { flex: 0 0 auto; }
+  .col-side { width: var(--side-w, 420px); height: var(--col-h, auto); flex: 0 0 auto; overflow: hidden; }
+  .col-side > .card { flex: 0 0 auto; }
+  .col-side > .card-picks { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .card-picks #picks { flex: 0 0 auto; }
+  .card-picks .gauge { margin-top: auto; }
+
+  #board { display: block; border-radius: 14px; }
+  .board-wrap { position: relative; }
+  #banner {
+    position: absolute; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 6px;
+    background: rgba(11,13,18,.72); border-radius: 14px; backdrop-filter: blur(3px); text-align: center;
+  }
+  #banner.show { display: flex; }
+  #banner b { font-size: 30px; font-weight: 800; }
+  #banner span { color: var(--muted); }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 0; }
+  .card h2 { margin: 0 0 8px; font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; }
+  .card h2 .r { font-weight: 500; letter-spacing: 0; text-transform: none; }
+
+  .card-picture { display: flex; gap: 12px; align-items: stretch; }
+  #picture { border-radius: 8px; display: block; flex: 0 0 auto; }
+  .card-picture .side { display: flex; flex-direction: column; gap: 6px; justify-content: center; flex: 1; min-width: 0; }
+  .card-picture .side .big { font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .card-picture .side .k { color: var(--muted); font-size: 11px; }
+  .card-picture .side .need { color: var(--gold); font-size: 12px; }
+
+  .pick { display: grid; grid-template-columns: 28px 1fr 46px; gap: 4px 8px; align-items: center; padding: 4px 0; border-top: 1px solid var(--line); }
+  .pick:first-child { border-top: 0; }
+  .pick .arrow { font-size: 17px; text-align: center; color: var(--muted); }
+  .pick.chosen .arrow { color: var(--accent); }
+  .pick .bar { height: 8px; background: var(--panel-2); border-radius: 4px; overflow: hidden; }
+  .pick .bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s; opacity: .55; }
+  .pick.chosen .bar i { opacity: 1; }
+  .pick .pct { text-align: right; color: var(--muted); }
+  .pick.chosen .pct { color: var(--text); font-weight: 700; }
+  .pick .why { grid-column: 2 / 4; color: var(--muted); font-size: 11px; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+  .pick.chosen .why { color: var(--text); opacity: .8; }
+  .pick.illegal { opacity: .3; }
+
+  .gauge { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+  .gauge .k { color: var(--muted); flex: 0 0 auto; }
+  .gauge .track { flex: 1; height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
+  .gauge .track i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ok), var(--gold), var(--warn)); transition: width .3s; }
+  .gauge .v { width: 40px; text-align: right; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 8px; }
+  .stat { background: var(--panel-2); border-radius: 8px; padding: 6px 10px; }
+  .stat .k { color: var(--muted); font-size: 10.5px; }
+  .stat .v { font-size: 16px; font-weight: 700; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, label.btn {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px 10px; font: inherit; cursor: pointer;
+  }
+  button:hover, label.btn:hover { border-color: var(--accent); }
+  .controls input[type=file] { display: none; }
+  .controls .hint { color: var(--muted); font-size: 11px; width: 100%; }
+  .fine { color: var(--muted); font-size: 11px; }
+
+  body.clean .card-controls, body.clean header .sub, body.clean .fine { display: none; }
+  body.drag #board { outline: 3px dashed var(--accent); outline-offset: -3px; }
+
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    main { flex-direction: column; align-items: center; height: auto; }
+    .col-side { width: min(100%, 520px); height: auto; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><em>Jev</em>가 맞추는 2048 그림 퍼즐</h1>
+  <span class="hook">타일이 커질수록 그림 조각이 드러난다. Jev는 그림을 못 보고 숫자만 본다.</span>
+  <span class="sub"><span class="dot" id="dot"></span><span id="status">준비</span></span>
+</header>
+<main>
+  <div class="col col-board">
+    <div class="board-wrap">
+      <canvas id="board"></canvas>
+      <div id="banner"><b id="bannerTitle"></b><span id="bannerSub"></span></div>
+    </div>
+  </div>
+  <div class="col col-side">
+    <div class="card card-picture">
+      <canvas id="picture"></canvas>
+      <div class="side">
+        <div class="k">맞춘 조각</div>
+        <div class="big"><span id="pieces">0</span><span class="k"> / 16</span></div>
+        <div class="k">최대 타일 <b id="maxTile" class="mono">0</b></div>
+        <div class="need" id="need"></div>
+      </div>
+    </div>
+    <div class="card card-picks">
+      <h2>Jev의 선택 <span class="r" id="pickNote"></span></h2>
+      <div class="fine" id="modeTag" style="margin:-4px 0 6px"></div>
+      <div id="picks"></div>
+      <div class="gauge"><span class="k">위기</span><div class="track"><i id="dangerBar"></i></div><span class="v mono" id="dangerVal">–</span></div>
+    </div>
+    <div class="card card-stats">
+      <div class="stats">
+        <div class="stat"><div class="k">수</div><div class="v mono" id="sMoves">0</div></div>
+        <div class="stat"><div class="k">점수</div><div class="v mono" id="sScore">0</div></div>
+        <div class="stat"><div class="k">Jev 요청</div><div class="v mono" id="sCalls">0</div></div>
+        <div class="stat"><div class="k">지연</div><div class="v mono" id="sLatency">–</div></div>
+        <div class="stat"><div class="k">토큰/수</div><div class="v mono" id="sTokens">–</div></div>
+        <div class="stat"><div class="k">비용</div><div class="v mono" id="sCost">$0</div></div>
+      </div>
+    </div>
+    <div class="card card-controls">
+      <div class="controls">
+        <button id="btnNew">새 게임 (N)</button>
+        <button id="btnPause">일시정지 (Space)</button>
+        <button id="btnSpeed">속도: 보통</button>
+        <label class="btn">그림 바꾸기<input type="file" id="file" accept="image/*"></label>
+        <button id="btnClean">촬영 모드 (C)</button>
+        <button id="btnMode"></button>
+        <div class="hint">그림 파일을 보드 위에 끌어다 놓아도 된다. 그림은 브라우저에만 있고 Jev에게는 가지 않는다. <code>?seed=123</code>으로 같은 판을 다시 볼 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

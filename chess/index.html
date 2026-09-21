@@ -1,0 +1,26 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jev 체스 판독 실험</title><style>
+:root{color-scheme:light dark;--bg:#f5f5f2;--panel:#fff;--ink:#222;--muted:#666;--line:#ddd;--accent:#2869bd}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}main{max-width:1350px;margin:auto;padding:20px;display:grid;grid-template-columns:minmax(420px,1fr) 400px;gap:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}h1{font-size:19px;margin:0 0 8px}h2{font-size:14px;margin:12px 0 6px}.muted{font-size:12px;color:var(--muted)}label{display:block;margin:10px 0}select,input,button{font:inherit}select{max-width:100%}button{background:var(--accent);color:white;padding:8px 16px;border:0;border-radius:7px;cursor:pointer}button:disabled{opacity:.5}#board svg{width:100%;height:auto;display:block}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.4 ui-monospace,monospace;max-height:220px;overflow:auto}#verdict{font-size:27px;font-weight:700}.hit{color:#208447}.miss{color:#be3030}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:5px;border-bottom:1px solid var(--line)}a{color:var(--accent)}@media(prefers-color-scheme:dark){:root{--bg:#151515;--panel:#202020;--ink:#eee;--muted:#aaa;--line:#383838;--accent:#5d9eeb}}@media(max-width:900px){main{grid-template-columns:1fr}}
+</style></head><body><main><section><div id="board"></div><div class="card"><h2>현재 FEN</h2><pre id="fen"></pre><div class="muted" id="source"></div></div></section><aside>
+<div class="card"><h1>Jev 체스 판독 실험</h1><a href="/tracking">16개 기물의 이동·잡힘·캐슬링 추적 →</a><div class="muted">Lichess 실전 퍼즐 · python-chess로 정답 검증 · 모델에게 정답이나 전술 설명을 보내지 않습니다.</div></div>
+<div class="card"><label>단계 <select id="stage"><option value="white_knight" selected>백 나이트는 현재 어디에?</option><option value="occupied">0. 말이 있는 칸 찾기</option><option value="colour">1. 지정한 말의 흑백 구분</option><option value="piece">2. 지정한 말의 종류</option><option value="mate">3. 한 수 체크메이트</option></select></label>
+<label>입력 <select id="encoding"><option value="pgn" selected>PGN 착수 수순 · 초기 배치부터</option><option value="fen">표준 FEN 원문</option><option value="pieces">좌표별 말 목록 · 코드 보조</option></select></label>
+<label>검사 <select id="condition"><option value="base">원본</option><option value="repeat">동일 요청 반복</option><option value="shuffle">선택지 순서 섞기</option></select></label>
+<label>문제 번호 <input id="index" type="number" min="1" max="20" value="1" style="width:75px"></label>
+<button id="ask">묻기</button> <button id="next">다음 문제 →</button>
+<div class="muted">백 나이트 문제는 선택지 중 현재 백 나이트 위치가 정확히 하나입니다. 다른 백 나이트가 판에 있을 수 있습니다. 체크메이트 선택지는 모두 같은 말의 합법적인 수이며, 메이트가 아닌 체크도 포함합니다. UCI 표기 e2e4는 e2에서 e4로 이동한다는 뜻입니다.</div></div>
+<div class="card"><div id="verdict">–</div><div id="detail" class="muted"></div><table id="probabilities"></table></div>
+<div class="card"><h2>Jev가 받은 입력</h2><pre id="state"></pre><h2>질문</h2><pre id="question"></pre><h2>선택지</h2><pre id="options"></pre></div>
+<div class="card muted">FEN을 목록으로 바꾸면 말의 위치·종류·색을 코드가 풀어줍니다. 체크 여부나 정답 수는 계산해 전달하지 않습니다. 체스와 오목의 점수 차이만으로 학습 데이터의 양을 판단할 수는 없습니다.</div>
+</aside></main><script>
+const $=id=>document.getElementById(id);
+function sync(){const knight=$('stage').value==='white_knight';for(const o of $('encoding').options)o.disabled=knight?o.value==='pieces':o.value==='pgn';if($('encoding').selectedOptions[0].disabled)$('encoding').value='fen';}
+$('stage').addEventListener('change',sync);
+async function ask(){const controls=['stage','encoding','condition','index','ask','next'].map($);controls.forEach(el=>el.disabled=true);$('verdict').textContent='측정 중…';
+try{const res=await fetch('/api/probe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({index:+$('index').value,stage:$('stage').value,encoding:$('encoding').value,condition:$('condition').value})});const r=await res.json();if(!res.ok)throw new Error(r.error||'요청 실패');
+$('board').innerHTML=r.svg;$('fen').textContent=r.fen;$('source').textContent=`${r.game_id ? "Lichess 대국 " + r.game_id : "Lichess 퍼즐 " + r.puzzle_id} · CC0 · 평가용 출처 정보는 모델에게 전달하지 않음`;
+$('verdict').textContent=r.hit?'적중':'빗나감';$('verdict').className=r.hit?'hit':'miss';$('detail').textContent=`${r.coordinate?'질의 좌표 '+r.coordinate+' · ':''}정답 ${r.answer} · 선택 ${r.pick} · ${r.latency_ms} ms`;
+$('probabilities').innerHTML='<tr><th>선택지</th><th>확률</th></tr>'+Object.entries(r.probabilities).sort((a,b)=>b[1]-a[1]).map(([a,p])=>`<tr><td>${a}${a===r.answer?' ✓':''}</td><td>${Math.round(p*100)}%</td></tr>`).join('');
+$('state').textContent=JSON.stringify(r.request.state,null,2);$('question').textContent=r.request.questions.point.instructions;$('options').textContent=JSON.stringify(r.request.questions.point.criteria,null,2);
+}catch(e){$('verdict').textContent='오류';$('detail').textContent=e.message;}finally{controls.forEach(el=>el.disabled=false);}}
+$('ask').addEventListener('click',ask);$('next').addEventListener('click',()=>{$('index').value=(+$('index').value%20)+1;ask();});sync();ask();
+</script></body></html>

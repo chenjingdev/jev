@@ -28,7 +28,7 @@
 
 ```sh
 uv run python experiments/branches/run.py --dry-run   # 호출 수·토큰 예상만
-op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Personal/typesafe jev key/credential"') \
+op run --env-file=<(echo 'TYPESAFE_API_KEY="op://Agent/typesafe jev key/credential"') \
   -- uv run python experiments/branches/run.py         # results.json에 이어하기
 uv run python experiments/branches/report.py            # summary.md 재생성
 ```

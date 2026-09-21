@@ -1,0 +1,4719 @@
+{
+  "created_at": "2026-09-20T09:56:30.057796+00:00",
+  "model": "jev-1.13.0",
+  "design": "Balanced 20 attacks and 20 same-source non-attacks; one pair of targets per parent. Truth labels select samples only, never enter API requests. Positive and negative propositions evaluated independently. This is a diagnostic subset, not full-map accuracy.",
+  "summary": {
+    "pairs": 40,
+    "true_attacks": 20,
+    "positive_correct": 33,
+    "negative_correct": 28,
+    "both_yes": 7,
+    "both_no": 0,
+    "opposite_verdicts": 33,
+    "mean_sum_error": 0.17350000000000002,
+    "attack": {
+      "n": 20,
+      "positive_yes": 17,
+      "negative_yes": 9
+    },
+    "nonattack": {
+      "n": 20,
+      "positive_yes": 4,
+      "negative_yes": 17
+    }
+  },
+  "requests": 20,
+  "judgments": 80,
+  "cost_usd": 0.001332,
+  "trials": [
+    {
+      "index": 1,
+      "relations": [
+        {
+          "source": "f5",
+          "target": "g6",
+          "expected_attack": true,
+          "positive_probability": 0.94,
+          "negative_probability": 0.19,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.13
+        },
+        {
+          "source": "f5",
+          "target": "d4",
+          "expected_attack": false,
+          "positive_probability": 0.33,
+          "negative_probability": 0.83,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.16
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a6",
+                "column": 1,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g5",
+                "column": 7,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b4",
+                "column": 2,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White bishop f5 (column 6, rank 5) currently attack Black king g6 (column 7, rank 6)?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White bishop f5 (column 6, rank 5) does NOT currently attack Black king g6 (column 7, rank 6). Is this statement true?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White bishop f5 (column 6, rank 5) currently attack Black pawn d4 (column 4, rank 4)?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White bishop f5 (column 6, rank 5) does NOT currently attack Black pawn d4 (column 4, rank 4). Is this statement true?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.94,
+          "r0_negative": 0.19,
+          "r1_positive": 0.33,
+          "r1_negative": 0.83
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1207,
+        "output_tokens": 76,
+        "latency_ms": 708
+      }
+    },
+    {
+      "index": 2,
+      "relations": [
+        {
+          "source": "h6",
+          "target": "c1",
+          "expected_attack": true,
+          "positive_probability": 0.09,
+          "negative_probability": 0.96,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.05
+        },
+        {
+          "source": "h6",
+          "target": "a1",
+          "expected_attack": false,
+          "positive_probability": 0.1,
+          "negative_probability": 0.97,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.07
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d7",
+                "column": 4,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "b6",
+                "column": 2,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "c3",
+                "column": 3,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d3",
+                "column": 4,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f3",
+                "column": 6,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen h6 (column 8, rank 6) currently attack White bishop c1 (column 3, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen h6 (column 8, rank 6) does NOT currently attack White bishop c1 (column 3, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen h6 (column 8, rank 6) currently attack White rook a1 (column 1, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen h6 (column 8, rank 6) does NOT currently attack White rook a1 (column 1, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.09,
+          "r0_negative": 0.96,
+          "r1_positive": 0.1,
+          "r1_negative": 0.97
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1737,
+        "output_tokens": 76,
+        "latency_ms": 689
+      }
+    },
+    {
+      "index": 3,
+      "relations": [
+        {
+          "source": "g7",
+          "target": "b7",
+          "expected_attack": true,
+          "positive_probability": 0.72,
+          "negative_probability": 0.48,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.2
+        },
+        {
+          "source": "g7",
+          "target": "a6",
+          "expected_attack": false,
+          "positive_probability": 0.05,
+          "negative_probability": 0.97,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.02
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a6",
+                "column": 1,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d6",
+                "column": 4,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a5",
+                "column": 1,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "b3",
+                "column": 2,
+                "rank": 3
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f3",
+                "column": 6,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "d2",
+                "column": 4,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White rook g7 (column 7, rank 7) currently attack Black pawn b7 (column 2, rank 7)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White rook g7 (column 7, rank 7) does NOT currently attack Black pawn b7 (column 2, rank 7). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White rook g7 (column 7, rank 7) currently attack Black pawn a6 (column 1, rank 6)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White rook g7 (column 7, rank 7) does NOT currently attack Black pawn a6 (column 1, rank 6). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.72,
+          "r0_negative": 0.48,
+          "r1_positive": 0.05,
+          "r1_negative": 0.97
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1471,
+        "output_tokens": 76,
+        "latency_ms": 673
+      }
+    },
+    {
+      "index": 4,
+      "relations": [
+        {
+          "source": "g4",
+          "target": "d4",
+          "expected_attack": true,
+          "positive_probability": 0.64,
+          "negative_probability": 0.43,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.07
+        },
+        {
+          "source": "g4",
+          "target": "f5",
+          "expected_attack": false,
+          "positive_probability": 0.09,
+          "negative_probability": 0.95,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.04
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d7",
+                "column": 4,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a6",
+                "column": 1,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "d6",
+                "column": 4,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h5",
+                "column": 8,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "g4",
+                "column": 7,
+                "rank": 4
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black rook g4 (column 7, rank 4) currently attack White pawn d4 (column 4, rank 4)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black rook g4 (column 7, rank 4) does NOT currently attack White pawn d4 (column 4, rank 4). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black rook g4 (column 7, rank 4) currently attack White king f5 (column 6, rank 5)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black rook g4 (column 7, rank 4) does NOT currently attack White king f5 (column 6, rank 5). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.64,
+          "r0_negative": 0.43,
+          "r1_positive": 0.09,
+          "r1_negative": 0.95
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1199,
+        "output_tokens": 76,
+        "latency_ms": 688
+      }
+    },
+    {
+      "index": 5,
+      "relations": [
+        {
+          "source": "g2",
+          "target": "f2",
+          "expected_attack": true,
+          "positive_probability": 0.9,
+          "negative_probability": 0.3,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.2
+        },
+        {
+          "source": "g2",
+          "target": "c2",
+          "expected_attack": false,
+          "positive_probability": 0.6,
+          "negative_probability": 0.42,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.02
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a6",
+                "column": 1,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e6",
+                "column": 5,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a4",
+                "column": 1,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b3",
+                "column": 2,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "c3",
+                "column": 3,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "h3",
+                "column": 8,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen g2 (column 7, rank 2) currently attack White pawn f2 (column 6, rank 2)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen g2 (column 7, rank 2) does NOT currently attack White pawn f2 (column 6, rank 2). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen g2 (column 7, rank 2) currently attack White pawn c2 (column 3, rank 2)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen g2 (column 7, rank 2) does NOT currently attack White pawn c2 (column 3, rank 2). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.9,
+          "r0_negative": 0.3,
+          "r1_positive": 0.6,
+          "r1_negative": 0.42
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1657,
+        "output_tokens": 76,
+        "latency_ms": 254
+      }
+    },
+    {
+      "index": 6,
+      "relations": [
+        {
+          "source": "f8",
+          "target": "c8",
+          "expected_attack": true,
+          "positive_probability": 0.72,
+          "negative_probability": 0.32,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.04
+        },
+        {
+          "source": "f8",
+          "target": "g6",
+          "expected_attack": false,
+          "positive_probability": 0.47,
+          "negative_probability": 0.81,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.28
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "c8",
+                "column": 3,
+                "rank": 8
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g5",
+                "column": 7,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h4",
+                "column": 8,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b3",
+                "column": 2,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f8 (column 6, rank 8) currently attack Black queen c8 (column 3, rank 8)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f8 (column 6, rank 8) does NOT currently attack Black queen c8 (column 3, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f8 (column 6, rank 8) currently attack Black pawn g6 (column 7, rank 6)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f8 (column 6, rank 8) does NOT currently attack Black pawn g6 (column 7, rank 6). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.72,
+          "r0_negative": 0.32,
+          "r1_positive": 0.47,
+          "r1_negative": 0.81
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1420,
+        "output_tokens": 76,
+        "latency_ms": 263
+      }
+    },
+    {
+      "index": 7,
+      "relations": [
+        {
+          "source": "f6",
+          "target": "f8",
+          "expected_attack": true,
+          "positive_probability": 0.85,
+          "negative_probability": 0.51,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.3599999999999999
+        },
+        {
+          "source": "f6",
+          "target": "b5",
+          "expected_attack": false,
+          "positive_probability": 0.04,
+          "negative_probability": 0.98,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.02
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "c7",
+                "column": 3,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "b4",
+                "column": 2,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White rook f6 (column 6, rank 6) currently attack Black king f8 (column 6, rank 8)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White rook f6 (column 6, rank 6) does NOT currently attack Black king f8 (column 6, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White rook f6 (column 6, rank 6) currently attack Black knight b5 (column 2, rank 5)?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White rook f6 (column 6, rank 6) does NOT currently attack Black knight b5 (column 2, rank 5). Is this statement true?",
+                "movement_rule": "Same column OR same rank, with distinct endpoints.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.85,
+          "r0_negative": 0.51,
+          "r1_positive": 0.04,
+          "r1_negative": 0.98
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1356,
+        "output_tokens": 76,
+        "latency_ms": 322
+      }
+    },
+    {
+      "index": 8,
+      "relations": [
+        {
+          "source": "a5",
+          "target": "e1",
+          "expected_attack": true,
+          "positive_probability": 0.13,
+          "negative_probability": 0.95,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.08
+        },
+        {
+          "source": "a5",
+          "target": "b1",
+          "expected_attack": false,
+          "positive_probability": 0.27,
+          "negative_probability": 0.93,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.2000000000000002
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "d7",
+                "column": 4,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e6",
+                "column": 5,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "a5",
+                "column": 1,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "b1",
+                "column": 2,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen a5 (column 1, rank 5) currently attack White king e1 (column 5, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen a5 (column 1, rank 5) does NOT currently attack White king e1 (column 5, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen a5 (column 1, rank 5) currently attack White knight b1 (column 2, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen a5 (column 1, rank 5) does NOT currently attack White knight b1 (column 2, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.13,
+          "r0_negative": 0.95,
+          "r1_positive": 0.27,
+          "r1_negative": 0.93
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1893,
+        "output_tokens": 76,
+        "latency_ms": 293
+      }
+    },
+    {
+      "index": 9,
+      "relations": [
+        {
+          "source": "e3",
+          "target": "c1",
+          "expected_attack": true,
+          "positive_probability": 0.5,
+          "negative_probability": 0.68,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.1800000000000002
+        },
+        {
+          "source": "e3",
+          "target": "h8",
+          "expected_attack": false,
+          "positive_probability": 0.28,
+          "negative_probability": 0.96,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.24
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "c8",
+                "column": 3,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c7",
+                "column": 3,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "e3",
+                "column": 5,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "b1",
+                "column": 2,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen e3 (column 5, rank 3) currently attack White king c1 (column 3, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen e3 (column 5, rank 3) does NOT currently attack White king c1 (column 3, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen e3 (column 5, rank 3) currently attack White queen h8 (column 8, rank 8)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen e3 (column 5, rank 3) does NOT currently attack White queen h8 (column 8, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.5,
+          "r0_negative": 0.68,
+          "r1_positive": 0.28,
+          "r1_negative": 0.96
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1774,
+        "output_tokens": 76,
+        "latency_ms": 363
+      }
+    },
+    {
+      "index": 10,
+      "relations": [
+        {
+          "source": "d1",
+          "target": "d5",
+          "expected_attack": true,
+          "positive_probability": 0.72,
+          "negative_probability": 0.5,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.22
+        },
+        {
+          "source": "d1",
+          "target": "f4",
+          "expected_attack": false,
+          "positive_probability": 0.28,
+          "negative_probability": 0.92,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.2000000000000002
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b6",
+                "column": 2,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a5",
+                "column": 1,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b3",
+                "column": 2,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "c3",
+                "column": 3,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h3",
+                "column": 8,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "d1",
+                "column": 4,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen d1 (column 4, rank 1) currently attack White knight d5 (column 4, rank 5)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen d1 (column 4, rank 1) does NOT currently attack White knight d5 (column 4, rank 5). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen d1 (column 4, rank 1) currently attack White pawn f4 (column 6, rank 4)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen d1 (column 4, rank 1) does NOT currently attack White pawn f4 (column 6, rank 4). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.72,
+          "r0_negative": 0.5,
+          "r1_positive": 0.28,
+          "r1_negative": 0.92
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1497,
+        "output_tokens": 76,
+        "latency_ms": 240
+      }
+    },
+    {
+      "index": 11,
+      "relations": [
+        {
+          "source": "g6",
+          "target": "g5",
+          "expected_attack": true,
+          "positive_probability": 0.97,
+          "negative_probability": 0.04,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.01
+        },
+        {
+          "source": "g6",
+          "target": "h2",
+          "expected_attack": false,
+          "positive_probability": 0.02,
+          "negative_probability": 0.98,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.0
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "g5",
+                "column": 7,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "h3",
+                "column": 8,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black king g6 (column 7, rank 6) currently attack White knight g5 (column 7, rank 5)?",
+                "movement_rule": "Each absolute coordinate difference is at most 1 and at least one is 1.",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black king g6 (column 7, rank 6) does NOT currently attack White knight g5 (column 7, rank 5). Is this statement true?",
+                "movement_rule": "Each absolute coordinate difference is at most 1 and at least one is 1.",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black king g6 (column 7, rank 6) currently attack White pawn h2 (column 8, rank 2)?",
+                "movement_rule": "Each absolute coordinate difference is at most 1 and at least one is 1.",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black king g6 (column 7, rank 6) does NOT currently attack White pawn h2 (column 8, rank 2). Is this statement true?",
+                "movement_rule": "Each absolute coordinate difference is at most 1 and at least one is 1.",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.97,
+          "r0_negative": 0.04,
+          "r1_positive": 0.02,
+          "r1_negative": 0.98
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1214,
+        "output_tokens": 76,
+        "latency_ms": 251
+      }
+    },
+    {
+      "index": 12,
+      "relations": [
+        {
+          "source": "h1",
+          "target": "g2",
+          "expected_attack": true,
+          "positive_probability": 0.84,
+          "negative_probability": 0.17,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.01
+        },
+        {
+          "source": "h1",
+          "target": "d1",
+          "expected_attack": false,
+          "positive_probability": 0.67,
+          "negative_probability": 0.27,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 0.9400000000000001
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c7",
+                "column": 3,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e6",
+                "column": 5,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g4",
+                "column": 7,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c3",
+                "column": 3,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d3",
+                "column": 4,
+                "rank": 3
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "d1",
+                "column": 4,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen h1 (column 8, rank 1) currently attack White pawn g2 (column 7, rank 2)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen h1 (column 8, rank 1) does NOT currently attack White pawn g2 (column 7, rank 2). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen h1 (column 8, rank 1) currently attack White queen d1 (column 4, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen h1 (column 8, rank 1) does NOT currently attack White queen d1 (column 4, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.84,
+          "r0_negative": 0.17,
+          "r1_positive": 0.67,
+          "r1_negative": 0.27
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1814,
+        "output_tokens": 76,
+        "latency_ms": 333
+      }
+    },
+    {
+      "index": 13,
+      "relations": [
+        {
+          "source": "d7",
+          "target": "c6",
+          "expected_attack": true,
+          "positive_probability": 0.86,
+          "negative_probability": 0.34,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.2
+        },
+        {
+          "source": "d7",
+          "target": "h8",
+          "expected_attack": false,
+          "positive_probability": 0.34,
+          "negative_probability": 0.92,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.26
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "b8",
+                "column": 2,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "d7",
+                "column": 4,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "c3",
+                "column": 3,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d2",
+                "column": 4,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen d7 (column 4, rank 7) currently attack Black pawn c6 (column 3, rank 6)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen d7 (column 4, rank 7) does NOT currently attack Black pawn c6 (column 3, rank 6). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen d7 (column 4, rank 7) currently attack Black rook h8 (column 8, rank 8)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen d7 (column 4, rank 7) does NOT currently attack Black rook h8 (column 8, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.86,
+          "r0_negative": 0.34,
+          "r1_positive": 0.34,
+          "r1_negative": 0.92
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1895,
+        "output_tokens": 76,
+        "latency_ms": 337
+      }
+    },
+    {
+      "index": 14,
+      "relations": [
+        {
+          "source": "e5",
+          "target": "b2",
+          "expected_attack": true,
+          "positive_probability": 0.66,
+          "negative_probability": 0.7,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.3599999999999999
+        },
+        {
+          "source": "e5",
+          "target": "g1",
+          "expected_attack": false,
+          "positive_probability": 0.33,
+          "negative_probability": 0.91,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.24
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "b8",
+                "column": 2,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "g4",
+                "column": 7,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "b1",
+                "column": 2,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen e5 (column 5, rank 5) currently attack White pawn b2 (column 2, rank 2)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen e5 (column 5, rank 5) does NOT currently attack White pawn b2 (column 2, rank 2). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen e5 (column 5, rank 5) currently attack White knight g1 (column 7, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen e5 (column 5, rank 5) does NOT currently attack White knight g1 (column 7, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.66,
+          "r0_negative": 0.7,
+          "r1_positive": 0.33,
+          "r1_negative": 0.91
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1894,
+        "output_tokens": 76,
+        "latency_ms": 256
+      }
+    },
+    {
+      "index": 15,
+      "relations": [
+        {
+          "source": "d8",
+          "target": "a5",
+          "expected_attack": true,
+          "positive_probability": 0.18,
+          "negative_probability": 0.93,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.11
+        },
+        {
+          "source": "d8",
+          "target": "a1",
+          "expected_attack": false,
+          "positive_probability": 0.2,
+          "negative_probability": 0.95,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.15
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "White",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "c8",
+                "column": 3,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "d8",
+                "column": 4,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a6",
+                "column": 1,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "d6",
+                "column": 4,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a5",
+                "column": 1,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b4",
+                "column": 2,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e3",
+                "column": 5,
+                "rank": 3
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "White"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen d8 (column 4, rank 8) currently attack White pawn a5 (column 1, rank 5)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen d8 (column 4, rank 8) does NOT currently attack White pawn a5 (column 1, rank 5). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does Black queen d8 (column 4, rank 8) currently attack White rook a1 (column 1, rank 1)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "Black queen d8 (column 4, rank 8) does NOT currently attack White rook a1 (column 1, rank 1). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.18,
+          "r0_negative": 0.93,
+          "r1_positive": 0.2,
+          "r1_negative": 0.95
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1817,
+        "output_tokens": 76,
+        "latency_ms": 233
+      }
+    },
+    {
+      "index": 16,
+      "relations": [
+        {
+          "source": "f8",
+          "target": "b8",
+          "expected_attack": true,
+          "positive_probability": 0.75,
+          "negative_probability": 0.37,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.12
+        },
+        {
+          "source": "f8",
+          "target": "a8",
+          "expected_attack": false,
+          "positive_probability": 0.56,
+          "negative_probability": 0.41,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 0.97
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "b8",
+                "column": 2,
+                "rank": 8
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e6",
+                "column": 5,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "g6",
+                "column": 7,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g5",
+                "column": 7,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "d1",
+                "column": 4,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f8 (column 6, rank 8) currently attack Black knight b8 (column 2, rank 8)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f8 (column 6, rank 8) does NOT currently attack Black knight b8 (column 2, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f8 (column 6, rank 8) currently attack Black rook a8 (column 1, rank 8)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f8 (column 6, rank 8) does NOT currently attack Black rook a8 (column 1, rank 8). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.75,
+          "r0_negative": 0.37,
+          "r1_positive": 0.56,
+          "r1_negative": 0.41
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1465,
+        "output_tokens": 76,
+        "latency_ms": 373
+      }
+    },
+    {
+      "index": 17,
+      "relations": [
+        {
+          "source": "e5",
+          "target": "g4",
+          "expected_attack": true,
+          "positive_probability": 0.82,
+          "negative_probability": 0.62,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.44
+        },
+        {
+          "source": "e5",
+          "target": "c5",
+          "expected_attack": false,
+          "positive_probability": 0.74,
+          "negative_probability": 0.86,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.6
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "c8",
+                "column": 3,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "g8",
+                "column": 7,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "b5",
+                "column": 2,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g4",
+                "column": 7,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e3",
+                "column": 5,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g3",
+                "column": 7,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "b1",
+                "column": 2,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White knight e5 (column 5, rank 5) currently attack Black pawn g4 (column 7, rank 4)?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White knight e5 (column 5, rank 5) does NOT currently attack Black pawn g4 (column 7, rank 4). Is this statement true?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White knight e5 (column 5, rank 5) currently attack Black rook c5 (column 3, rank 5)?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White knight e5 (column 5, rank 5) does NOT currently attack Black rook c5 (column 3, rank 5). Is this statement true?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.82,
+          "r0_negative": 0.62,
+          "r1_positive": 0.74,
+          "r1_negative": 0.86
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1333,
+        "output_tokens": 76,
+        "latency_ms": 274
+      }
+    },
+    {
+      "index": 18,
+      "relations": [
+        {
+          "source": "c7",
+          "target": "a8",
+          "expected_attack": true,
+          "positive_probability": 0.87,
+          "negative_probability": 0.7,
+          "positive_verdict": true,
+          "negative_verdict": true,
+          "both_yes": true,
+          "both_no": false,
+          "opposite_verdicts": false,
+          "probability_sum": 1.5699999999999998
+        },
+        {
+          "source": "c7",
+          "target": "e7",
+          "expected_attack": false,
+          "positive_probability": 0.49,
+          "negative_probability": 0.92,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.4100000000000001
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "a8",
+                "column": 1,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "c8",
+                "column": 3,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "d8",
+                "column": 4,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "e8",
+                "column": 5,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "c7",
+                "column": 3,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "d7",
+                "column": 4,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "e7",
+                "column": 5,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h7",
+                "column": 8,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "e5",
+                "column": 5,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "e2",
+                "column": 5,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "d1",
+                "column": 4,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "f1",
+                "column": 6,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "knight",
+                "square": "g1",
+                "column": 7,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "h1",
+                "column": 8,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White knight c7 (column 3, rank 7) currently attack Black rook a8 (column 1, rank 8)?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White knight c7 (column 3, rank 7) does NOT currently attack Black rook a8 (column 1, rank 8). Is this statement true?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White knight c7 (column 3, rank 7) currently attack Black knight e7 (column 5, rank 7)?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White knight c7 (column 3, rank 7) does NOT currently attack Black knight e7 (column 5, rank 7). Is this statement true?",
+                "movement_rule": "Absolute column and rank differences are (1,2) or (2,1).",
+                "occupancy_rule": "Intermediate pieces do not block this attack.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.87,
+          "r0_negative": 0.7,
+          "r1_positive": 0.49,
+          "r1_negative": 0.92
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1962,
+        "output_tokens": 76,
+        "latency_ms": 270
+      }
+    },
+    {
+      "index": 19,
+      "relations": [
+        {
+          "source": "e4",
+          "target": "d5",
+          "expected_attack": true,
+          "positive_probability": 0.95,
+          "negative_probability": 0.12,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.0699999999999998
+        },
+        {
+          "source": "e4",
+          "target": "a5",
+          "expected_attack": false,
+          "positive_probability": 0.31,
+          "negative_probability": 0.97,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.28
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "d8",
+                "column": 4,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b7",
+                "column": 2,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c6",
+                "column": 3,
+                "rank": 6
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "d6",
+                "column": 4,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f6",
+                "column": 6,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "h6",
+                "column": 8,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a5",
+                "column": 1,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "d5",
+                "column": 4,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "e4",
+                "column": 5,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a3",
+                "column": 1,
+                "rank": 3
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "c2",
+                "column": 3,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White bishop e4 (column 5, rank 4) currently attack Black king d5 (column 4, rank 5)?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White bishop e4 (column 5, rank 4) does NOT currently attack Black king d5 (column 4, rank 5). Is this statement true?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White bishop e4 (column 5, rank 4) currently attack Black pawn a5 (column 1, rank 5)?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White bishop e4 (column 5, rank 4) does NOT currently attack Black pawn a5 (column 1, rank 5). Is this statement true?",
+                "movement_rule": "Absolute column difference equals absolute rank difference, and both are nonzero.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.95,
+          "r0_negative": 0.12,
+          "r1_positive": 0.31,
+          "r1_negative": 0.97
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1444,
+        "output_tokens": 76,
+        "latency_ms": 232
+      }
+    },
+    {
+      "index": 20,
+      "relations": [
+        {
+          "source": "f7",
+          "target": "g7",
+          "expected_attack": true,
+          "positive_probability": 0.96,
+          "negative_probability": 0.06,
+          "positive_verdict": true,
+          "negative_verdict": false,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.02
+        },
+        {
+          "source": "f7",
+          "target": "d4",
+          "expected_attack": false,
+          "positive_probability": 0.31,
+          "negative_probability": 0.91,
+          "positive_verdict": false,
+          "negative_verdict": true,
+          "both_yes": false,
+          "both_no": false,
+          "opposite_verdicts": true,
+          "probability_sum": 1.22
+        }
+      ],
+      "call": {
+        "request": {
+          "model": "jev-1.13.0",
+          "state": {
+            "game": "standard chess",
+            "side_to_move": "Black",
+            "coordinate_key": "a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1 through 8",
+            "pieces": [
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "d8",
+                "column": 4,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "king",
+                "square": "f8",
+                "column": 6,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "rook",
+                "square": "h8",
+                "column": 8,
+                "rank": 8
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "a7",
+                "column": 1,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c7",
+                "column": 3,
+                "rank": 7
+              },
+              {
+                "color": "White",
+                "kind": "queen",
+                "square": "f7",
+                "column": 6,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "g7",
+                "column": 7,
+                "rank": 7
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "b6",
+                "column": 2,
+                "rank": 6
+              },
+              {
+                "color": "Black",
+                "kind": "pawn",
+                "square": "c5",
+                "column": 3,
+                "rank": 5
+              },
+              {
+                "color": "Black",
+                "kind": "bishop",
+                "square": "f5",
+                "column": 6,
+                "rank": 5
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "c4",
+                "column": 3,
+                "rank": 4
+              },
+              {
+                "color": "Black",
+                "kind": "knight",
+                "square": "d4",
+                "column": 4,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "f4",
+                "column": 6,
+                "rank": 4
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "a2",
+                "column": 1,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "b2",
+                "column": 2,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "pawn",
+                "square": "d2",
+                "column": 4,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "king",
+                "square": "f2",
+                "column": 6,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "g2",
+                "column": 7,
+                "rank": 2
+              },
+              {
+                "color": "Black",
+                "kind": "queen",
+                "square": "h2",
+                "column": 8,
+                "rank": 2
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "a1",
+                "column": 1,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "bishop",
+                "square": "c1",
+                "column": 3,
+                "rank": 1
+              },
+              {
+                "color": "White",
+                "kind": "rook",
+                "square": "e1",
+                "column": 5,
+                "rank": 1
+              }
+            ],
+            "our_color": "Black"
+          },
+          "questions": {
+            "r0_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f7 (column 6, rank 7) currently attack Black pawn g7 (column 7, rank 7)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r0_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f7 (column 6, rank 7) does NOT currently attack Black pawn g7 (column 7, rank 7). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_positive": {
+              "type": "noul",
+              "instructions": {
+                "question": "Does White queen f7 (column 6, rank 7) currently attack Black knight d4 (column 4, rank 4)?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            },
+            "r1_negative": {
+              "type": "noul",
+              "instructions": {
+                "question": "White queen f7 (column 6, rank 7) does NOT currently attack Black knight d4 (column 4, rank 4). Is this statement true?",
+                "movement_rule": "Same column OR same rank OR equal nonzero absolute column and rank differences; endpoints differ.",
+                "occupancy_rule": "No piece may lie strictly between the two squares.",
+                "scope": "Attack map only. Ignore whether moving the attacking piece would expose its own king."
+              }
+            }
+          }
+        },
+        "probabilities": {
+          "r0_positive": 0.96,
+          "r0_negative": 0.06,
+          "r1_positive": 0.31,
+          "r1_negative": 0.91
+        },
+        "resolved_model": "jev-1.13.0",
+        "input_tokens": 1657,
+        "output_tokens": 76,
+        "latency_ms": 316
+      }
+    }
+  ]
+}

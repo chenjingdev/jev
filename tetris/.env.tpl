@@ -1,1 +1,1 @@
-TYPESAFE_API_KEY=op://Personal/typesafe jev key/credential
+TYPESAFE_API_KEY=op://Agent/typesafe jev key/credential
