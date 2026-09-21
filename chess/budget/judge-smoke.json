@@ -1,0 +1,2425 @@
+{
+  "created_at": "2026-09-21T01:54:40.291219+00:00",
+  "design": "Jev ranks positions by how much they need a deeper search, seeing only the piece placement. Rankings are scored against the depth-4 gap labels from depth_gap.py, which Jev never sees. Chance, a code-only heuristic and the oracle ceiling are in the same table.",
+  "model": "jev-1.13.0",
+  "gap_file": "/Users/chenjing/dev/jev/chess/budget/depth-gap.json",
+  "gap_config": {
+    "sample": 400,
+    "seed": 20260921,
+    "shallow_depth": 2,
+    "deep_depth": 4,
+    "threshold": 30,
+    "clip": 1000
+  },
+  "gap_summary": {
+    "positions": 400,
+    "threshold": 30,
+    "base_rate": 0.4175,
+    "mean_gap": 81.15,
+    "gap_quantiles": {
+      "0.5": 10,
+      "0.75": 115,
+      "0.9": 265,
+      "0.95": 330,
+      "0.99": 670
+    },
+    "move_changed_rate": 0.6775,
+    "move_changed_but_zero_gap": 52,
+    "deep_time_ratio": 55.1,
+    "mean_shallow_ms": 16.39,
+    "mean_deep_ms": 902.6
+  },
+  "config": {
+    "limit": 25,
+    "workers": 4,
+    "threshold": 30
+  },
+  "questions": {
+    "unresolved": {
+      "type": "Noul",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. Material is about to change hands here: there are captures or capture threats on this position whose outcome is not yet settled, so the pieces standing now are not the pieces that will be standing a few moves from now."
+    },
+    "free_piece": {
+      "type": "Noul",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. At least one piece belonging to the side to move can be taken by the opponent right now without the opponent losing a piece of equal value in return."
+    },
+    "trap": {
+      "type": "Noul",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. A natural, sensible-looking move for the side to move would lose material here, because of a reply the opponent has available afterwards."
+    },
+    "complexity": {
+      "type": "Score",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. How complicated is this position?",
+      "criteria": [
+        "Simple: few pieces are left and they barely interact, so the position plays itself and the same plan works whatever the opponent does.",
+        "Ordinary: a normal middlegame where several pieces interact but the position holds together on general principles.",
+        "Complicated: many pieces interact at once, several plans are live for both sides, and what happens on one part of the board changes what works on another."
+      ]
+    },
+    "sharpness": {
+      "type": "Score",
+      "instructions": "Standard chess rules apply. A rook moves along its column or rank, a bishop along its diagonals, a queen along either, and a knight jumps to a square two columns and one rank away or two ranks and one column away. Rook, bishop and queen lines are blocked by any piece in between. A pawn captures one square diagonally forward, white towards higher ranks and black towards lower ranks. Columns are numbered a=1 to h=8. How forcing is this position for the side to move?",
+      "criteria": [
+        "Quiet: pieces are not touching, nothing is under threat, and any reasonable move keeps the position roughly as it is.",
+        "Tense: pieces face each other and threats exist, but nothing is forced yet.",
+        "Sharp: captures, checks or threats dominate the position and the wrong move changes the material balance immediately."
+      ]
+    }
+  },
+  "rankings": {
+    "heuristic.material": {
+      "auc": 0.8056,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.0947,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.8,
+          "recall": 0.4444,
+          "gap_captured": 0.3454,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.5714,
+          "recall": 0.4444,
+          "gap_captured": 0.3621,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.5833,
+          "recall": 0.7778,
+          "gap_captured": 0.7326,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.7,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.65
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.75
+          }
+        ]
+      }
+    },
+    "heuristic.tactical": {
+      "auc": 0.4861,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 0.5,
+          "recall": 0.1111,
+          "gap_captured": 0.156,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.6,
+          "recall": 0.3333,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.4286,
+          "recall": 0.3333,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.25,
+          "recall": 0.3333,
+          "gap_captured": 0.4011,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.4875,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.75
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.225
+          }
+        ]
+      }
+    },
+    "oracle": {
+      "auc": 1.0,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.351,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 1.0,
+          "recall": 0.5556,
+          "gap_captured": 0.7465,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 1.0,
+          "recall": 0.7778,
+          "gap_captured": 0.8802,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.75,
+          "recall": 1.0,
+          "gap_captured": 0.9972,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 1.0,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 1.0
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 1.0
+          }
+        ]
+      }
+    },
+    "jev.unresolved": {
+      "auc": 0.4062,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.4,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.2857,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.25,
+          "recall": 0.3333,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.625,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.55
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.7
+          }
+        ]
+      }
+    },
+    "jev.free_piece": {
+      "auc": 0.5625,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.6,
+          "recall": 0.3333,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.4286,
+          "recall": 0.3333,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.3333,
+          "recall": 0.4444,
+          "gap_captured": 0.5627,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.625,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.575
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.675
+          }
+        ]
+      }
+    },
+    "jev.trap": {
+      "auc": 0.2986,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "gap_captured": 0.0,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "gap_captured": 0.0,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.0,
+          "recall": 0.0,
+          "gap_captured": 0.0,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.25,
+          "recall": 0.3333,
+          "gap_captured": 0.3398,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.325,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.3
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.35
+          }
+        ]
+      }
+    },
+    "jev.complexity": {
+      "auc": 0.6146,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 0.5,
+          "recall": 0.1111,
+          "gap_captured": 0.1086,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.4,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.2857,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.4167,
+          "recall": 0.5556,
+          "gap_captured": 0.532,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.625,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.45
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.8
+          }
+        ]
+      }
+    },
+    "jev.sharpness": {
+      "auc": 0.4236,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "gap_captured": 0.0,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.2,
+          "recall": 0.1111,
+          "gap_captured": 0.156,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.2857,
+          "recall": 0.2222,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.3333,
+          "recall": 0.4444,
+          "gap_captured": 0.468,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.625,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.65
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.6
+          }
+        ]
+      }
+    },
+    "jev.complexity_plus_material": {
+      "auc": 0.8125,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.1058,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.8,
+          "recall": 0.4444,
+          "gap_captured": 0.2646,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.7143,
+          "recall": 0.5556,
+          "gap_captured": 0.3955,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.5833,
+          "recall": 0.7778,
+          "gap_captured": 0.6267,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.675,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.475
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.875
+          }
+        ]
+      }
+    },
+    "jev.sharpness_plus_material": {
+      "auc": 0.7778,
+      "budgets": [
+        {
+          "fraction": 0.1,
+          "positions": 2,
+          "precision": 1.0,
+          "recall": 0.2222,
+          "gap_captured": 0.2033,
+          "chance_recall": 0.1
+        },
+        {
+          "fraction": 0.2,
+          "positions": 5,
+          "precision": 0.8,
+          "recall": 0.4444,
+          "gap_captured": 0.4095,
+          "chance_recall": 0.2
+        },
+        {
+          "fraction": 0.3,
+          "positions": 7,
+          "precision": 0.8571,
+          "recall": 0.6667,
+          "gap_captured": 0.5794,
+          "chance_recall": 0.3
+        },
+        {
+          "fraction": 0.5,
+          "positions": 12,
+          "precision": 0.5,
+          "recall": 0.6667,
+          "gap_captured": 0.5822,
+          "chance_recall": 0.5
+        }
+      ],
+      "conditional_auc": {
+        "pooled": 0.725,
+        "bands": [
+          {
+            "max_piece_count": 19,
+            "positions": 7,
+            "auc": null
+          },
+          {
+            "max_piece_count": 29,
+            "positions": 9,
+            "auc": 0.7
+          },
+          {
+            "max_piece_count": 32,
+            "positions": 9,
+            "auc": 0.75
+          }
+        ]
+      }
+    }
+  },
+  "usage": {
+    "requests": 25,
+    "input_tokens": 38268,
+    "output_tokens": 2150,
+    "latency_ms_median": 244.04
+  },
+  "elapsed_seconds": 2.08,
+  "positions": [
+    {
+      "fen": "4k3/6p1/8/1ppn1p2/1prp4/8/K7/8 w - - 2 41",
+      "match": "d2plain-vs-d4-100",
+      "game": 21,
+      "ply": 75,
+      "opening": "op11",
+      "played_uci": "a2a1",
+      "duplicates": 1,
+      "shallow_move": "a2a1",
+      "deep_move": "a2a1",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 4,
+      "shallow_ms": 1.04,
+      "deep_ms": 18.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 4,
+        "piece_count": 10
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.69,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 0.89,
+            "confidence": 0.0,
+            "probabilities": {
+              "0": 0.38,
+              "1": 0.36,
+              "2": 0.26
+            }
+          },
+          "sharpness": {
+            "value": 1.28,
+            "confidence": 0.0,
+            "probabilities": {
+              "0": 0.22,
+              "1": 0.27,
+              "2": 0.51
+            }
+          }
+        },
+        "latency_ms": 249.14,
+        "usage": {
+          "input_tokens": 1273,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r4b1r/1p3kpp/3pbn2/p1p5/P7/3P1B2/1P1B4/R2K4 w - - 4 26",
+      "match": "d2plain-vs-d4-100",
+      "game": 73,
+      "ply": 45,
+      "opening": "op37",
+      "played_uci": "f3b7",
+      "duplicates": 0,
+      "shallow_move": "f3b7",
+      "deep_move": "f3b7",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 14.59,
+      "deep_ms": 773.31,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 29,
+        "piece_count": 19
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.53,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.54,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.24,
+            "confidence": 0.57,
+            "probabilities": {
+              "0": 0.02,
+              "1": 0.72,
+              "2": 0.26
+            }
+          },
+          "sharpness": {
+            "value": 0.84,
+            "confidence": 0.33,
+            "probabilities": {
+              "0": 0.3,
+              "1": 0.56,
+              "2": 0.14
+            }
+          }
+        },
+        "latency_ms": 357.43,
+        "usage": {
+          "input_tokens": 1428,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqk2Q/1p1pbp1p/2n5/pNp1p3/P1P1n3/8/1P1P1PPP/R1B1KBNR b KQq - 0 9",
+      "match": "d2plain-vs-d4-100",
+      "game": 74,
+      "ply": 12,
+      "opening": "op37",
+      "played_uci": "e7f8",
+      "duplicates": 0,
+      "shallow_move": "e7f8",
+      "deep_move": "e7f8",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 0.62,
+      "deep_ms": 28.6,
+      "features": {
+        "in_check": true,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 1,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.64,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.7,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.66,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.59,
+            "confidence": 0.38,
+            "probabilities": {
+              "0": 0.02,
+              "1": 0.37,
+              "2": 0.61
+            }
+          },
+          "sharpness": {
+            "value": 1.36,
+            "confidence": 0.05,
+            "probabilities": {
+              "0": 0.11,
+              "1": 0.41,
+              "2": 0.48
+            }
+          }
+        },
+        "latency_ms": 268.62,
+        "usage": {
+          "input_tokens": 1600,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3r4/3k4/p4p2/P2p1p1Q/5P2/1P1PBP1B/7P/R3K2R b KQ - 0 25",
+      "match": "d2plain-vs-d4-100",
+      "game": 82,
+      "ply": 44,
+      "opening": "op41",
+      "played_uci": "d5d4",
+      "duplicates": 0,
+      "shallow_move": "d5d4",
+      "deep_move": "d7c6",
+      "move_changed": true,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 7.6,
+      "deep_ms": 263.76,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 14,
+        "piece_count": 18
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.57,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.57,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.6,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.44,
+            "confidence": 0.27,
+            "probabilities": {
+              "0": 0.02,
+              "1": 0.52,
+              "2": 0.46
+            }
+          },
+          "sharpness": {
+            "value": 1.26,
+            "confidence": 0.24,
+            "probabilities": {
+              "0": 0.12,
+              "1": 0.5,
+              "2": 0.38
+            }
+          }
+        },
+        "latency_ms": 606.18,
+        "usage": {
+          "input_tokens": 1412,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r6r/1p3k2/3b1q2/p1pPpbp1/P1B4p/1PB2P2/3P2PP/R2QK2R w K - 4 21",
+      "match": "d2plain-vs-d4-100",
+      "game": 87,
+      "ply": 35,
+      "opening": "op44",
+      "played_uci": "a1a2",
+      "duplicates": 0,
+      "shallow_move": "a1a2",
+      "deep_move": "a1a2",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 11,
+      "shallow_ms": 23.34,
+      "deep_ms": 1837.29,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 31,
+        "piece_count": 25
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.69,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.64,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.56,
+            "confidence": 0.35,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.43,
+              "2": 0.5599999999999999
+            }
+          },
+          "sharpness": {
+            "value": 1.39,
+            "confidence": 0.26,
+            "probabilities": {
+              "0": 0.05,
+              "1": 0.51,
+              "2": 0.44
+            }
+          }
+        },
+        "latency_ms": 768.74,
+        "usage": {
+          "input_tokens": 1531,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2k4/2p1b3/1p1p4/3n3r/P7/Q4bn1/7q/1KR5 b - - 3 32",
+      "match": "d2rand-vs-d2-100",
+      "game": 5,
+      "ply": 58,
+      "opening": "op03",
+      "played_uci": "f3e4",
+      "duplicates": 0,
+      "shallow_move": "f3e4",
+      "deep_move": "f3e4",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 15.46,
+      "deep_ms": 708.25,
+      "features": {
+        "in_check": false,
+        "captures_available": 1,
+        "best_capture_value": 100,
+        "checks_available": 5,
+        "hanging_pieces": 1,
+        "max_hanging_value": 330,
+        "legal_moves": 51,
+        "piece_count": 15
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.67,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.57,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.6,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.7,
+            "confidence": 0.54,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.28,
+              "2": 0.71
+            }
+          },
+          "sharpness": {
+            "value": 1.7,
+            "confidence": 0.55,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.22,
+              "2": 0.74
+            }
+          }
+        },
+        "latency_ms": 652.39,
+        "usage": {
+          "input_tokens": 1360,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2q1b1r/4pkp1/1p3n2/3b4/PpnN1Bp1/8/2B2P1P/R2QK2R w KQ - 0 18",
+      "match": "d2rand-vs-d2-100",
+      "game": 11,
+      "ply": 29,
+      "opening": "op06",
+      "played_uci": "h1f1",
+      "duplicates": 0,
+      "shallow_move": "f2f3",
+      "deep_move": "c2b3",
+      "move_changed": true,
+      "gap": 280,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 31.77,
+      "deep_ms": 2052.99,
+      "features": {
+        "in_check": false,
+        "captures_available": 1,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 1,
+        "max_hanging_value": 500,
+        "legal_moves": 44,
+        "piece_count": 23
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.71,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.76,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.63,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.68,
+            "confidence": 0.51,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.31,
+              "2": 0.68
+            }
+          },
+          "sharpness": {
+            "value": 1.56,
+            "confidence": 0.33,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.37,
+              "2": 0.59
+            }
+          }
+        },
+        "latency_ms": 227.73,
+        "usage": {
+          "input_tokens": 1498,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2qkb1r/2p1pppp/2n2n2/pB1p4/P7/1PN1PN2/1BQP1PPP/R3K2R b KQkq - 0 8",
+      "match": "d2rand-vs-d2-100",
+      "game": 23,
+      "ply": 10,
+      "opening": "op12",
+      "played_uci": "e7e5",
+      "duplicates": 0,
+      "shallow_move": "e7e5",
+      "deep_move": "d8d6",
+      "move_changed": true,
+      "gap": 300,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 3,
+      "shallow_ms": 19.53,
+      "deep_ms": 952.98,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 320,
+        "legal_moves": 22,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.47,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.6,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.38,
+            "confidence": 0.4,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.6,
+              "2": 0.39
+            }
+          },
+          "sharpness": {
+            "value": 0.89,
+            "confidence": 0.38,
+            "probabilities": {
+              "0": 0.26,
+              "1": 0.59,
+              "2": 0.15
+            }
+          }
+        },
+        "latency_ms": 248.07,
+        "usage": {
+          "input_tokens": 1602,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "k6r/8/5q2/p1Qp1P1p/P1P4P/4P3/R7/4K3 w - - 0 31",
+      "match": "d2rand-vs-d2-100",
+      "game": 27,
+      "ply": 55,
+      "opening": "op14",
+      "played_uci": "c5a5",
+      "duplicates": 0,
+      "shallow_move": "c5a5",
+      "deep_move": "c5a5",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 9.48,
+      "deep_ms": 236.77,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 6,
+        "hanging_pieces": 2,
+        "max_hanging_value": 100,
+        "legal_moves": 30,
+        "piece_count": 14
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.67,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.66,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.18,
+            "confidence": 0.4,
+            "probabilities": {
+              "0": 0.11,
+              "1": 0.6,
+              "2": 0.29
+            }
+          },
+          "sharpness": {
+            "value": 1.53,
+            "confidence": 0.29,
+            "probabilities": {
+              "0": 0.05,
+              "1": 0.37,
+              "2": 0.58
+            }
+          }
+        },
+        "latency_ms": 221.03,
+        "usage": {
+          "input_tokens": 1342,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqkb1r/2p1pppp/1pnp1n2/p7/P6P/1PNP1N2/1BP1PPP1/R2QKB1R b KQkq - 0 7",
+      "match": "d2rand-vs-d2-100",
+      "game": 30,
+      "ply": 8,
+      "opening": "op15",
+      "played_uci": "c8e6",
+      "duplicates": 0,
+      "shallow_move": "c8e6",
+      "deep_move": "c6e5",
+      "move_changed": true,
+      "gap": 25,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 19.98,
+      "deep_ms": 1184.73,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 32,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.29,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.45,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.59,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.15,
+            "confidence": 0.65,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.77,
+              "2": 0.19
+            }
+          },
+          "sharpness": {
+            "value": 0.31,
+            "confidence": 0.54,
+            "probabilities": {
+              "0": 0.72,
+              "1": 0.26,
+              "2": 0.02
+            }
+          }
+        },
+        "latency_ms": 274.16,
+        "usage": {
+          "input_tokens": 1653,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "1r2k2r/1bpq1p2/1pnppnp1/p1b4p/P1P4P/1PNPPNP1/1B2BP2/R2QK2R w Kk - 10 20",
+      "match": "d2rand-vs-d2-100",
+      "game": 38,
+      "ply": 33,
+      "opening": "op19",
+      "played_uci": "a1a2",
+      "duplicates": 0,
+      "shallow_move": "a1a2",
+      "deep_move": "b2a3",
+      "move_changed": true,
+      "gap": 330,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 14,
+      "shallow_ms": 21.12,
+      "deep_ms": 1101.26,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.49,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.56,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.62,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.38,
+            "confidence": 0.42,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.62,
+              "2": 0.38
+            }
+          },
+          "sharpness": {
+            "value": 0.82,
+            "confidence": 0.4,
+            "probabilities": {
+              "0": 0.29,
+              "1": 0.6,
+              "2": 0.11
+            }
+          }
+        },
+        "latency_ms": 232.96,
+        "usage": {
+          "input_tokens": 1651,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "7Q/8/8/2P1Q3/r1k1P3/p7/5R2/2K3NR b - - 0 41",
+      "match": "d2rand-vs-d2-100",
+      "game": 51,
+      "ply": 76,
+      "opening": "op26",
+      "played_uci": "a4a5",
+      "duplicates": 0,
+      "shallow_move": "a4a5",
+      "deep_move": "a4a6",
+      "move_changed": true,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 7,
+      "shallow_ms": 7.51,
+      "deep_ms": 457.6,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 10,
+        "piece_count": 11
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.67,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.66,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.68,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.4,
+            "confidence": 0.1,
+            "probabilities": {
+              "0": 0.13,
+              "1": 0.35,
+              "2": 0.52
+            }
+          },
+          "sharpness": {
+            "value": 1.74,
+            "confidence": 0.62,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.18,
+              "2": 0.78
+            }
+          }
+        },
+        "latency_ms": 235.47,
+        "usage": {
+          "input_tokens": 1292,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/1b1pbp2/rpn1pnp1/p1p4p/P4B1P/1PNP1NP1/2P1PPB1/R2QK2R w Kk - 1 12",
+      "match": "d2rand-vs-d2-100",
+      "game": 53,
+      "ply": 17,
+      "opening": "op27",
+      "played_uci": "a1a3",
+      "duplicates": 0,
+      "shallow_move": "e2e3",
+      "deep_move": "f4g5",
+      "move_changed": true,
+      "gap": 90,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 25.21,
+      "deep_ms": 1263.93,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 41,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.51,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.42,
+            "confidence": 0.36,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.58,
+              "2": 0.42
+            }
+          },
+          "sharpness": {
+            "value": 0.9,
+            "confidence": 0.44,
+            "probabilities": {
+              "0": 0.23,
+              "1": 0.63,
+              "2": 0.14
+            }
+          }
+        },
+        "latency_ms": 292.2,
+        "usage": {
+          "input_tokens": 1651,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2qk2r/1bpp2pp/3b4/pP2p2P/1n2p1n1/2N2N2/1PPP1PB1/R1BQK2R w KQkq - 0 12",
+      "match": "d2rand-vs-d2-100",
+      "game": 56,
+      "ply": 17,
+      "opening": "op28",
+      "played_uci": "f3g1",
+      "duplicates": 0,
+      "shallow_move": "f3g1",
+      "deep_move": "f3g1",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 23.73,
+      "deep_ms": 1300.44,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.7,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.62,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.56,
+            "confidence": 0.34,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.43,
+              "2": 0.5599999999999999
+            }
+          },
+          "sharpness": {
+            "value": 1.34,
+            "confidence": 0.27,
+            "probabilities": {
+              "0": 0.08,
+              "1": 0.51,
+              "2": 0.41
+            }
+          }
+        },
+        "latency_ms": 244.04,
+        "usage": {
+          "input_tokens": 1602,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r3k2r/3bq3/p2pp3/P1p5/2P1N1pP/1N6/4BP2/R2QK2R b KQkq - 1 26",
+      "match": "d2rand-vs-d2-100",
+      "game": 59,
+      "ply": 46,
+      "opening": "op30",
+      "played_uci": "d7c6",
+      "duplicates": 0,
+      "shallow_move": "d7c6",
+      "deep_move": "d6d5",
+      "move_changed": true,
+      "gap": 5,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 17.43,
+      "deep_ms": 989.34,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 30,
+        "piece_count": 21
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.54,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.57,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.62,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.41,
+            "confidence": 0.35,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.5700000000000001,
+              "2": 0.42
+            }
+          },
+          "sharpness": {
+            "value": 1.04,
+            "confidence": 0.3,
+            "probabilities": {
+              "0": 0.21,
+              "1": 0.54,
+              "2": 0.25
+            }
+          }
+        },
+        "latency_ms": 255.68,
+        "usage": {
+          "input_tokens": 1466,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "rn1qkb1r/1b1pppp1/1p3n2/p1p1N2p/P4P1P/2N5/1PPPP1P1/R1BQKB1R w KQkq - 1 7",
+      "match": "d2rand-vs-d2-100",
+      "game": 63,
+      "ply": 7,
+      "opening": "op32",
+      "played_uci": "e2e3",
+      "duplicates": 0,
+      "shallow_move": "b2b3",
+      "deep_move": "e5d3",
+      "move_changed": true,
+      "gap": 5,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 4,
+      "shallow_ms": 14.71,
+      "deep_ms": 913.99,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 29,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.5,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.55,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.63,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.43,
+            "confidence": 0.32,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.55,
+              "2": 0.44
+            }
+          },
+          "sharpness": {
+            "value": 1.04,
+            "confidence": 0.34,
+            "probabilities": {
+              "0": 0.2,
+              "1": 0.56,
+              "2": 0.24
+            }
+          }
+        },
+        "latency_ms": 252.96,
+        "usage": {
+          "input_tokens": 1653,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1b1k1nr/pp1p1ppp/4p3/2p5/P2n1b2/2N3q1/1PPPPN2/R1BQKB1R b KQkq - 1 9",
+      "match": "d2rand-vs-d2-100",
+      "game": 65,
+      "ply": 12,
+      "opening": "op33",
+      "played_uci": "g8f6",
+      "duplicates": 0,
+      "shallow_move": "g8f6",
+      "deep_move": "f4e5",
+      "move_changed": true,
+      "gap": 130,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 18.86,
+      "deep_ms": 860.84,
+      "features": {
+        "in_check": false,
+        "captures_available": 5,
+        "best_capture_value": 320,
+        "checks_available": 4,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 49,
+        "piece_count": 29
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.56,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.61,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.63,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.44,
+            "confidence": 0.3,
+            "probabilities": {
+              "0": 0.02,
+              "1": 0.53,
+              "2": 0.45
+            }
+          },
+          "sharpness": {
+            "value": 1.44,
+            "confidence": 0.16,
+            "probabilities": {
+              "0": 0.07,
+              "1": 0.41,
+              "2": 0.52
+            }
+          }
+        },
+        "latency_ms": 200.31,
+        "usage": {
+          "input_tokens": 1602,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqkb1r/2pppppp/8/pp1nB3/3Pn1PP/2P2N2/P3PP2/RN1QKB1R b KQkq - 0 8",
+      "match": "d2rand-vs-d2-100",
+      "game": 67,
+      "ply": 10,
+      "opening": "op34",
+      "played_uci": "c8b7",
+      "duplicates": 0,
+      "shallow_move": "c8b7",
+      "deep_move": "d7d6",
+      "move_changed": true,
+      "gap": 235,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 18.31,
+      "deep_ms": 999.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 3,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 32,
+        "piece_count": 31
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.6,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.71,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.62,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.44,
+            "confidence": 0.3,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.54,
+              "2": 0.45
+            }
+          },
+          "sharpness": {
+            "value": 1.43,
+            "confidence": 0.14,
+            "probabilities": {
+              "0": 0.09,
+              "1": 0.39,
+              "2": 0.52
+            }
+          }
+        },
+        "latency_ms": 232.96,
+        "usage": {
+          "input_tokens": 1636,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/1bpp4/rpnbpnp1/p4p1p/P6P/1PNPPN2/1BP1BPP1/R2QK2R b Kk - 4 14",
+      "match": "d2rand-vs-d2-100",
+      "game": 72,
+      "ply": 22,
+      "opening": "op36",
+      "played_uci": "a6a7",
+      "duplicates": 0,
+      "shallow_move": "a6a7",
+      "deep_move": "c6b4",
+      "move_changed": true,
+      "gap": 80,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 15,
+      "shallow_ms": 24.11,
+      "deep_ms": 1205.88,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 40,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.44,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.52,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.58,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.43,
+            "confidence": 0.34,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.56,
+              "2": 0.44
+            }
+          },
+          "sharpness": {
+            "value": 0.75,
+            "confidence": 0.34,
+            "probabilities": {
+              "0": 0.34,
+              "1": 0.56,
+              "2": 0.1
+            }
+          }
+        },
+        "latency_ms": 201.35,
+        "usage": {
+          "input_tokens": 1651,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/4ppb1/bpPp1n2/2r2P1p/P1nN1B1P/2N2BP1/2P5/R2QK2R w KQk - 5 23",
+      "match": "d2rand-vs-d2-100",
+      "game": 81,
+      "ply": 39,
+      "opening": "op41",
+      "played_uci": "a4a5",
+      "duplicates": 0,
+      "shallow_move": "a4a5",
+      "deep_move": "d1d3",
+      "move_changed": true,
+      "gap": 195,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 27.22,
+      "deep_ms": 1648.21,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 43,
+        "piece_count": 27
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.71,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.74,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.63,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.76,
+            "confidence": 0.64,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.23,
+              "2": 0.77
+            }
+          },
+          "sharpness": {
+            "value": 1.49,
+            "confidence": 0.23,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.44,
+              "2": 0.52
+            }
+          }
+        },
+        "latency_ms": 627.75,
+        "usage": {
+          "input_tokens": 1567,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qk2r/4ppb1/b1Pp1n2/p1r2P1p/R1nN1B1P/2N2BP1/2P5/3QK2R b Kk - 1 24",
+      "match": "d2rand-vs-d2-100",
+      "game": 81,
+      "ply": 42,
+      "opening": "op41",
+      "played_uci": "c4b2",
+      "duplicates": 0,
+      "shallow_move": "c4b2",
+      "deep_move": "c4b2",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 2,
+      "shallow_ms": 43.9,
+      "deep_ms": 2353.22,
+      "features": {
+        "in_check": false,
+        "captures_available": 2,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 37,
+        "piece_count": 26
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.7,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.74,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.64,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.8,
+            "confidence": 0.7,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.2,
+              "2": 0.8
+            }
+          },
+          "sharpness": {
+            "value": 1.53,
+            "confidence": 0.3,
+            "probabilities": {
+              "0": 0.04,
+              "1": 0.38,
+              "2": 0.58
+            }
+          }
+        },
+        "latency_ms": 237.53,
+        "usage": {
+          "input_tokens": 1549,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r2qkb1r/1b2ppp1/1pnp1n2/p1p4p/2N2P1P/P1NPB3/1PP1P1P1/R2QKB1R w KQkq - 6 11",
+      "match": "d2rand-vs-d2-100",
+      "game": 83,
+      "ply": 15,
+      "opening": "op42",
+      "played_uci": "f4f5",
+      "duplicates": 0,
+      "shallow_move": "a3a4",
+      "deep_move": "c3e4",
+      "move_changed": true,
+      "gap": 10,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 4,
+      "shallow_ms": 19.51,
+      "deep_ms": 1333.8,
+      "features": {
+        "in_check": false,
+        "captures_available": 4,
+        "best_capture_value": 100,
+        "checks_available": 1,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 35,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.47,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.52,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.59,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.31,
+            "confidence": 0.5,
+            "probabilities": {
+              "0": 0.01,
+              "1": 0.67,
+              "2": 0.32
+            }
+          },
+          "sharpness": {
+            "value": 0.73,
+            "confidence": 0.31,
+            "probabilities": {
+              "0": 0.36,
+              "1": 0.54,
+              "2": 0.1
+            }
+          }
+        },
+        "latency_ms": 231.91,
+        "usage": {
+          "input_tokens": 1653,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "3qkb1r/rb2ppp1/1pnp1n2/p1p2P1p/P6P/1PNPPNP1/1BP3B1/2RQK2R w Kk - 11 17",
+      "match": "d2rand-vs-d2-100",
+      "game": 85,
+      "ply": 27,
+      "opening": "op43",
+      "played_uci": "c1a1",
+      "duplicates": 0,
+      "shallow_move": "c1a1",
+      "deep_move": "c3b5",
+      "move_changed": true,
+      "gap": 110,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 13,
+      "shallow_ms": 18.54,
+      "deep_ms": 1048.91,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 33,
+        "piece_count": 32
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.55,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.56,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.59,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.44,
+            "confidence": 0.33,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.55,
+              "2": 0.45
+            }
+          },
+          "sharpness": {
+            "value": 0.91,
+            "confidence": 0.45,
+            "probabilities": {
+              "0": 0.23,
+              "1": 0.63,
+              "2": 0.14
+            }
+          }
+        },
+        "latency_ms": 235.65,
+        "usage": {
+          "input_tokens": 1651,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "1k5r/8/4N2p/3NP2P/Q7/5P2/2RK4/7R b - - 0 40",
+      "match": "d2rand-vs-d2-100",
+      "game": 91,
+      "ply": 74,
+      "opening": "op46",
+      "played_uci": "h8h7",
+      "duplicates": 0,
+      "shallow_move": "h8h7",
+      "deep_move": "h8h7",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": true,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 5.01,
+      "deep_ms": 268.14,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 0,
+        "max_hanging_value": 0,
+        "legal_moves": 7,
+        "piece_count": 12
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.63,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.6,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.4,
+            "confidence": 0.1,
+            "probabilities": {
+              "0": 0.09,
+              "1": 0.43,
+              "2": 0.48
+            }
+          },
+          "sharpness": {
+            "value": 1.46,
+            "confidence": 0.19,
+            "probabilities": {
+              "0": 0.11,
+              "1": 0.32,
+              "2": 0.57
+            }
+          }
+        },
+        "latency_ms": 230.96,
+        "usage": {
+          "input_tokens": 1309,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    },
+    {
+      "fen": "r1bqk2r/2pp1ppp/1pn1p3/p1b4P/P1P3P1/1P3N2/3PPnB1/RNBQK2R w KQkq - 0 9",
+      "match": "d2rand-vs-d2-100",
+      "game": 96,
+      "ply": 11,
+      "opening": "op48",
+      "played_uci": "d1c2",
+      "duplicates": 0,
+      "shallow_move": "d1c2",
+      "deep_move": "d1c2",
+      "move_changed": false,
+      "gap": 0,
+      "shallow_mate": false,
+      "deep_mate": false,
+      "shallow_ties_at_top": 1,
+      "shallow_ms": 22.56,
+      "deep_ms": 1299.2,
+      "features": {
+        "in_check": false,
+        "captures_available": 0,
+        "best_capture_value": 0,
+        "checks_available": 0,
+        "hanging_pieces": 1,
+        "max_hanging_value": 100,
+        "legal_moves": 29,
+        "piece_count": 31
+      },
+      "jev": {
+        "answers": {
+          "unresolved": {
+            "value": 0.53,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "free_piece": {
+            "value": 0.73,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "trap": {
+            "value": 0.65,
+            "confidence": null,
+            "probabilities": {}
+          },
+          "complexity": {
+            "value": 1.42,
+            "confidence": 0.28,
+            "probabilities": {
+              "0": 0.03,
+              "1": 0.52,
+              "2": 0.45
+            }
+          },
+          "sharpness": {
+            "value": 1.33,
+            "confidence": 0.0,
+            "probabilities": {
+              "0": 0.14,
+              "1": 0.39,
+              "2": 0.47
+            }
+          }
+        },
+        "latency_ms": 197.18,
+        "usage": {
+          "input_tokens": 1636,
+          "output_tokens": 86
+        },
+        "model": "jev-1.13.0"
+      }
+    }
+  ]
+}
