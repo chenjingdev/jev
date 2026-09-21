@@ -31,7 +31,7 @@ from pathlib import Path
 import chess
 from typesafe_sdk import Noul, Score, TypeSafeClient
 
-from depth_gap import heuristic_report, material_score, oracle_report, ranking_report
+from depth_gap import auc, heuristic_report, material_score, oracle_report, ranking_report
 
 HERE = Path(__file__).resolve().parent
 MODEL = os.environ.get('JEV_MODEL', 'jev-1.13.0')
@@ -56,6 +56,14 @@ QUESTIONS = {
     'trap': Noul(instructions=(
         RULES + ' A natural, sensible-looking move for the side to move would lose material here, '
         'because of a reply the opponent has available afterwards.')),
+    'complexity': Score(criteria=[
+        'Simple: few pieces are left and they barely interact, so the position plays itself and '
+        'the same plan works whatever the opponent does.',
+        'Ordinary: a normal middlegame where several pieces interact but the position holds '
+        'together on general principles.',
+        'Complicated: many pieces interact at once, several plans are live for both sides, and '
+        'what happens on one part of the board changes what works on another.',
+    ], instructions=RULES + ' How complicated is this position?'),
     'sharpness': Score(criteria=[
         'Quiet: pieces are not touching, nothing is under threat, and any reasonable move keeps '
         'the position roughly as it is.',
@@ -117,16 +125,74 @@ def answer_value(row, key):
     return -1.0 if value is None else value
 
 
+def conditional_auc(rows, key, threshold, buckets=4):
+    """AUC inside piece-count bands, so a ranking cannot win on game phase alone.
+
+    material_score is close to a measure of how far the game has gone. A question
+    that scores well overall but at chance inside each band is reading the phase,
+    not the position - the same distinction the sliding-puzzle runs kept hitting.
+    """
+    counts = sorted(r['features']['piece_count'] for r in rows)
+    if not counts:
+        return None
+    edges = [counts[min(len(counts) - 1, int(len(counts) * (i + 1) / buckets))] for i in range(buckets)]
+    weighted, total = 0.0, 0
+    per_band = []
+    low = -1
+    for high in sorted(set(edges)):
+        band = [r for r in rows if low < r['features']['piece_count'] <= high]
+        low = high
+        value = auc(band, key, threshold) if band else None
+        per_band.append({'max_piece_count': high, 'positions': len(band), 'auc': value})
+        if value is not None:
+            weighted += value * len(band)
+            total += len(band)
+    return {'pooled': round(weighted / total, 4) if total else None, 'bands': per_band}
+
+
+def rank_of(rows, key):
+    """Rank position within `rows`, so two scores on different scales can be added."""
+    order = sorted(range(len(rows)), key=lambda i: key(rows[i]))
+    ranks = [0] * len(rows)
+    for place, index in enumerate(order):
+        ranks[index] = place
+    return ranks
+
+
 def report(rows, threshold):
     """Every ranking side by side: chance, heuristic, each Jev question, oracle."""
     out = {f'heuristic.{name}': table for name, table in heuristic_report(rows, threshold).items()}
     out['oracle'] = oracle_report(rows, threshold)
     for key in QUESTIONS:
         out[f'jev.{key}'] = ranking_report(rows, threshold, lambda r, k=key: answer_value(r, k))
-    # Does the model add anything on top of the code signal it has to beat?
-    out['jev.sharpness_plus_material'] = ranking_report(
-        rows, threshold, lambda r: answer_value(r, 'sharpness') + material_score(r['features']) / 10000)
+    # Does the model add anything on top of the code signal it has to beat? Ranks, not raw
+    # values: a Noul is 0..1 and a Score is a position on its level scale.
+    material_rank = rank_of(rows, lambda r: material_score(r['features']))
+    for key in ('complexity', 'sharpness'):
+        jev_rank = rank_of(rows, lambda r, k=key: answer_value(r, k))
+        combined = {id(r): jev_rank[i] + material_rank[i] for i, r in enumerate(rows)}
+        out[f'jev.{key}_plus_material'] = ranking_report(rows, threshold, lambda r: combined[id(r)])
+    for name, table in out.items():
+        table['conditional_auc'] = conditional_auc(rows, ranking_key(name, rows), threshold)
     return out
+
+
+def ranking_key(name, rows):
+    """The score function behind a report entry, for the conditional pass."""
+    if name == 'oracle':
+        return lambda r: r['gap']
+    if name == 'heuristic.material':
+        return lambda r: material_score(r['features'])
+    if name == 'heuristic.tactical':
+        from depth_gap import tactical_score
+        return lambda r: tactical_score(r['features'])
+    if name.endswith('_plus_material'):
+        key = name[len('jev.'):-len('_plus_material')]
+        material_rank = rank_of(rows, lambda r: material_score(r['features']))
+        jev_rank = rank_of(rows, lambda r, k=key: answer_value(r, k))
+        combined = {id(r): jev_rank[i] + material_rank[i] for i, r in enumerate(rows)}
+        return lambda r: combined[id(r)]
+    return lambda r, k=name[len('jev.'):]: answer_value(r, k)
 
 
 def run(gap_file: Path, output: Path, limit: int, workers: int, threshold: int):
