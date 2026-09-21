@@ -231,18 +231,18 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
                         started_move = time.perf_counter()
                         ranked, telemetry = weak_candidates(board, depth=depth if hybrid else opponent_depth)
                         telemetry['elapsed_ms'] = round((time.perf_counter() - started_move) * 1000, 2)
-                    base = ranked[0]['move']
+                    base_move = ranked[0]['move']
                     options = shortlist(ranked, margin)
-                    choice = base
+                    choice = base_move
                     decision = None
                     control = None
                     if hybrid and len(options) >= 2 and selector != 'none':
                         if selector == 'jev':
                             req = make_request(board, options, seed + number * 1000 + ply)
-                            decision = ask_jev(client, req, base)
+                            decision = ask_jev(client, req, base_move)
                             choice = decision['selected_move']
                         else:
-                            control = random_pick(options, base, seed, number, ply)
+                            control = random_pick(options, base_move, seed, number, ply)
                             choice = control['selected_move']
                     if choice not in options: raise ValueError('Chosen move outside shortlist')
                     move = chess.Move.from_uci(choice)
@@ -250,7 +250,7 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
                     record = {'ply': ply, 'side': 'white' if board.turn else 'black',
                               'engine': row['white'] if board.turn else row['black'],
                               'uci': choice, 'san': board.san(move), 'fen_before': board.fen(),
-                              'base_move': base, 'engine_candidates': ranked, 'shortlist': options,
+                              'base_move': base_move, 'engine_candidates': ranked, 'shortlist': options,
                               'jev': decision, 'random_control': control,
                               'jev_skip': None if decision else 'control' if not hybrid else 'random_control' if control else 'plain' if selector == 'none' else 'no_close_alternative',
                               **telemetry}
