@@ -80,15 +80,27 @@ def client():
     return LOCAL.client
 
 
-def state_for(fen: str):
-    """Pieces with algebraic and numeric coordinates; nothing derived from an engine."""
+def state_for(fen: str, every_square: bool = False):
+    """Pieces with algebraic and numeric coordinates; nothing derived from an engine.
+
+    `every_square` lists all 64 squares, empty ones included, so the request is the
+    same length whatever is left on the board. The default lists only occupied
+    squares, which makes an emptier board a shorter prompt - and the first run
+    found the answers running backwards against how full the board is, which that
+    length difference could by itself explain.
+    """
     board = chess.Board(fen)
     pieces = {}
-    for square, piece in sorted(board.piece_map().items()):
+    squares = chess.SQUARES if every_square else sorted(board.piece_map())
+    for square in squares:
+        piece = board.piece_at(square)
         name = chess.square_name(square)
-        colour = 'White' if piece.color else 'Black'
-        pieces[f'{colour} {chess.piece_name(piece.piece_type)} {name}'] = (
-            f'column {chess.square_file(square) + 1}, rank {chess.square_rank(square) + 1}')
+        where = f'column {chess.square_file(square) + 1}, rank {chess.square_rank(square) + 1}'
+        if piece is None:
+            pieces[f'empty {name}'] = where
+        else:
+            colour = 'White' if piece.color else 'Black'
+            pieces[f'{colour} {chess.piece_name(piece.piece_type)} {name}'] = where
     return {
         'side_to_move': 'White' if board.turn else 'Black',
         'pieces': pieces,
@@ -97,9 +109,9 @@ def state_for(fen: str):
     }
 
 
-def ask(row):
+def ask(row, every_square=False):
     started = time.perf_counter()
-    result = client().system_one(model=MODEL, state=state_for(row['fen']), questions=QUESTIONS)
+    result = client().system_one(model=MODEL, state=state_for(row['fen'], every_square), questions=QUESTIONS)
     answers = {}
     for key, answer in result.answers.items():
         # Noul answers carry `.noul` (probability the statement holds); Score answers carry
@@ -195,7 +207,7 @@ def ranking_key(name, rows):
     return lambda r, k=name[len('jev.'):]: answer_value(r, k)
 
 
-def run(gap_file: Path, output: Path, limit: int, workers: int, threshold: int):
+def run(gap_file: Path, output: Path, limit: int, workers: int, threshold: int, every_square: bool = False):
     if output.exists():
         raise FileExistsError('Use a new output name to preserve previous evidence')
     source = json.loads(gap_file.read_text())
@@ -203,7 +215,7 @@ def run(gap_file: Path, output: Path, limit: int, workers: int, threshold: int):
     done = []
     started = time.perf_counter()
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures = {pool.submit(ask, row): row for row in rows}
+        futures = {pool.submit(ask, row, every_square): row for row in rows}
         for index, future in enumerate(as_completed(futures), 1):
             done.append(future.result())
             if index % 25 == 0:
@@ -221,7 +233,8 @@ def run(gap_file: Path, output: Path, limit: int, workers: int, threshold: int):
         'gap_file': str(gap_file),
         'gap_config': source['config'],
         'gap_summary': source['summary'],
-        'config': {'limit': limit, 'workers': workers, 'threshold': threshold},
+        'config': {'limit': limit, 'workers': workers, 'threshold': threshold,
+                   'every_square': every_square},
         'questions': {key: {'type': type(q).__name__,
                             'instructions': q.instructions,
                             **({'criteria': list(q.criteria)} if getattr(q, 'criteria', None) else {})}
@@ -247,5 +260,7 @@ if __name__ == '__main__':
     p.add_argument('--limit', type=int, default=0, help='0 uses every labelled position')
     p.add_argument('--workers', type=int, default=4)
     p.add_argument('--threshold', type=int, default=30)
+    p.add_argument('--every-square', action='store_true',
+                   help='list all 64 squares so request length does not vary with how full the board is')
     args = p.parse_args()
-    run(args.gap_file, args.output, args.limit, args.workers, args.threshold)
+    run(args.gap_file, args.output, args.limit, args.workers, args.threshold, args.every_square)
