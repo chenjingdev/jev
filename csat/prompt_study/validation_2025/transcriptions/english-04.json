@@ -1,0 +1,226 @@
+{
+ "task": {
+  "subject": "english",
+  "name": "영어",
+  "section": "english",
+  "page": 4,
+  "targets": [
+   25,
+   26,
+   27,
+   28
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/images/english/page-04.jpg",
+   "sha256": "5794fa32bc884147ffe4d0cd9a209161b6e6402b0f619714a4d90ce4ee6ffe78"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.\nDo not assign unknown labels (가), (나), A, B, etc. to named regions, entities or solved values. Preserve unknown correspondences. Transcribe the printed prompt, including any question instructions shared across adjacent questions.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 25,
+      "question": "다음 도표의 내용과 일치하지 않는 것은?",
+      "context": "The graph above shows the percentages of women employed behind the scenes on the top 100 U.S. films by role in 2020, 2021, and 2022.",
+      "options": [
+       "For each of the three years, the percentage of women employed as producers on the top 100 U.S. films was the highest as compared with the percentages of each of the other three roles.",
+       "The percentage of women employed as directors on the top 100 U.S. films in 2021 was lower than in 2020 but higher than in 2022.",
+       "The percentage of women employed as writers on the top 100 U.S. films increased by 4 percentage points from 2020 to 2021 and by 1 percentage point from 2021 to 2022.",
+       "The percentage of women employed as editors on the top 100 U.S. films was less than 20% in each of the three years.",
+       "In 2022, the percentage of women employed as producers on the top 100 U.S. films was the same as that in 2020."
+      ],
+      "has_visual": true,
+      "visual_description": "A grouped vertical bar graph titled “Percentages of Women Employed Behind the Scenes on Top 100 U.S. Films by Role in 2020, 2021, and 2022.” The vertical axis is labeled “(%)” and has labeled ticks at 0, 5, 10, 15, 20, 25, and 30. The horizontal axis is labeled “(Role)” and lists Director, Writer, Editor, and Producer from left to right. Each role has three bars: an unfilled white bar for 2020, a solid gray bar for 2021, and a diagonally striped bar for 2022. Values printed above the bars are: Director—16 in 2020, 12 in 2021, 11 in 2022; Writer—12 in 2020, 16 in 2021, 17 in 2022; Editor—18 in 2020, 21 in 2021, 18 in 2022; Producer—28 in 2020, 24 in 2021, 28 in 2022. A legend below the graph identifies the three bar styles as 2020, 2021, and 2022.",
+      "uncertainties": []
+     },
+     {
+      "number": 26,
+      "question": "Dick Enberg에 관한 다음 글의 내용과 일치하지 않는 것은?",
+      "context": "Dick Enberg was one of America’s most beloved sports broadcasters. He was born in Michigan in 1935. In the early 1960s, he became an assistant professor at San Fernando Valley State College, where he also served as a coach of its baseball team. Afterwards, he began a full-time sportscasting career in Los Angeles. In 1973, he became the first U.S. sportscaster ever to visit China. He joined NBC Sports in 1975 and remained with the network for about 25 years, covering such big events as the Olympics. He later worked for other major sports broadcasting stations. He made his last live broadcast in 2016 and died the following year at the age of 82. He served as Chairman of the American Sportscaster Association for more than three decades. Enberg was also a best-selling writer and won Emmy Awards as a sportscaster, a writer, and a producer.",
+      "options": [
+       "Michigan에서 태어났다.",
+       "대학 야구팀 코치였다.",
+       "중국을 방문한 첫 미국인 스포츠 캐스터였다.",
+       "마지막 생방송 후 3년 뒤에 사망하였다.",
+       "Emmy Awards를 수상하였다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 27,
+      "question": "Adenville City Pass Card에 관한 다음 안내문의 내용과 일치하지 않는 것은?",
+      "context": "Adenville City Pass Card\n\nThe Adenville City Pass Card is a public transportation card for tourists visiting Adenville.\n\nService Range\n• Adenville-based subway lines\n• Adenville-licensed buses\n※ This card cannot be used for city tour buses.\n\nCard Type\n\n| Card Type | Price | Additional Benefit |\n|---|---:|---|\n| 1-Day | $10 | 10% off admission for major tourist attractions |\n| 3-Day | $25 | 10% off admission for major tourist attractions |\n| 5-Day | $40 | 10% off admission for major tourist attractions |\n\n※ Unused cards are refundable within 30 days of the purchase date.\n\nPurchase Information\n• Physical cards can be purchased at subway stations.\n• Mobile cards can be purchased on the A-Transit app.",
+      "options": [
+       "관광객을 위한 대중교통 카드이다.",
+       "시티 투어 버스에는 사용할 수 없다.",
+       "5일 패스 카드에만 주요 관광지 입장료 할인 혜택이 제공된다.",
+       "미사용 카드는 구입일로부터 30일 이내에 환불이 가능하다.",
+       "모바일 카드는 A-Transit 앱에서 구입할 수 있다."
+      ],
+      "has_visual": true,
+      "visual_description": "A boxed notice headed “Adenville City Pass Card,” with small pushpin illustrations near both upper corners. Under “Card Type,” a three-column table lists Card Type, Price, and Additional Benefit. The rows are 1-Day—$10, 3-Day—$25, and 5-Day—$40. The Additional Benefit cell is vertically merged across all three card-type rows and reads “10% off admission for major tourist attractions.”",
+      "uncertainties": []
+     },
+     {
+      "number": 28,
+      "question": "Luckwood Snow Festival에 관한 다음 안내문의 내용과 일치하는 것은?",
+      "context": "Luckwood Snow Festival\n\nWe’re happy to announce the 15th annual Luckwood Snow Festival. Come to the festival to enjoy winter activities.\n\nWhen & Where\n• January 24th—30th (7 days), from 9 a.m. to 8 p.m.\n• Luckwood Park\n\nSpecial Activities\n• Snow Sculpture Contest: 11 teams will participate.\n• Fun in the Snow: Kids can enjoy snow tunnels and snow slides.\n\nTransportation\n• Parking is not available (Use public transportation and/or shuttle bus service).\n• The shuttle bus runs between Luckwood Subway Station and Luckwood Park (One-way fare: $1, cash only).\n\n※ For more information, please visit www.ldsnow.org.",
+      "options": [
+       "2년에 한 번 열린다.",
+       "열흘 동안 진행된다.",
+       "눈 조각 경연에는 11개 팀이 참가할 것이다.",
+       "주차가 가능하다.",
+       "셔틀버스 이용은 무료이다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 15920,
+     "completion_tokens": 1563,
+     "total_tokens": 17483
+    },
+    "elapsed_seconds": 52.16,
+    "raw_response": {
+     "id": "chatcmpl-fc673de7-0acc-4cb0-b2bf-9f4ca19c25ff",
+     "object": "chat.completion",
+     "created": 1790090309,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[],\"questions\":[{\"number\":25,\"question\":\"다음 도표의 내용과 일치하지 않는 것은?\",\"context\":\"The graph above shows the percentages of women employed behind the scenes on the top 100 U.S. films by role in 2020, 2021, and 2022.\",\"options\":[\"For each of the three years, the percentage of women employed as producers on the top 100 U.S. films was the highest as compared with the percentages of each of the other three roles.\",\"The percentage of women employed as directors on the top 100 U.S. films in 2021 was lower than in 2020 but higher than in 2022.\",\"The percentage of women employed as writers on the top 100 U.S. films increased by 4 percentage points from 2020 to 2021 and by 1 percentage point from 2021 to 2022.\",\"The percentage of women employed as editors on the top 100 U.S. films was less than 20% in each of the three years.\",\"In 2022, the percentage of women employed as producers on the top 100 U.S. films was the same as that in 2020.\"],\"has_visual\":true,\"visual_description\":\"A grouped vertical bar graph titled “Percentages of Women Employed Behind the Scenes on Top 100 U.S. Films by Role in 2020, 2021, and 2022.” The vertical axis is labeled “(%)” and has labeled ticks at 0, 5, 10, 15, 20, 25, and 30. The horizontal axis is labeled “(Role)” and lists Director, Writer, Editor, and Producer from left to right. Each role has three bars: an unfilled white bar for 2020, a solid gray bar for 2021, and a diagonally striped bar for 2022. Values printed above the bars are: Director—16 in 2020, 12 in 2021, 11 in 2022; Writer—12 in 2020, 16 in 2021, 17 in 2022; Editor—18 in 2020, 21 in 2021, 18 in 2022; Producer—28 in 2020, 24 in 2021, 28 in 2022. A legend below the graph identifies the three bar styles as 2020, 2021, and 2022.\",\"uncertainties\":[]},{\"number\":26,\"question\":\"Dick Enberg에 관한 다음 글의 내용과 일치하지 않는 것은?\",\"context\":\"Dick Enberg was one of America’s most beloved sports broadcasters. He was born in Michigan in 1935. In the early 1960s, he became an assistant professor at San Fernando Valley State College, where he also served as a coach of its baseball team. Afterwards, he began a full-time sportscasting career in Los Angeles. In 1973, he became the first U.S. sportscaster ever to visit China. He joined NBC Sports in 1975 and remained with the network for about 25 years, covering such big events as the Olympics. He later worked for other major sports broadcasting stations. He made his last live broadcast in 2016 and died the following year at the age of 82. He served as Chairman of the American Sportscaster Association for more than three decades. Enberg was also a best-selling writer and won Emmy Awards as a sportscaster, a writer, and a producer.\",\"options\":[\"Michigan에서 태어났다.\",\"대학 야구팀 코치였다.\",\"중국을 방문한 첫 미국인 스포츠 캐스터였다.\",\"마지막 생방송 후 3년 뒤에 사망하였다.\",\"Emmy Awards를 수상하였다.\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":27,\"question\":\"Adenville City Pass Card에 관한 다음 안내문의 내용과 일치하지 않는 것은?\",\"context\":\"Adenville City Pass Card\\n\\nThe Adenville City Pass Card is a public transportation card for tourists visiting Adenville.\\n\\nService Range\\n• Adenville-based subway lines\\n• Adenville-licensed buses\\n※ This card cannot be used for city tour buses.\\n\\nCard Type\\n\\n| Card Type | Price | Additional Benefit |\\n|---|---:|---|\\n| 1-Day | $10 | 10% off admission for major tourist attractions |\\n| 3-Day | $25 | 10% off admission for major tourist attractions |\\n| 5-Day | $40 | 10% off admission for major tourist attractions |\\n\\n※ Unused cards are refundable within 30 days of the purchase date.\\n\\nPurchase Information\\n• Physical cards can be purchased at subway stations.\\n• Mobile cards can be purchased on the A-Transit app.\",\"options\":[\"관광객을 위한 대중교통 카드이다.\",\"시티 투어 버스에는 사용할 수 없다.\",\"5일 패스 카드에만 주요 관광지 입장료 할인 혜택이 제공된다.\",\"미사용 카드는 구입일로부터 30일 이내에 환불이 가능하다.\",\"모바일 카드는 A-Transit 앱에서 구입할 수 있다.\"],\"has_visual\":true,\"visual_description\":\"A boxed notice headed “Adenville City Pass Card,” with small pushpin illustrations near both upper corners. Under “Card Type,” a three-column table lists Card Type, Price, and Additional Benefit. The rows are 1-Day—$10, 3-Day—$25, and 5-Day—$40. The Additional Benefit cell is vertically merged across all three card-type rows and reads “10% off admission for major tourist attractions.”\",\"uncertainties\":[]},{\"number\":28,\"question\":\"Luckwood Snow Festival에 관한 다음 안내문의 내용과 일치하는 것은?\",\"context\":\"Luckwood Snow Festival\\n\\nWe’re happy to announce the 15th annual Luckwood Snow Festival. Come to the festival to enjoy winter activities.\\n\\nWhen & Where\\n• January 24th—30th (7 days), from 9 a.m. to 8 p.m.\\n• Luckwood Park\\n\\nSpecial Activities\\n• Snow Sculpture Contest: 11 teams will participate.\\n• Fun in the Snow: Kids can enjoy snow tunnels and snow slides.\\n\\nTransportation\\n• Parking is not available (Use public transportation and/or shuttle bus service).\\n• The shuttle bus runs between Luckwood Subway Station and Luckwood Park (One-way fare: $1, cash only).\\n\\n※ For more information, please visit www.ldsnow.org.\",\"options\":[\"2년에 한 번 열린다.\",\"열흘 동안 진행된다.\",\"눈 조각 경연에는 11개 팀이 참가할 것이다.\",\"주차가 가능하다.\",\"셔틀버스 이용은 무료이다.\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 15920,
+      "completion_tokens": 1563,
+      "total_tokens": 17483
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/a1a3aab9-12f3-42c4-8ae5-6810a1f2a4b2.json"
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     25,
+     26,
+     27,
+     28
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 17108,
+     "completion_tokens": 263,
+     "total_tokens": 17371
+    },
+    "elapsed_seconds": 8.63,
+    "raw_response": {
+     "id": "chatcmpl-94e6e971-c25c-4d4b-9ee7-a398fb94502e",
+     "object": "chat.completion",
+     "created": 1790090318,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[25,26,27,28]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 17108,
+      "completion_tokens": 263,
+      "total_tokens": 17371
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/15e023f8-eef9-4a3c-81a3-a6f63b7c09a1.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 25,
+   "question": "다음 도표의 내용과 일치하지 않는 것은?",
+   "context": "The graph above shows the percentages of women employed behind the scenes on the top 100 U.S. films by role in 2020, 2021, and 2022.",
+   "options": [
+    "For each of the three years, the percentage of women employed as producers on the top 100 U.S. films was the highest as compared with the percentages of each of the other three roles.",
+    "The percentage of women employed as directors on the top 100 U.S. films in 2021 was lower than in 2020 but higher than in 2022.",
+    "The percentage of women employed as writers on the top 100 U.S. films increased by 4 percentage points from 2020 to 2021 and by 1 percentage point from 2021 to 2022.",
+    "The percentage of women employed as editors on the top 100 U.S. films was less than 20% in each of the three years.",
+    "In 2022, the percentage of women employed as producers on the top 100 U.S. films was the same as that in 2020."
+   ],
+   "has_visual": true,
+   "visual_description": "A grouped vertical bar graph titled “Percentages of Women Employed Behind the Scenes on Top 100 U.S. Films by Role in 2020, 2021, and 2022.” The vertical axis is labeled “(%)” and has labeled ticks at 0, 5, 10, 15, 20, 25, and 30. The horizontal axis is labeled “(Role)” and lists Director, Writer, Editor, and Producer from left to right. Each role has three bars: an unfilled white bar for 2020, a solid gray bar for 2021, and a diagonally striped bar for 2022. Values printed above the bars are: Director—16 in 2020, 12 in 2021, 11 in 2022; Writer—12 in 2020, 16 in 2021, 17 in 2022; Editor—18 in 2020, 21 in 2021, 18 in 2022; Producer—28 in 2020, 24 in 2021, 28 in 2022. A legend below the graph identifies the three bar styles as 2020, 2021, and 2022.",
+   "uncertainties": []
+  },
+  {
+   "number": 26,
+   "question": "Dick Enberg에 관한 다음 글의 내용과 일치하지 않는 것은?",
+   "context": "Dick Enberg was one of America’s most beloved sports broadcasters. He was born in Michigan in 1935. In the early 1960s, he became an assistant professor at San Fernando Valley State College, where he also served as a coach of its baseball team. Afterwards, he began a full-time sportscasting career in Los Angeles. In 1973, he became the first U.S. sportscaster ever to visit China. He joined NBC Sports in 1975 and remained with the network for about 25 years, covering such big events as the Olympics. He later worked for other major sports broadcasting stations. He made his last live broadcast in 2016 and died the following year at the age of 82. He served as Chairman of the American Sportscaster Association for more than three decades. Enberg was also a best-selling writer and won Emmy Awards as a sportscaster, a writer, and a producer.",
+   "options": [
+    "Michigan에서 태어났다.",
+    "대학 야구팀 코치였다.",
+    "중국을 방문한 첫 미국인 스포츠 캐스터였다.",
+    "마지막 생방송 후 3년 뒤에 사망하였다.",
+    "Emmy Awards를 수상하였다."
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 27,
+   "question": "Adenville City Pass Card에 관한 다음 안내문의 내용과 일치하지 않는 것은?",
+   "context": "Adenville City Pass Card\n\nThe Adenville City Pass Card is a public transportation card for tourists visiting Adenville.\n\nService Range\n• Adenville-based subway lines\n• Adenville-licensed buses\n※ This card cannot be used for city tour buses.\n\nCard Type\n\n| Card Type | Price | Additional Benefit |\n|---|---:|---|\n| 1-Day | $10 | 10% off admission for major tourist attractions |\n| 3-Day | $25 | 10% off admission for major tourist attractions |\n| 5-Day | $40 | 10% off admission for major tourist attractions |\n\n※ Unused cards are refundable within 30 days of the purchase date.\n\nPurchase Information\n• Physical cards can be purchased at subway stations.\n• Mobile cards can be purchased on the A-Transit app.",
+   "options": [
+    "관광객을 위한 대중교통 카드이다.",
+    "시티 투어 버스에는 사용할 수 없다.",
+    "5일 패스 카드에만 주요 관광지 입장료 할인 혜택이 제공된다.",
+    "미사용 카드는 구입일로부터 30일 이내에 환불이 가능하다.",
+    "모바일 카드는 A-Transit 앱에서 구입할 수 있다."
+   ],
+   "has_visual": true,
+   "visual_description": "A boxed notice headed “Adenville City Pass Card,” with small pushpin illustrations near both upper corners. Under “Card Type,” a three-column table lists Card Type, Price, and Additional Benefit. The rows are 1-Day—$10, 3-Day—$25, and 5-Day—$40. The Additional Benefit cell is vertically merged across all three card-type rows and reads “10% off admission for major tourist attractions.”",
+   "uncertainties": []
+  },
+  {
+   "number": 28,
+   "question": "Luckwood Snow Festival에 관한 다음 안내문의 내용과 일치하는 것은?",
+   "context": "Luckwood Snow Festival\n\nWe’re happy to announce the 15th annual Luckwood Snow Festival. Come to the festival to enjoy winter activities.\n\nWhen & Where\n• January 24th—30th (7 days), from 9 a.m. to 8 p.m.\n• Luckwood Park\n\nSpecial Activities\n• Snow Sculpture Contest: 11 teams will participate.\n• Fun in the Snow: Kids can enjoy snow tunnels and snow slides.\n\nTransportation\n• Parking is not available (Use public transportation and/or shuttle bus service).\n• The shuttle bus runs between Luckwood Subway Station and Luckwood Park (One-way fare: $1, cash only).\n\n※ For more information, please visit www.ldsnow.org.",
+   "options": [
+    "2년에 한 번 열린다.",
+    "열흘 동안 진행된다.",
+    "눈 조각 경연에는 11개 팀이 참가할 것이다.",
+    "주차가 가능하다.",
+    "셔틀버스 이용은 무료이다."
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}

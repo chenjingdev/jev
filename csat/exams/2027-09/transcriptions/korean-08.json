@@ -1,0 +1,408 @@
+{
+ "task": {
+  "subject": "korean",
+  "name": "국어",
+  "section": "korean-common",
+  "page": 8,
+  "targets": [
+   22
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/exams/2027-09/images/korean/page-07.jpg",
+   "sha256": "f21b071c1a93368a2e8ca5c8a6233e9ac396c2535902b83bb9cb3ef1a95f27a9"
+  },
+  {
+   "path": "/Users/chenjing/dev/jev/csat/exams/2027-09/images/korean/page-08.jpg",
+   "sha256": "bef82a945c6b6b6d138c637d62b6b0931c98292c5d4781e1fc7e94ef197cbfc8"
+  },
+  {
+   "path": "/Users/chenjing/dev/jev/csat/exams/2027-09/images/korean/page-09.jpg",
+   "sha256": "431c4d8b48a56402020d27bb14a1d7f30833f2890b483cab762ded0e18b005a8"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 22,
+      "question": "(가)～(다)에 대한 설명으로 가장 적절한 것은?",
+      "context": "다음 글을 읽고 물음에 답하시오.\n\n(가)\n\n경주 남산 달밤에 가오리들이 날아다닌다\n아닌 밤중에 웬 가오리라니\n\n뒤틀리고 꼬여 자라는 것이 남산 소나무들이어서\n그 나무들 무릎뼈 펴 ㉠ 둥싯, 만월이다\n\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다 [A]\n\n항아리에 차오르는 달빛이 봉우리까지 담겨들면\n산꼭대기에 납작 엎드려 있던 삼층석탑 옥개석이 주욱,\n지느러미 펼치면서 ㉡ 저런, 저런 소리치며 등짝 검은 가오리\n솟구친다\n무겁게 어둠 눌러 덮은 오랜 자국이 저 희디흰 배때기여서\n그 빛은 참 아뜩한 기쁨이 아닐 수 없겠다\n\n달밤에 천 마리 가오리들이 날아다닌다\n\n골짜기마다 코 떨어지고 목 사라진 돌부처\n앉음새 고쳐 앉은 몸에\n금강소나무 같은 굵은 팔뚝이 툭, 툭 불거진다\n- 장옥관, 「가오리 날아오르다」 -\n\n(나)\n\n백 마리 여치가 한꺼번에 우는 소리\n내 자전거 바퀴가 ㉢ 치르르치르르 도는 소리\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리 [B]\n처녀 엄마의 눈물만 받아먹고 살다가\n유모차에 실려 먼 나라로 입양 가는\n아가의 뺨보다 더 차가운 한 송이 구름이\n하늘에서 내려와 내 손등을 덮어주고 가네요\n그 작은 구름에게선 천 년 동안 아직도\n아가인 그 사람의 냄새가 나네요\n내 자전거 바퀴는 골목의 모퉁이를 만날 때마다\n둥글게 둥글게 길을 깎아내고 있어요\n그럴 때마다 나 돌아온 고향 마을만큼\n큰 사과가 소리없이 깎이고 있네요\n구멍가게 노망든 할머니가 평상에 앉아\n그렇게 큰 사과를 숟가락으로 파내서\n잇몸으로 ㉣ 오물오물 잘도 잡수시네요\n- 김혜순, 「잘 익은 사과」 -\n\n(다)\n\n말이란 거창할 필요가 없으며, 도(道)는 털끝만한 차이로도 나뉘는 법이니, 말로써 도를 표현할 수 있다면 기와 조각이나 돌멩이인들 어찌 버리겠는가. (중략) 글을 짓는 사람은 글이 진실되었는가를 생각하면 그만이다. 이로써 보자면 글이 잘되고 못되고는 내게 달려 있고, 글을 칭찬하고 비판하고는 남의 소관이다. 이는 꼭 이명(耳鳴)이나 코골이와 같다.\n\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!” [C]\n\n㉤ 아, 자기만이 홀로 아는 경우는 남이 알지 못할까 항상 근심하고, 자기가 깨닫지 못한 경우는 남이 먼저 깨닫는 것을 싫어하나니, 어찌 코와 귀에만 이러한 병이 있겠는가. 문장의 경우는 이보다 더 심하다. 이명은 병이건만 남이 알지 못할까 걱정하는데, 하물며 병이 아닌 것이야 말해 무엇 하겠는가. 코를 고는 것은 병이 아닌데도 남이 일깨워 주면 골을 내니, 하물며 병이야 일러 무엇 하겠는가.\n\n그러므로 이 책을 보는 사람이 기와 조각이나 돌멩이 같은 것이라도 버리지 않는다면, 화공의 평범한 그림에서도 도적의 뻗친 귀밑털을 보듯 진실을 보게 될 것이다. 그러니 이 책의 독자가 이명은 듣지 못하더라도 나의 코골이를 일깨워 준다면, 그것이 내가 이 글을 쓴 의도에 가까울 것이다.\n- 박지원, 「공작관문고 자서」 -",
+      "options": [
+       "(가)는 (나)와 달리, 의외의 상황에 의아함을 표현하면서 시상 전개를 시작하고 있다.",
+       "(나)는 (가)와 달리, 감탄의 표현을 활용하여 고조된 감정을 드러내고 있다.",
+       "(나)는 (다)와 달리, 현재와 미래의 상황을 대비하여 인식의 변화를 강조하고 있다.",
+       "(다)는 (나)와 달리, 특정 상황을 가정하여 변화된 시대상에 대해 비판적 태도를 드러내고 있다.",
+       "(가), (나), (다)는 모두, 자연물을 활용하여 현실을 잊고자 하는 의지를 강조하고 있다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 37177,
+     "completion_tokens": 1744,
+     "total_tokens": 38921
+    },
+    "elapsed_seconds": 33.64,
+    "raw_response": {
+     "id": "chatcmpl-0888993e-23be-4c1b-8e47-2beea3ce7b69",
+     "object": "chat.completion",
+     "created": 1790495072,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[{\"question_numbers\":[22],\"text\":\"다음 글을 읽고 물음에 답하시오.\\n\\n(가)\\n\\n경주 남산 달밤에 가오리들이 날아다닌다\\n아닌 밤중에 웬 가오리라니\\n\\n뒤틀리고 꼬여 자라는 것이 남산 소나무들이어서\\n그 나무들 무릎뼈 펴 ㉠ 둥싯, 만월이다\\n\\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\\n자신의 바닥으로 가라앉을 것이다\\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\\n바다로 바뀐 탓일 게다 [A]\\n\\n항아리에 차오르는 달빛이 봉우리까지 담겨들면\\n산꼭대기에 납작 엎드려 있던 삼층석탑 옥개석이 주욱,\\n지느러미 펼치면서 ㉡ 저런, 저런 소리치며 등짝 검은 가오리\\n솟구친다\\n무겁게 어둠 눌러 덮은 오랜 자국이 저 희디흰 배때기여서\\n그 빛은 참 아뜩한 기쁨이 아닐 수 없겠다\\n\\n달밤에 천 마리 가오리들이 날아다닌다\\n\\n골짜기마다 코 떨어지고 목 사라진 돌부처\\n앉음새 고쳐 앉은 몸에\\n금강소나무 같은 굵은 팔뚝이 툭, 툭 불거진다\\n- 장옥관, 「가오리 날아오르다」 -\\n\\n(나)\\n\\n백 마리 여치가 한꺼번에 우는 소리\\n내 자전거 바퀴가 ㉢ 치르르치르르 도는 소리\\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\\n바퀴살 아래에서 자꾸만 빻아지는 소리 [B]\\n처녀 엄마의 눈물만 받아먹고 살다가\\n유모차에 실려 먼 나라로 입양 가는\\n아가의 뺨보다 더 차가운 한 송이 구름이\\n하늘에서 내려와 내 손등을 덮어주고 가네요\\n그 작은 구름에게선 천 년 동안 아직도\\n아가인 그 사람의 냄새가 나네요\\n내 자전거 바퀴는 골목의 모퉁이를 만날 때마다\\n둥글게 둥글게 길을 깎아내고 있어요\\n그럴 때마다 나 돌아온 고향 마을만큼\\n큰 사과가 소리없이 깎이고 있네요\\n구멍가게 노망든 할머니가 평상에 앉아\\n그렇게 큰 사과를 숟가락으로 파내서\\n잇몸으로 ㉣ 오물오물 잘도 잡수시네요\\n- 김혜순, 「잘 익은 사과」 -\\n\\n(다)\\n\\n말이란 거창할 필요가 없으며, 도(道)는 털끝만한 차이로도 나뉘는 법이니, 말로써 도를 표현할 수 있다면 기와 조각이나 돌멩이인들 어찌 버리겠는가. (중략) 글을 짓는 사람은 글이 진실되었는가를 생각하면 그만이다. 이로써 보자면 글이 잘되고 못되고는 내게 달려 있고, 글을 칭찬하고 비판하고는 남의 소관이다. 이는 꼭 이명(耳鳴)이나 코골이와 같다.\\n\\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\\n\\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\\n“나는 그런 적 없소이다!” [C]\\n\\n㉤ 아, 자기만이 홀로 아는 경우는 남이 알지 못할까 항상 근심하고, 자기가 깨닫지 못한 경우는 남이 먼저 깨닫는 것을 싫어하나니, 어찌 코와 귀에만 이러한 병이 있겠는가. 문장의 경우는 이보다 더 심하다. 이명은 병이건만 남이 알지 못할까 걱정하는데, 하물며 병이 아닌 것이야 말해 무엇 하겠는가. 코를 고는 것은 병이 아닌데도 남이 일깨워 주면 골을 내니, 하물며 병이야 일러 무엇 하겠는가.\\n\\n그러므로 이 책을 보는 사람이 기와 조각이나 돌멩이 같은 것이라도 버리지 않는다면, 화공의 평범한 그림에서도 도적의 뻗친 귀밑털을 보듯 진실을 보게 될 것이다. 그러니 이 책의 독자가 이명은 듣지 못하더라도 나의 코골이를 일깨워 준다면, 그것이 내가 이 글을 쓴 의도에 가까울 것이다.\\n- 박지원, 「공작관문고 자서」 -\"}],\"questions\":[{\"number\":22,\"question\":\"(가)～(다)에 대한 설명으로 가장 적절한 것은?\",\"context\":\"\",\"options\":[\"(가)는 (나)와 달리, 의외의 상황에 의아함을 표현하면서 시상 전개를 시작하고 있다.\",\"(나)는 (가)와 달리, 감탄의 표현을 활용하여 고조된 감정을 드러내고 있다.\",\"(나)는 (다)와 달리, 현재와 미래의 상황을 대비하여 인식의 변화를 강조하고 있다.\",\"(다)는 (나)와 달리, 특정 상황을 가정하여 변화된 시대상에 대해 비판적 태도를 드러내고 있다.\",\"(가), (나), (다)는 모두, 자연물을 활용하여 현실을 잊고자 하는 의지를 강조하고 있다.\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 37177,
+      "completion_tokens": 1744,
+      "total_tokens": 38921
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/0017188b-6f03-4b9d-97f0-969f1d552e14.json"
+   },
+   "review": {
+    "issues": [
+     {
+      "number": 22,
+      "field": "context",
+      "problem": "The transcription omits the visible underlining of the marked expressions ㉠ ‘둥싯’, ㉡ ‘저런’, ㉢ ‘치르르치르르’, and ㉣ ‘오물오물’ in the shared passage."
+     }
+    ],
+    "checked_numbers": [
+     22
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 38556,
+     "completion_tokens": 1075,
+     "total_tokens": 39631
+    },
+    "elapsed_seconds": 21.35,
+    "raw_response": {
+     "id": "chatcmpl-95ba982b-f900-461f-9321-ffddeed8872e",
+     "object": "chat.completion",
+     "created": 1790495093,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[{\"number\":22,\"field\":\"context\",\"problem\":\"The transcription omits the visible underlining of the marked expressions ㉠ ‘둥싯’, ㉡ ‘저런’, ㉢ ‘치르르치르르’, and ㉣ ‘오물오물’ in the shared passage.\"}],\"checked_numbers\":[22]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 38556,
+      "completion_tokens": 1075,
+      "total_tokens": 39631
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/27966c1d-83ff-47db-8339-64c662c96191.json"
+   }
+  },
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 22,
+      "question": "(가)～(다)에 대한 설명으로 가장 적절한 것은?",
+      "context": "다음 글을 읽고 물음에 답하시오.\n\n(가)\n\n경주 남산 달밤에 가오리들이 날아다닌다\n아닌 밤중에 웬 가오리라니\n\n뒤틀리고 꼬여 자라는 것이 남산 소나무들이어서\n그 나무들 무릎뼈 펴 ㉠ <u>둥싯</u>, 만월이다\n\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다 [A]\n\n항아리에 차오르는 달빛이 봉우리까지 담겨들면\n산꼭대기에 납작 엎드려 있던 삼층석탑 옥개석이 주욱,\n지느러미 펼치면서 ㉡ <u>저런</u>, 저런 소리치며 등짝 검은 가오리\n솟구친다\n무겁게 어둠 눌러 덮은 오랜 자국이 저 희디흰 배때기여서\n그 빛은 참 아뜩한 기쁨이 아닐 수 없겠다\n\n달밤에 천 마리 가오리들이 날아다닌다\n\n골짜기마다 코 떨어지고 목 사라진 돌부처\n앉음새 고쳐 앉은 몸에\n금강소나무 같은 굵은 팔뚝이 툭, 툭 불거진다\n- 장옥관, 「가오리 날아오르다」 -\n\n(나)\n\n백 마리 여치가 한꺼번에 우는 소리\n내 자전거 바퀴가 ㉢ <u>치르르치르르</u> 도는 소리\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리 [B]\n처녀 엄마의 눈물만 받아먹고 살다가\n유모차에 실려 먼 나라로 입양 가는\n아가의 뺨보다 더 차가운 한 송이 구름이\n하늘에서 내려와 내 손등을 덮어주고 가네요\n그 작은 구름에게선 천 년 동안 아직도\n아가인 그 사람의 냄새가 나네요\n내 자전거 바퀴는 골목의 모퉁이를 만날 때마다\n둥글게 둥글게 길을 깎아내고 있어요\n그럴 때마다 나 돌아온 고향 마을만큼\n큰 사과가 소리없이 깎이고 있네요\n구멍가게 노망든 할머니가 평상에 앉아\n그렇게 큰 사과를 숟가락으로 파내서\n잇몸으로 ㉣ <u>오물오물</u> 잘도 잡수시네요\n- 김혜순, 「잘 익은 사과」 -\n\n(다)\n\n말이란 거창할 필요가 없으며, 도(道)는 털끝만한 차이로도 나뉘는 법이니, 말로써 도를 표현할 수 있다면 기와 조각이나 돌멩이인들 어찌 버리겠는가. (중략) 글을 짓는 사람은 글이 진실되었는가를 생각하면 그만이다. 이로써 보자면 글이 잘되고 못되고는 내게 달려 있고, 글을 칭찬하고 비판하고는 남의 소관이다. 이는 꼭 이명(耳鳴)이나 코골이와 같다.\n\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!” [C]\n\n㉤ 아, 자기만이 홀로 아는 경우는 남이 알지 못할까 항상 근심하고, 자기가 깨닫지 못한 경우는 남이 먼저 깨닫는 것을 싫어하나니, 어찌 코와 귀에만 이러한 병이 있겠는가. 문장의 경우는 이보다 더 심하다. 이명은 병이건만 남이 알지 못할까 걱정하는데, 하물며 병이 아닌 것이야 말해 무엇 하겠는가. 코를 고는 것은 병이 아닌데도 남이 일깨워 주면 골을 내니, 하물며 병이야 일러 무엇 하겠는가.\n\n그러므로 이 책을 보는 사람이 기와 조각이나 돌멩이 같은 것이라도 버리지 않는다면, 화공의 평범한 그림에서도 도적의 뻗친 귀밑털을 보듯 진실을 보게 될 것이다. 그러니 이 책의 독자가 이명은 듣지 못하더라도 나의 코골이를 일깨워 준다면, 그것이 내가 이 글을 쓴 의도에 가까울 것이다.\n- 박지원, 「공작관문고 자서」 -",
+      "options": [
+       "(가)는 (나)와 달리, 의외의 상황에 의아함을 표현하면서 시상 전개를 시작하고 있다.",
+       "(나)는 (가)와 달리, 감탄의 표현을 활용하여 고조된 감정을 드러내고 있다.",
+       "(나)는 (다)와 달리, 현재와 미래의 상황을 대비하여 인식의 변화를 강조하고 있다.",
+       "(다)는 (나)와 달리, 특정 상황을 가정하여 변화된 시대상에 대해 비판적 태도를 드러내고 있다.",
+       "(가), (나), (다)는 모두, 자연물을 활용하여 현실을 잊고자 하는 의지를 강조하고 있다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 38652,
+     "completion_tokens": 775,
+     "total_tokens": 39427
+    },
+    "elapsed_seconds": 16.44,
+    "raw_response": {
+     "id": "chatcmpl-0e40f290-8304-4a6b-bca4-4297f5ba7d02",
+     "object": "chat.completion",
+     "created": 1790495110,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"patches\":[{\"numbers\":[22],\"field\":\"context\",\"old\":\"그 나무들 무릎뼈 펴 ㉠ 둥싯, 만월이다\",\"new\":\"그 나무들 무릎뼈 펴 ㉠ <u>둥싯</u>, 만월이다\"},{\"numbers\":[22],\"field\":\"context\",\"old\":\"지느러미 펼치면서 ㉡ 저런, 저런 소리치며 등짝 검은 가오리\",\"new\":\"지느러미 펼치면서 ㉡ <u>저런</u>, 저런 소리치며 등짝 검은 가오리\"},{\"numbers\":[22],\"field\":\"context\",\"old\":\"내 자전거 바퀴가 ㉢ 치르르치르르 도는 소리\",\"new\":\"내 자전거 바퀴가 ㉢ <u>치르르치르르</u> 도는 소리\"},{\"numbers\":[22],\"field\":\"context\",\"old\":\"잇몸으로 ㉣ 오물오물 잘도 잡수시네요\",\"new\":\"잇몸으로 ㉣ <u>오물오물</u> 잘도 잡수시네요\"}],\"uncertainty_updates\":[]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 38652,
+      "completion_tokens": 775,
+      "total_tokens": 39427
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/771bc09a-b771-4b57-bc88-df7ca3349443.json",
+    "source_patches": {
+     "patches": [
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "그 나무들 무릎뼈 펴 ㉠ 둥싯, 만월이다",
+       "new": "그 나무들 무릎뼈 펴 ㉠ <u>둥싯</u>, 만월이다"
+      },
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "지느러미 펼치면서 ㉡ 저런, 저런 소리치며 등짝 검은 가오리",
+       "new": "지느러미 펼치면서 ㉡ <u>저런</u>, 저런 소리치며 등짝 검은 가오리"
+      },
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "내 자전거 바퀴가 ㉢ 치르르치르르 도는 소리",
+       "new": "내 자전거 바퀴가 ㉢ <u>치르르치르르</u> 도는 소리"
+      },
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "잇몸으로 ㉣ 오물오물 잘도 잡수시네요",
+       "new": "잇몸으로 ㉣ <u>오물오물</u> 잘도 잡수시네요"
+      }
+     ],
+     "uncertainty_updates": []
+    }
+   },
+   "review": {
+    "issues": [
+     {
+      "number": 22,
+      "field": "context annotation",
+      "problem": "[A] is rendered only as an end tag. In the source, the [A] bracket marks the full four-line passage beginning “그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는” and ending “바다로 바뀐 탓일 게다.”"
+     },
+     {
+      "number": 22,
+      "field": "context annotation",
+      "problem": "[B] is rendered only as an end tag. In the source, the [B] bracket specifically marks the two lines “보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼 / 바퀴살 아래에서 자꾸만 빻아지는 소리.”"
+     },
+     {
+      "number": 22,
+      "field": "context annotation",
+      "problem": "[C] is rendered only as an end tag. In the source, the [C] bracket spans both the ear-ringing anecdote and the snoring anecdote, from “한 아이가 뜰에서 놀다가” through “나는 그런 적 없소이다!”"
+     }
+    ],
+    "checked_numbers": [
+     22
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 38578,
+     "completion_tokens": 2177,
+     "total_tokens": 40755
+    },
+    "elapsed_seconds": 41.87,
+    "raw_response": {
+     "id": "chatcmpl-0b067068-dcad-4658-82f3-d5a7cbf0c699",
+     "object": "chat.completion",
+     "created": 1790495152,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[{\"number\":22,\"field\":\"context annotation\",\"problem\":\"[A] is rendered only as an end tag. In the source, the [A] bracket marks the full four-line passage beginning “그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는” and ending “바다로 바뀐 탓일 게다.”\"},{\"number\":22,\"field\":\"context annotation\",\"problem\":\"[B] is rendered only as an end tag. In the source, the [B] bracket specifically marks the two lines “보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼 / 바퀴살 아래에서 자꾸만 빻아지는 소리.”\"},{\"number\":22,\"field\":\"context annotation\",\"problem\":\"[C] is rendered only as an end tag. In the source, the [C] bracket spans both the ear-ringing anecdote and the snoring anecdote, from “한 아이가 뜰에서 놀다가” through “나는 그런 적 없소이다!”\"}],\"checked_numbers\":[22]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 38578,
+      "completion_tokens": 2177,
+      "total_tokens": 40755
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/5d5ab432-c1b0-4b5e-a41d-cdec9ee3fb22.json"
+   }
+  },
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 22,
+      "question": "(가)～(다)에 대한 설명으로 가장 적절한 것은?",
+      "context": "다음 글을 읽고 물음에 답하시오.\n\n(가)\n\n경주 남산 달밤에 가오리들이 날아다닌다\n아닌 밤중에 웬 가오리라니\n\n뒤틀리고 꼬여 자라는 것이 남산 소나무들이어서\n그 나무들 무릎뼈 펴 ㉠ <u>둥싯</u>, 만월이다\n\n[A]\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다\n\n항아리에 차오르는 달빛이 봉우리까지 담겨들면\n산꼭대기에 납작 엎드려 있던 삼층석탑 옥개석이 주욱,\n지느러미 펼치면서 ㉡ <u>저런</u>, 저런 소리치며 등짝 검은 가오리\n솟구친다\n무겁게 어둠 눌러 덮은 오랜 자국이 저 희디흰 배때기여서\n그 빛은 참 아뜩한 기쁨이 아닐 수 없겠다\n\n달밤에 천 마리 가오리들이 날아다닌다\n\n골짜기마다 코 떨어지고 목 사라진 돌부처\n앉음새 고쳐 앉은 몸에\n금강소나무 같은 굵은 팔뚝이 툭, 툭 불거진다\n- 장옥관, 「가오리 날아오르다」 -\n\n(나)\n\n백 마리 여치가 한꺼번에 우는 소리\n내 자전거 바퀴가 ㉢ <u>치르르치르르</u> 도는 소리\n[B]\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리\n처녀 엄마의 눈물만 받아먹고 살다가\n유모차에 실려 먼 나라로 입양 가는\n아가의 뺨보다 더 차가운 한 송이 구름이\n하늘에서 내려와 내 손등을 덮어주고 가네요\n그 작은 구름에게선 천 년 동안 아직도\n아가인 그 사람의 냄새가 나네요\n내 자전거 바퀴는 골목의 모퉁이를 만날 때마다\n둥글게 둥글게 길을 깎아내고 있어요\n그럴 때마다 나 돌아온 고향 마을만큼\n큰 사과가 소리없이 깎이고 있네요\n구멍가게 노망든 할머니가 평상에 앉아\n그렇게 큰 사과를 숟가락으로 파내서\n잇몸으로 ㉣ <u>오물오물</u> 잘도 잡수시네요\n- 김혜순, 「잘 익은 사과」 -\n\n(다)\n\n말이란 거창할 필요가 없으며, 도(道)는 털끝만한 차이로도 나뉘는 법이니, 말로써 도를 표현할 수 있다면 기와 조각이나 돌멩이인들 어찌 버리겠는가. (중략) 글을 짓는 사람은 글이 진실되었는가를 생각하면 그만이다. 이로써 보자면 글이 잘되고 못되고는 내게 달려 있고, 글을 칭찬하고 비판하고는 남의 소관이다. 이는 꼭 이명(耳鳴)이나 코골이와 같다.\n\n[C]\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!”\n\n㉤ 아, 자기만이 홀로 아는 경우는 남이 알지 못할까 항상 근심하고, 자기가 깨닫지 못한 경우는 남이 먼저 깨닫는 것을 싫어하나니, 어찌 코와 귀에만 이러한 병이 있겠는가. 문장의 경우는 이보다 더 심하다. 이명은 병이건만 남이 알지 못할까 걱정하는데, 하물며 병이 아닌 것이야 말해 무엇 하겠는가. 코를 고는 것은 병이 아닌데도 남이 일깨워 주면 골을 내니, 하물며 병이야 일러 무엇 하겠는가.\n\n그러므로 이 책을 보는 사람이 기와 조각이나 돌멩이 같은 것이라도 버리지 않는다면, 화공의 평범한 그림에서도 도적의 뻗친 귀밑털을 보듯 진실을 보게 될 것이다. 그러니 이 책의 독자가 이명은 듣지 못하더라도 나의 코골이를 일깨워 준다면, 그것이 내가 이 글을 쓴 의도에 가까울 것이다.\n- 박지원, 「공작관문고 자서」 -",
+      "options": [
+       "(가)는 (나)와 달리, 의외의 상황에 의아함을 표현하면서 시상 전개를 시작하고 있다.",
+       "(나)는 (가)와 달리, 감탄의 표현을 활용하여 고조된 감정을 드러내고 있다.",
+       "(나)는 (다)와 달리, 현재와 미래의 상황을 대비하여 인식의 변화를 강조하고 있다.",
+       "(다)는 (나)와 달리, 특정 상황을 가정하여 변화된 시대상에 대해 비판적 태도를 드러내고 있다.",
+       "(가), (나), (다)는 모두, 자연물을 활용하여 현실을 잊고자 하는 의지를 강조하고 있다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 38834,
+     "completion_tokens": 1067,
+     "total_tokens": 39901
+    },
+    "elapsed_seconds": 21.78,
+    "raw_response": {
+     "id": "chatcmpl-b2129f5e-3937-4701-8ab6-99339e23f8a6",
+     "object": "chat.completion",
+     "created": 1790495173,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"patches\":[{\"numbers\":[22],\"field\":\"context\",\"old\":\"그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\\n자신의 바닥으로 가라앉을 것이다\\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\\n바다로 바뀐 탓일 게다 [A]\",\"new\":\"[A]\\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\\n자신의 바닥으로 가라앉을 것이다\\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\\n바다로 바뀐 탓일 게다\"},{\"numbers\":[22],\"field\":\"context\",\"old\":\"보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\\n바퀴살 아래에서 자꾸만 빻아지는 소리 [B]\",\"new\":\"[B]\\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\\n바퀴살 아래에서 자꾸만 빻아지는 소리\"},{\"numbers\":[22],\"field\":\"context\",\"old\":\"한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\\n\\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\\n“나는 그런 적 없소이다!” [C]\",\"new\":\"[C]\\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\\n\\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\\n“나는 그런 적 없소이다!”\"}],\"uncertainty_updates\":[]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 38834,
+      "completion_tokens": 1067,
+      "total_tokens": 39901
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/673f3767-0588-49a5-8300-b9f663d49c8a.json",
+    "source_patches": {
+     "patches": [
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다 [A]",
+       "new": "[A]\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다"
+      },
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리 [B]",
+       "new": "[B]\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리"
+      },
+      {
+       "numbers": [
+        22
+       ],
+       "field": "context",
+       "old": "한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!” [C]",
+       "new": "[C]\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!”"
+      }
+     ],
+     "uncertainty_updates": []
+    }
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     22
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 3123,
+     "completion_tokens": 937,
+     "total_tokens": 39516
+    },
+    "elapsed_seconds": 20.02,
+    "raw_response": {
+     "id": "chatcmpl-c1d8b4e6-a583-4c06-82c8-bccd7a64541f",
+     "object": "chat.completion",
+     "created": 1790495193,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[22]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 3123,
+      "completion_tokens": 937,
+      "total_tokens": 39516
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/exams/2027-09/call-traces/4f371825-d5fb-466f-b4e9-e07dd432ee53.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 22,
+   "question": "(가)～(다)에 대한 설명으로 가장 적절한 것은?",
+   "context": "다음 글을 읽고 물음에 답하시오.\n\n(가)\n\n경주 남산 달밤에 가오리들이 날아다닌다\n아닌 밤중에 웬 가오리라니\n\n뒤틀리고 꼬여 자라는 것이 남산 소나무들이어서\n그 나무들 무릎뼈 펴 ㉠ <u>둥싯</u>, 만월이다\n\n[A]\n그럴 즈음은 잡티 하나 없는 고요의 대낮이 되어서는\n꽃, 새, 바위의 내부가 훤히 들여다보이고 당신은 고요히\n자신의 바닥으로 가라앉을 것이다\n그때 귀 먹먹하고 숨 갑갑하다면 남산 일대가\n바다로 바뀐 탓일 게다\n\n항아리에 차오르는 달빛이 봉우리까지 담겨들면\n산꼭대기에 납작 엎드려 있던 삼층석탑 옥개석이 주욱,\n지느러미 펼치면서 ㉡ <u>저런</u>, 저런 소리치며 등짝 검은 가오리\n솟구친다\n무겁게 어둠 눌러 덮은 오랜 자국이 저 희디흰 배때기여서\n그 빛은 참 아뜩한 기쁨이 아닐 수 없겠다\n\n달밤에 천 마리 가오리들이 날아다닌다\n\n골짜기마다 코 떨어지고 목 사라진 돌부처\n앉음새 고쳐 앉은 몸에\n금강소나무 같은 굵은 팔뚝이 툭, 툭 불거진다\n- 장옥관, 「가오리 날아오르다」 -\n\n(나)\n\n백 마리 여치가 한꺼번에 우는 소리\n내 자전거 바퀴가 ㉢ <u>치르르치르르</u> 도는 소리\n[B]\n보랏빛 가을 찬바람이 정미소에 실려온 나락들처럼\n바퀴살 아래에서 자꾸만 빻아지는 소리\n처녀 엄마의 눈물만 받아먹고 살다가\n유모차에 실려 먼 나라로 입양 가는\n아가의 뺨보다 더 차가운 한 송이 구름이\n하늘에서 내려와 내 손등을 덮어주고 가네요\n그 작은 구름에게선 천 년 동안 아직도\n아가인 그 사람의 냄새가 나네요\n내 자전거 바퀴는 골목의 모퉁이를 만날 때마다\n둥글게 둥글게 길을 깎아내고 있어요\n그럴 때마다 나 돌아온 고향 마을만큼\n큰 사과가 소리없이 깎이고 있네요\n구멍가게 노망든 할머니가 평상에 앉아\n그렇게 큰 사과를 숟가락으로 파내서\n잇몸으로 ㉣ <u>오물오물</u> 잘도 잡수시네요\n- 김혜순, 「잘 익은 사과」 -\n\n(다)\n\n말이란 거창할 필요가 없으며, 도(道)는 털끝만한 차이로도 나뉘는 법이니, 말로써 도를 표현할 수 있다면 기와 조각이나 돌멩이인들 어찌 버리겠는가. (중략) 글을 짓는 사람은 글이 진실되었는가를 생각하면 그만이다. 이로써 보자면 글이 잘되고 못되고는 내게 달려 있고, 글을 칭찬하고 비판하고는 남의 소관이다. 이는 꼭 이명(耳鳴)이나 코골이와 같다.\n\n[C]\n한 아이가 뜰에서 놀다가 갑자기 ‘왜앵’하고 귀가 울리자 ‘와!’하고 좋아하면서 가만히 옆의 동무에게 이렇게 말했다.\n“얘, 이 소리 좀 들어 봐! 내 귀에서 ‘왜앵’하는 소리가 난다. 피리 부는 것 같기도 하고 생황을 부는 것 같기도 한데 동글동글한 게 꼭 별 같단다.”\n그 동무가 자기 귀를 기울여 맞대어 보았으나 끝내 아무 소리도 듣지 못하자, 그만 소리를 지르며 남이 알지 못하는 것을 한스럽게 여겼다.\n\n언젠가 어떤 시골 사람과 함께 잔 적이 있는데, 그 사람의 코 고는 소리가 우람하여 마치 토하는 것 같기도 하고, 휘파람을 부는 것 같기도 하고, 탄식하는 것 같기도 하고, 한숨 쉬는 것 같기도 하고, 후후 불을 부는 것 같기도 하고, 보글보글 솥이 끓는 것 같기도 하고, 빈 수레가 덜커덩거리는 것 같기도 했다. 숨을 들이쉴 땐 톱질하는 소리가 나고, 내뿜을 때는 돼지가 꿀꿀거리는 소리가 났다. 그러다가 남이 흔들어 깨우자 발끈 성을 내며 이렇게 말했다.\n“나는 그런 적 없소이다!”\n\n㉤ 아, 자기만이 홀로 아는 경우는 남이 알지 못할까 항상 근심하고, 자기가 깨닫지 못한 경우는 남이 먼저 깨닫는 것을 싫어하나니, 어찌 코와 귀에만 이러한 병이 있겠는가. 문장의 경우는 이보다 더 심하다. 이명은 병이건만 남이 알지 못할까 걱정하는데, 하물며 병이 아닌 것이야 말해 무엇 하겠는가. 코를 고는 것은 병이 아닌데도 남이 일깨워 주면 골을 내니, 하물며 병이야 일러 무엇 하겠는가.\n\n그러므로 이 책을 보는 사람이 기와 조각이나 돌멩이 같은 것이라도 버리지 않는다면, 화공의 평범한 그림에서도 도적의 뻗친 귀밑털을 보듯 진실을 보게 될 것이다. 그러니 이 책의 독자가 이명은 듣지 못하더라도 나의 코골이를 일깨워 준다면, 그것이 내가 이 글을 쓴 의도에 가까울 것이다.\n- 박지원, 「공작관문고 자서」 -",
+   "options": [
+    "(가)는 (나)와 달리, 의외의 상황에 의아함을 표현하면서 시상 전개를 시작하고 있다.",
+    "(나)는 (가)와 달리, 감탄의 표현을 활용하여 고조된 감정을 드러내고 있다.",
+    "(나)는 (다)와 달리, 현재와 미래의 상황을 대비하여 인식의 변화를 강조하고 있다.",
+    "(다)는 (나)와 달리, 특정 상황을 가정하여 변화된 시대상에 대해 비판적 태도를 드러내고 있다.",
+    "(가), (나), (다)는 모두, 자연물을 활용하여 현실을 잊고자 하는 의지를 강조하고 있다."
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}

@@ -1,0 +1,62 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jev 오답 노트</title><style>
+:root{--ink:#182329;--muted:#5d6a70;--line:#dce2e2;--paper:#f5f6f2;--card:#fff;--accent:#245d54;--good:#1f7a4d;--good-bg:#e3f3ea;--bad:#b3422f;--bad-bg:#fbe9e5;--bar:#e9ece8}
+@media(prefers-color-scheme:dark){:root{--ink:#e4e8e6;--muted:#9aa6a3;--line:#2f3a3a;--paper:#141a1b;--card:#1c2425;--accent:#7cc4b3;--good:#6fd39c;--good-bg:#173226;--bad:#f08b76;--bad-bg:#3a1f1a;--bar:#2a3435}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;font-size:16px}
+.layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav{border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+nav h1{font-size:19px;margin:0 0 4px}nav .sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+nav button{display:flex;justify-content:space-between;width:100%;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:7px 10px;border-radius:6px;cursor:pointer;text-align:left}
+nav button:hover{background:var(--bar)}nav button.on{background:var(--accent);color:var(--paper)}nav button span:last-child{opacity:.7}
+.filters{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;font-size:14px}
+main{padding:24px 28px 80px;max-width:1500px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden}
+.q.noimg{grid-template-columns:1fr}.q.focus{outline:2px solid var(--accent)}
+.body{padding:20px 22px}.head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.head h2{font-size:18px;margin:0}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:20px;padding:2px 9px;color:var(--muted)}.chip.solo{border-color:var(--bad);color:var(--bad)}
+.stem{font-weight:650;line-height:1.6;margin:14px 0 10px;white-space:pre-wrap}
+details{margin:8px 0;font-size:14px}summary{cursor:pointer;color:var(--accent)}details pre{white-space:pre-wrap;font-family:inherit;line-height:1.65;background:var(--paper);padding:12px;border-radius:6px;max-height:420px;overflow:auto}
+ol{list-style:none;padding:0;margin:12px 0}li{border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-bottom:6px;position:relative}
+li.ans{border-color:var(--good);background:var(--good-bg)}li.pick{border-color:var(--bad);background:var(--bad-bg)}
+li .row{display:flex;gap:8px;line-height:1.5}li .n{font-weight:700;min-width:1.4em}li .tags{margin-left:auto;font-size:12px;white-space:nowrap;color:var(--muted)}
+li .bar{height:4px;background:var(--bar);border-radius:2px;margin-top:6px}li .bar i{display:block;height:4px;border-radius:2px;background:var(--accent)}
+.img{background:#fff;border-left:1px solid var(--line);max-height:880px;overflow:auto;cursor:zoom-in}.img img{width:100%;display:block}
+.img.big{position:fixed;inset:0;z-index:9;max-height:none;cursor:zoom-out;background:rgba(0,0,0,.85)}.img.big img{width:auto;max-width:100%;margin:auto}
+.help{font-size:12px;color:var(--muted);margin-top:18px;line-height:1.6}
+@media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;height:auto}.q{grid-template-columns:1fr}.img{border-left:0;border-top:1px solid var(--line)}main{padding:16px}}
+</style>
+<div class="layout"><nav><h1>Jev 오답 노트</h1><div class="sub" id="total"></div>
+<div class="filters"><label><input type="checkbox" id="solo"> GPT 셋 다 맞힌 문항만</label><label><input type="checkbox" id="vis"> 그림·표 없는 문항만</label></div>
+<div id="subjects"></div><div class="help">j / k: 다음·이전 문항<br>시험지 이미지를 누르면 크게 보기</div></nav>
+<main id="list"></main></div>
+<script>const DATA=__DATA__;const C='①②③④⑤';
+let cur='전체';
+function el(t,txt,c){const x=document.createElement(t);if(txt!=null)x.textContent=txt;if(c)x.className=c;return x}
+function filtered(){const solo=document.getElementById('solo').checked,vis=document.getElementById('vis').checked;
+ return DATA.filter(d=>(!solo||Object.values(d.others).every(v=>v==d.answer))&&(!vis||!d.visual))}
+function nav(){const box=document.getElementById('subjects');box.replaceChildren();const items=filtered();const counts={};
+ for(const d of items)counts[d.subject]=(counts[d.subject]||0)+1;
+ const all=[['전체',items.length],...Object.entries(counts)];
+ for(const [name,n] of all){const b=el('button');b.append(el('span',name),el('span',n));if(name===cur)b.className='on';b.onclick=()=>{cur=name;render()};box.append(b)}
+ document.getElementById('total').textContent='884문항 중 '+DATA.length+'개 오답 · 표시 '+(cur==='전체'?items.length:counts[cur]||0)+'개'}
+function card(d){const q=el('section',null,'q'+(d.image?'':' noimg'));q.id=d.id;const b=el('div',null,'body');
+ const h=el('div',null,'head');h.append(el('h2',d.subject+' '+d.number+'번'),el('span','배점 '+d.points,'chip'));
+ if(d.visual)h.append(el('span','그림·표 전사','chip'));
+ if(Object.values(d.others).length&&Object.values(d.others).every(v=>v==d.answer))h.append(el('span','Jev만 틀림','chip solo'));
+ b.append(h,el('div',d.state.question,'stem'));
+ for(const [k,label] of [['passage','지문'],['visual_description','그림 설명(모델 입력)']]){if(d.state[k]){const det=el('details');det.append(el('summary',label),el('pre',d.state[k]));b.append(det)}}
+ const ol=el('ol');d.options.forEach((o,i)=>{const n=i+1;const li=el('li');if(n==d.answer)li.classList.add('ans');if(n==d.selected)li.classList.add('pick');
+  const row=el('div',null,'row');row.append(el('span',C[i]||n,'n'),el('span',o));
+  const tags=[];if(n==d.answer)tags.push('정답');if(n==d.selected)tags.push('Jev');for(const [m,v] of Object.entries(d.others))if(v==n)tags.push(m);
+  const p=d.probs[n];row.append(el('span',tags.join(' · ')+(p!=null?'  '+Math.round(p*100)+'%':''),'tags'));li.append(row);
+  if(p!=null){const bar=el('div',null,'bar');const f=el('i');f.style.width=(p*100)+'%';bar.append(f);li.append(bar)}ol.append(li)});
+ b.append(ol);q.append(b);
+ if(d.image){const w=el('div',null,'img');const im=el('img');im.loading='lazy';im.src=d.image;im.alt=d.subject+' '+d.page+'쪽';w.append(im);w.onclick=()=>w.classList.toggle('big');q.append(w)}
+ return q}
+function render(){nav();const list=document.getElementById('list');list.replaceChildren();for(const d of filtered())if(cur==='전체'||d.subject===cur)list.append(card(d));window.scrollTo(0,0)}
+document.getElementById('solo').onchange=render;document.getElementById('vis').onchange=render;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.img.big').forEach(x=>x.classList.remove('big'));
+ if(e.key!=='j'&&e.key!=='k')return;const qs=[...document.querySelectorAll('.q')];if(!qs.length)return;
+ let i=qs.findIndex(x=>x.getBoundingClientRect().top>5);if(i<0)i=qs.length;i=e.key==='j'?Math.min(i,qs.length-1):Math.max(i-2,0);
+ qs.forEach(x=>x.classList.remove('focus'));qs[i].classList.add('focus');qs[i].scrollIntoView({block:'start'})});
+render();</script></html>

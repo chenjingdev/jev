@@ -1,0 +1,52 @@
+{
+  "created_at": "2026-09-21T15:54:22.762424+00:00",
+  "match": "d2sparserand-vs-d2-100-noise10-audit01",
+  "purpose": "Exploratory frequency control for existing confidence >=0.4 Jev arm. No new Jev calls.",
+  "intervention_probability": 0.09182098765432099,
+  "calibration": {
+    "match": "d2jevc04-vs-d2-100-noise10.json",
+    "sha256": "a9859d25735740c3740b78bbb910812d1ffcf2296380ee87e35ff4a00a4cfb14",
+    "changes": 238,
+    "eligible_turns": 2592
+  },
+  "policy": "At each eligible hybrid turn independently change with q, uniformly among non-base shortlist candidates; otherwise use base. Same top-3 noise and engine search as existing runs.",
+  "primary_comparisons": [
+    "sparse random vs existing Jev confidence >=0.4",
+    "sparse random vs existing plain",
+    "sparse random vs existing unrestricted random"
+  ],
+  "analysis": "Mean score difference paired by opening; resample complete color-swapped opening pairs. Report intervention rates and uncertainty.",
+  "limitations": [
+    "Reuses examined openings and one seed schedule; diagnostic, not confirmatory.",
+    "Matches expected changes per eligible turn, not exact counts or game states.",
+    "Calibrated from the already observed Jev arm; do not retune q after seeing results."
+  ],
+  "command": [
+    "/Users/chenjing/dev/jev/.venv/bin/python",
+    "/Users/chenjing/dev/jev/chess/ladder_batch.py",
+    "--name",
+    "d2sparserand-vs-d2-100-noise10-audit01",
+    "--selector",
+    "random",
+    "--depth",
+    "2",
+    "--opponent-depth",
+    "2",
+    "--noise",
+    "10",
+    "--opponent-noise",
+    "10",
+    "--seed",
+    "73419",
+    "--workers",
+    "4",
+    "--random-intervention-probability",
+    "0.09182098765432099"
+  ],
+  "source_sha256": {
+    "jev_engine_match.py": "72622ef6c6d1a2e2af3c2d5fda10040f65dffa4fe25fb43b186198664ab0d923",
+    "ladder_batch.py": "257e0f25b77b2ba8d352a71810318ad149cf27a53ac12224d693fe5d66fe974d",
+    "weak_engine.py": "b7ff0a11ae79b5366ad76f40b06c6c6fea6aac4a18db5288e37925bfc2f88c28",
+    "openings-50.json": "5d5cee7b202ad3aa7875c48a17633bdf510ff07b6c025fe825f8df428ab93838"
+  }
+}

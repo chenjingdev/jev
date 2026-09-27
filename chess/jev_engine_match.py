@@ -123,14 +123,48 @@ HYBRID_NAMES = {'jev': 'Stockfish + Jev', 'random': 'Stockfish + Random', 'none'
 BASE_NAMES = {'stockfish': 'Stockfish', 'weak': 'Weak'}
 
 
-def hybrid_name_for(base, selector):
+def hybrid_name_for(base, selector, min_confidence=None, random_intervention_probability=None):
+    if selector == 'random' and random_intervention_probability is not None:
+        return f"{BASE_NAMES[base]} + Random(change={random_intervention_probability:.6g})"
+    if selector == 'jev' and min_confidence:
+        return f"{BASE_NAMES[base]} + Jev(conf>={min_confidence:g})"
     if selector == 'none':
         return f"{BASE_NAMES[base]} (plain)"
     return f"{BASE_NAMES[base]} + {'Jev' if selector == 'jev' else 'Random'}"
 
 
-def random_pick(options, base, seed, number, ply):
+def add_noise(rows, noise, seed, number, ply):
+    """Seeded evaluation noise in the weak engine's own units: breaks deterministic ties and repetition loops.
+    Each supplied candidate gets an independent offset in [-noise, noise]. The weak runner supplies its top 3."""
+    if not noise:
+        return rows
+    rng = random.Random(f'noise-{seed}-{number}-{ply}')
+    for r in rows:
+        offset = rng.randint(-noise, noise)
+        r['raw'] += offset
+        if r['cp'] is not None:
+            r['cp'] += offset
+        r['noise'] = offset
+    rows.sort(key=lambda r: (-r['raw'], r['move']))
+    for i, r in enumerate(rows, 1):
+        r['rank'] = i
+    return rows
+
+
+def random_pick(options, base, seed, number, ply, intervention_probability=None):
     """Uniform choice among the same shortlist Jev would see; no API call."""
+    if intervention_probability is not None:
+        if not 0 <= intervention_probability <= 1:
+            raise ValueError('intervention_probability must be in [0, 1]')
+        alternatives = sorted(set(options) - {base})
+        if base not in options or not alternatives:
+            raise ValueError('Sparse control requires the base and at least one alternative')
+        draw = random.Random(f'intervene-{seed}-{number}-{ply}').random()
+        intervene = draw < intervention_probability
+        choice = random.Random(f'pick-{seed}-{number}-{ply}').choice(alternatives) if intervene else base
+        return {'base_move': base, 'selected_move': choice, 'intervention': intervene,
+                'options': sorted(options), 'selector': 'random_sparse',
+                'intervention_probability': intervention_probability, 'gate_draw': draw}
     choice = random.Random(f'pick-{seed}-{number}-{ply}').choice(sorted(options))
     return {'base_move': base, 'selected_move': choice, 'intervention': choice != base,
             'options': sorted(options), 'selector': 'random'}
@@ -156,6 +190,8 @@ def summarize(payload):
             points[g['black']] += .5
     latency = [c['latency_ms'] for c in calls]
     return {'points': points, 'calls': len(calls), 'interventions': sum(c['intervention'] for c in calls),
+            'gated': sum(bool(c.get('gated')) for c in calls),
+            'jev_disagreed': sum(c.get('jev_move', c['selected_move']) != c['base_move'] for c in calls),
             'jev_total_ms': round(sum(latency), 2),
             'jev_mean_ms': round(sum(latency) / len(latency), 2) if latency else None,
             'tokens': sum(c['response']['usage']['input_tokens'] + c['response']['usage']['output_tokens'] for c in calls),
@@ -163,14 +199,22 @@ def summarize(payload):
             'finished_games': sum(g['result'] != '*' for g in payload['games'])}
 
 
-def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), seed=73419, selector='jev', base='stockfish', depth=2, opponent_depth=None):
+def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), seed=73419, selector='jev', base='stockfish', depth=2, opponent_depth=None, min_confidence=None, noise=0, opponent_noise=None, random_intervention_probability=None):
     if nodes < 1 or margin < 0 or max_plies < 1 or selector not in HYBRID_NAMES or base not in BASE_NAMES or depth < 1:
         raise ValueError('Invalid match configuration')
+    if opponent_noise is None:
+        opponent_noise = noise
+    if noise < 0 or opponent_noise < 0 or ((noise or opponent_noise) and base != 'weak'):
+        raise ValueError('noise applies to the weak base only')
+    if min_confidence is not None and not (0 < min_confidence <= 1 and selector == 'jev'):
+        raise ValueError('min_confidence must be in (0, 1] and requires selector=jev')
+    if random_intervention_probability is not None and not (0 <= random_intervention_probability <= 1 and selector == 'random'):
+        raise ValueError('random_intervention_probability must be in [0, 1] and requires selector=random')
     if opponent_depth is None:
         opponent_depth = depth
     if opponent_depth < 1 or (base != 'weak' and opponent_depth != depth):
         raise ValueError('opponent_depth only applies to the weak base')
-    hybrid_name = hybrid_name_for(base, selector)
+    hybrid_name = hybrid_name_for(base, selector, min_confidence, random_intervention_probability)
     base_name = BASE_NAMES[base]
     if base == 'weak':
         hybrid_name = hybrid_name.replace('Weak', f'Weak{depth}')
@@ -182,7 +226,8 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
         raise FileExistsError('Use a new output name to preserve previous evidence')
     payload = {'created_at': datetime.now(timezone.utc).isoformat(), 'status': 'running', 'model': MODEL,
                'design': 'Two color-swapped games from the same configured opening. Both use Stockfish MultiPV=3, identical node budgets, Threads=1, Hash=16, cleared per turn. The selector (Jev or a seeded uniform random control) only picks among cp candidates within margin; no scores/ranks/base/PVs sent to Jev. Node limits may overshoot. Jev adds API time; not an equal-wall-time comparison. Shortlisting is engine assistance, not independent chess reasoning.',
-               'selector': selector, 'base_engine': base,
+               'selector': selector, 'base_engine': base, 'min_confidence': min_confidence, 'noise': noise, 'opponent_noise': opponent_noise,
+               'random_intervention_probability': random_intervention_probability,
                'config': {'engine': engine_path, 'nodes': nodes, 'margin_cp': margin, 'max_plies': max_plies,
                           'multipv': 3, 'threads': 1, 'hash_mb': 16, 'seed': seed, 'opening_uci': list(opening),
                           'selector': selector, 'base_engine': base},
@@ -197,6 +242,10 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
                                   'multipv': 3, 'margin_units': margin})
         if opponent_depth != depth:
             payload['design'] += f' Asymmetric: hybrid side searches depth {depth}, plain opponent depth {opponent_depth}.'
+    if random_intervention_probability is not None:
+        payload['design'] += (f' Sparse random control: at each eligible hybrid turn, independently change the base move '
+                              f'with probability {random_intervention_probability}; choose uniformly among non-base shortlist moves. '
+                              'Otherwise keep the base move. Gate and move-choice RNG streams are separate.')
     pgns = []
     started = time.perf_counter()
     try:
@@ -230,19 +279,27 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
                     else:
                         started_move = time.perf_counter()
                         ranked, telemetry = weak_candidates(board, depth=depth if hybrid else opponent_depth)
+                        ranked = add_noise(ranked, noise if hybrid else opponent_noise, seed, number, ply)
                         telemetry['elapsed_ms'] = round((time.perf_counter() - started_move) * 1000, 2)
-                    base = ranked[0]['move']
+                    base_move = ranked[0]['move']
                     options = shortlist(ranked, margin)
-                    choice = base
+                    choice = base_move
                     decision = None
                     control = None
                     if hybrid and len(options) >= 2 and selector != 'none':
                         if selector == 'jev':
                             req = make_request(board, options, seed + number * 1000 + ply)
-                            decision = ask_jev(client, req, base)
+                            decision = ask_jev(client, req, base_move)
                             choice = decision['selected_move']
+                            if min_confidence is not None and decision['confidence'] < min_confidence:
+                                # Confidence gate: Jev's answer is recorded but the base #1 is played.
+                                decision.update(jev_move=decision['selected_move'], selected_move=base_move,
+                                                intervention=False, gated=True)
+                                choice = base_move
+                            elif min_confidence is not None:
+                                decision.update(jev_move=decision['selected_move'], gated=False)
                         else:
-                            control = random_pick(options, base, seed, number, ply)
+                            control = random_pick(options, base_move, seed, number, ply, random_intervention_probability)
                             choice = control['selected_move']
                     if choice not in options: raise ValueError('Chosen move outside shortlist')
                     move = chess.Move.from_uci(choice)
@@ -250,7 +307,7 @@ def run(output, engine_path, nodes=5000, margin=35, max_plies=400, opening=(), s
                     record = {'ply': ply, 'side': 'white' if board.turn else 'black',
                               'engine': row['white'] if board.turn else row['black'],
                               'uci': choice, 'san': board.san(move), 'fen_before': board.fen(),
-                              'base_move': base, 'engine_candidates': ranked, 'shortlist': options,
+                              'base_move': base_move, 'engine_candidates': ranked, 'shortlist': options,
                               'jev': decision, 'random_control': control,
                               'jev_skip': None if decision else 'control' if not hybrid else 'random_control' if control else 'plain' if selector == 'none' else 'no_close_alternative',
                               **telemetry}
@@ -298,5 +355,10 @@ if __name__ == '__main__':
     p.add_argument('--base', choices=sorted(BASE_NAMES), default='stockfish')
     p.add_argument('--depth', type=int, default=2, help='weak engine search depth (hybrid side)')
     p.add_argument('--opponent-depth', type=int, default=None, help='weak engine depth for the plain opponent')
+    p.add_argument('--min-confidence', type=float, default=None, help='play the base #1 unless Jev confidence reaches this value')
+    p.add_argument('--noise', type=int, default=0, help='seeded noise added after the weak engine selects its top-3 root candidates')
+    p.add_argument('--opponent-noise', type=int, default=None, help='noise for the plain opponent (default: same as --noise)')
+    p.add_argument('--random-intervention-probability', type=float, default=None,
+                   help='random selector only: probability of changing to a uniformly chosen non-base candidate on each eligible turn')
     args = p.parse_args()
-    run(args.output, args.engine, args.nodes, args.margin, args.max_plies, args.opening, args.seed, args.selector, args.base, args.depth, args.opponent_depth)
+    run(args.output, args.engine, args.nodes, args.margin, args.max_plies, args.opening, args.seed, args.selector, args.base, args.depth, args.opponent_depth, args.min_confidence, args.noise, args.opponent_noise, args.random_intervention_probability)

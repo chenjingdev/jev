@@ -1,0 +1,194 @@
+{
+ "task": {
+  "subject": "english",
+  "name": "영어",
+  "section": "english",
+  "page": 2,
+  "targets": [
+   18,
+   19,
+   20
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/images/english/page-02.jpg",
+   "sha256": "8278dec83d52d32ea45147c5a8257e986c280b08034f5a8c579bd98343639522"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.\nDo not assign unknown labels (가), (나), A, B, etc. to named regions, entities or solved values. Preserve unknown correspondences. Transcribe the printed prompt, including any question instructions shared across adjacent questions.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 18,
+      "question": "다음 글의 목적으로 가장 적절한 것은?",
+      "context": "Dear Rosydale City Marathon Racers,\n\nWe are really grateful to all of you who have signed up for the 10th Rosydale City Marathon that was scheduled for this coming Saturday at 10 a.m. Unfortunately, as you may already know, the weather forecast says that there is going to be a downpour throughout the race day. We truly hoped that the race would go smoothly. However, it is likely that the heavy rain will make the roads too slippery and dangerous for the racers to run safely. As a result, we have decided to cancel the race. We hope you understand and we promise to hold another race in the near future.\n\nSincerely,\nMartha Kingsley\nRace Manager",
+      "options": [
+       "마라톤 경기 취소 사실을 공지하려고",
+       "마라톤 경기 사전 행사 참여를 독려하려고",
+       "마라톤 경기 참가비 환불 절차를 설명하려고",
+       "마라톤 경기 참여 시 규칙 준수를 당부하려고",
+       "마라톤 경기 진행에 따른 도로 통제를 안내하려고"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 19,
+      "question": "다음 글에 드러난 Peter의 심경 변화로 가장 적절한 것은?",
+      "context": "It was Valentine’s Day on Friday and Peter was certain that his wife, Amy, was going to love his surprise. Peter had spent a long time searching online for an event that would be a new way to spend time with Amy. He had finally found the perfect thing for her. She often told him that she liked to go to places she had never visited before, and he was absolutely sure that she would love going to the new, five-star restaurant downtown. He smiled as he called the restaurant and asked for a reservation for Friday. Unfortunately, his smile quickly disappeared when he was told that the restaurant was fully reserved. “That’s too bad,” he said quietly. “I thought that I had found the right place.”",
+      "options": [
+       "relaxed → indifferent",
+       "confident → disappointed",
+       "confused → satisfied",
+       "jealous → discouraged",
+       "embarrassed → joyful"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 20,
+      "question": "다음 글에서 필자가 주장하는 바로 가장 적절한 것은?",
+      "context": "We almost universally accept that playing video games is at best a pleasant break from a student’s learning and more often what prevents a student from accomplishing their goals. Games catch and hold attention in a way that few things can. And yet once they have our focus, they rarely seem to offer anything meaningful to help students grow in their lives outside the games. While this may be true for many games, we are too easily ignoring a valuable tool that could be used to enhance productivity instead of derailing it. Rather, it is desirable that we develop games that connect to the learning outcomes we want for our students. This will enable educators to take advantage of games’ attention commanding capacities and allow our students to enjoy their games while learning.",
+      "options": [
+       "학습 효과 증진에 활용될 수 있는 게임을 개발해야 한다.",
+       "교육 현장에서 학습과 게임 활동을 적절하게 분배해야 한다.",
+       "학습 활동에 게임이 초래하는 집중력 저하를 경계해야 한다.",
+       "여가 시간에 게임을 활용함으로써 학습 효율을 향상해야 한다.",
+       "게임의 부정적 영향을 줄이기 위해 학습 공동체가 노력해야 한다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 15917,
+     "completion_tokens": 816,
+     "total_tokens": 16733
+    },
+    "elapsed_seconds": 28.38,
+    "raw_response": {
+     "id": "chatcmpl-504b89c5-7a59-4758-aaf1-43be873ccb06",
+     "object": "chat.completion",
+     "created": 1790090285,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[],\"questions\":[{\"number\":18,\"question\":\"다음 글의 목적으로 가장 적절한 것은?\",\"context\":\"Dear Rosydale City Marathon Racers,\\n\\nWe are really grateful to all of you who have signed up for the 10th Rosydale City Marathon that was scheduled for this coming Saturday at 10 a.m. Unfortunately, as you may already know, the weather forecast says that there is going to be a downpour throughout the race day. We truly hoped that the race would go smoothly. However, it is likely that the heavy rain will make the roads too slippery and dangerous for the racers to run safely. As a result, we have decided to cancel the race. We hope you understand and we promise to hold another race in the near future.\\n\\nSincerely,\\nMartha Kingsley\\nRace Manager\",\"options\":[\"마라톤 경기 취소 사실을 공지하려고\",\"마라톤 경기 사전 행사 참여를 독려하려고\",\"마라톤 경기 참가비 환불 절차를 설명하려고\",\"마라톤 경기 참여 시 규칙 준수를 당부하려고\",\"마라톤 경기 진행에 따른 도로 통제를 안내하려고\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":19,\"question\":\"다음 글에 드러난 Peter의 심경 변화로 가장 적절한 것은?\",\"context\":\"It was Valentine’s Day on Friday and Peter was certain that his wife, Amy, was going to love his surprise. Peter had spent a long time searching online for an event that would be a new way to spend time with Amy. He had finally found the perfect thing for her. She often told him that she liked to go to places she had never visited before, and he was absolutely sure that she would love going to the new, five-star restaurant downtown. He smiled as he called the restaurant and asked for a reservation for Friday. Unfortunately, his smile quickly disappeared when he was told that the restaurant was fully reserved. “That’s too bad,” he said quietly. “I thought that I had found the right place.”\",\"options\":[\"relaxed → indifferent\",\"confident → disappointed\",\"confused → satisfied\",\"jealous → discouraged\",\"embarrassed → joyful\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":20,\"question\":\"다음 글에서 필자가 주장하는 바로 가장 적절한 것은?\",\"context\":\"We almost universally accept that playing video games is at best a pleasant break from a student’s learning and more often what prevents a student from accomplishing their goals. Games catch and hold attention in a way that few things can. And yet once they have our focus, they rarely seem to offer anything meaningful to help students grow in their lives outside the games. While this may be true for many games, we are too easily ignoring a valuable tool that could be used to enhance productivity instead of derailing it. Rather, it is desirable that we develop games that connect to the learning outcomes we want for our students. This will enable educators to take advantage of games’ attention commanding capacities and allow our students to enjoy their games while learning.\",\"options\":[\"학습 효과 증진에 활용될 수 있는 게임을 개발해야 한다.\",\"교육 현장에서 학습과 게임 활동을 적절하게 분배해야 한다.\",\"학습 활동에 게임이 초래하는 집중력 저하를 경계해야 한다.\",\"여가 시간에 게임을 활용함으로써 학습 효율을 향상해야 한다.\",\"게임의 부정적 영향을 줄이기 위해 학습 공동체가 노력해야 한다.\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 15917,
+      "completion_tokens": 816,
+      "total_tokens": 16733
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/8289c7ed-05d8-4a0f-bb59-c670c2659f1f.json"
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     18,
+     19,
+     20
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 16405,
+     "completion_tokens": 17,
+     "total_tokens": 16422
+    },
+    "elapsed_seconds": 3.09,
+    "raw_response": {
+     "id": "chatcmpl-30762322-7c83-4e01-b477-4d0c564e857f",
+     "object": "chat.completion",
+     "created": 1790090288,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[18,19,20]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 16405,
+      "completion_tokens": 17,
+      "total_tokens": 16422
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/415836ad-1ef0-4107-811e-0cfde58419e5.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 18,
+   "question": "다음 글의 목적으로 가장 적절한 것은?",
+   "context": "Dear Rosydale City Marathon Racers,\n\nWe are really grateful to all of you who have signed up for the 10th Rosydale City Marathon that was scheduled for this coming Saturday at 10 a.m. Unfortunately, as you may already know, the weather forecast says that there is going to be a downpour throughout the race day. We truly hoped that the race would go smoothly. However, it is likely that the heavy rain will make the roads too slippery and dangerous for the racers to run safely. As a result, we have decided to cancel the race. We hope you understand and we promise to hold another race in the near future.\n\nSincerely,\nMartha Kingsley\nRace Manager",
+   "options": [
+    "마라톤 경기 취소 사실을 공지하려고",
+    "마라톤 경기 사전 행사 참여를 독려하려고",
+    "마라톤 경기 참가비 환불 절차를 설명하려고",
+    "마라톤 경기 참여 시 규칙 준수를 당부하려고",
+    "마라톤 경기 진행에 따른 도로 통제를 안내하려고"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 19,
+   "question": "다음 글에 드러난 Peter의 심경 변화로 가장 적절한 것은?",
+   "context": "It was Valentine’s Day on Friday and Peter was certain that his wife, Amy, was going to love his surprise. Peter had spent a long time searching online for an event that would be a new way to spend time with Amy. He had finally found the perfect thing for her. She often told him that she liked to go to places she had never visited before, and he was absolutely sure that she would love going to the new, five-star restaurant downtown. He smiled as he called the restaurant and asked for a reservation for Friday. Unfortunately, his smile quickly disappeared when he was told that the restaurant was fully reserved. “That’s too bad,” he said quietly. “I thought that I had found the right place.”",
+   "options": [
+    "relaxed → indifferent",
+    "confident → disappointed",
+    "confused → satisfied",
+    "jealous → discouraged",
+    "embarrassed → joyful"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 20,
+   "question": "다음 글에서 필자가 주장하는 바로 가장 적절한 것은?",
+   "context": "We almost universally accept that playing video games is at best a pleasant break from a student’s learning and more often what prevents a student from accomplishing their goals. Games catch and hold attention in a way that few things can. And yet once they have our focus, they rarely seem to offer anything meaningful to help students grow in their lives outside the games. While this may be true for many games, we are too easily ignoring a valuable tool that could be used to enhance productivity instead of derailing it. Rather, it is desirable that we develop games that connect to the learning outcomes we want for our students. This will enable educators to take advantage of games’ attention commanding capacities and allow our students to enjoy their games while learning.",
+   "options": [
+    "학습 효과 증진에 활용될 수 있는 게임을 개발해야 한다.",
+    "교육 현장에서 학습과 게임 활동을 적절하게 분배해야 한다.",
+    "학습 활동에 게임이 초래하는 집중력 저하를 경계해야 한다.",
+    "여가 시간에 게임을 활용함으로써 학습 효율을 향상해야 한다.",
+    "게임의 부정적 영향을 줄이기 위해 학습 공동체가 노력해야 한다."
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}
