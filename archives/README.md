@@ -10,6 +10,7 @@ for f in archives/*.tar.gz; do tar xzf "$f"; done
 |---|---|
 | `csat-bench-results.tar.gz` | `csat/bench/results/*/<시스템>/`: 지식 벤치마크(2027 9월 모평) 호출별 기록 40,107개 |
 | `gamebench-results.tar.gz` | `gamebench/results/*/<시스템>/`: 판단 벤치마크 호출별 기록과 로그 29,942개 |
+| `gamebench-lang-results.tar.gz` | `gamebench/results/lang-en/`, `lang-ko-rerun/`: 언어 시험 호출별 기록 5,552개와 로그 13개 |
 | `csat-all_subjects-results.tar.gz` | `csat/all_subjects/results/<모델>/`: 2026 수능 전과목 호출 기록 3,536개 |
 | `csat-prompt_study-development.tar.gz` | `csat/prompt_study/development/<변형>/`: 지시문 비교 호출 기록 3,536개 |
 | `chess-matches-full.tar.gz` | `chess/matches/*.json` 중 2MB 넘는 대국 통합 기록 15개(수별 Jev 확률 포함) |
