@@ -1,0 +1,487 @@
+{
+ "task": {
+  "subject": "industrial-general",
+  "name": "공업 일반",
+  "section": "industrial-general",
+  "page": 2,
+  "targets": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/all_subjects/images/industrial-general/page-02.jpg",
+   "sha256": "e7a4addd5c2fb9b10af2f52caa8089785d7e1ea8254d9874f131d7cc840073ac"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 5,
+      "question": "다음 기사에 나타난 신소재를 활용한 사례로 가장 적절한 것은?",
+      "context": "국내의 한 연구팀이 미세 주름 구조의 고성능 복합체 섬유를 개발하였다. 이 섬유에 활용된 신소재는 탄소 원자 6개로 이루어진 육각형이 서로 연결되어 있는 평면 판을 관 모양으로 말아 놓은 구조를 가지며, 미세 주름 구조로 인한 신축성과 높은 에너지 저장 능력을 활용하여 배터리 발열 제어, 데이터 센터 냉각 등에 응용될 수 있다.\n- ○○신문, 2025년 2월 21일 자 -",
+      "options": [
+       "압전 세라믹스를 활용한 스피커",
+       "탄소 나노 튜브를 활용한 투명 히터",
+       "초전도체를 활용한 전력 송전 케이블",
+       "광섬유를 활용한 구조물 변위 측정 센서",
+       "형상 기억 합금을 활용한 자동차 엔진 밸브"
+      ],
+      "has_visual": true,
+      "visual_description": "기사 상자 오른쪽에 관처럼 굽은 섬유 구조가 여러 가닥 얽혀 있는 그림이 있다. 원형 확대 표시 안에는 작은 육각형들이 연결되어 말린 관 모양의 격자 구조가 보인다.",
+      "uncertainties": []
+     },
+     {
+      "number": 6,
+      "question": "다음은 ○○기업의 제품 개발 점검 회의록의 일부이다. 이를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "제품 개발 점검 회의록\n\n일자: 2025년 5월 22일\n작성자: ○○기업 A 사원\n\n총괄이사: 채소ㆍ과일 착즙기의 개발 진행 상황을 말씀해 주세요.\n설계팀장: 제품 설계는 관련된 전 부서를 참여시켜 지속적 토의를 통해 개발에 필요한 모든 요소를 반영하여 동시에 설계하는 방법으로 진행 중입니다.\n영업팀장: 적층형 3D 프린터로 제작한 착즙기 시제품에 대한 고객의 반응을 조사한 결과 긍정적이었습니다.\n생산팀장: 향후 최종 제품이 결정되면 생산 계획을 수립하고 그에 따라 완제품의 자재 명세서(BOM)를 확정할 예정입니다.\n\n<보기>\nㄱ. 순차 설계 방법으로 제품 설계를 진행 중이다.\nㄴ. 시제품 제작에 활용된 프린팅 방식은 재료를 겹겹이 쌓아 입체 형상으로 제작하는 방식이다.\nㄷ. 생산 계획 수립 후 완제품을 구성하는 모든 부품과 조립품의 종류와 수량 등을 나타내는 목록을 확정할 예정이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 7,
+      "question": "다음 ○○기업 신규 제품 출시 계획서를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "○○기업 신규 제품 출시 계획서\n\n제품 설명: 스마트폰 앱을 통해 스위치의 ON/OFF를 제어할 수 있는 제품\n제품 안정성: △-C-2XK-Sxxxxxxxxx\n기술 인증: 국내에서 최초로 개발된 신기술을 적용한 신제품으로 인정되어 정부가 부여하는 인증 획득\n생산 관리: 필요한 때 필요한 것을 필요한 만큼 생산하는 시스템 적용\n\n<보기>\nㄱ. 획득한 기술 인증은 NEP 인증이다.\nㄴ. 생산 관리에 적용한 시스템은 적시 생산 시스템(JIT)이다.\nㄷ. 제품 안정성에 대한 인증은 보건, 환경, 안전, 품질 등 분야별 인증을 단일화한 국가 통합 인증이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": true,
+      "visual_description": "제품 설명 칸에는 왼쪽부터 손에 든 스마트폰 그림, 오른쪽을 향한 화살표 위의 블루투스 기호, 벽면 스위치 그림이 연결되어 있다. 스마트폰 그림에는 ‘스마트폰’, 화살표 아래에는 ‘블루투스 (최대 반경 50 m)’, 스위치 그림에는 ‘ON/OFF 제어’라고 표시되어 있다. 제품 안정성 칸에는 국가 통합 인증을 나타내는 형태의 검은 선 로고와 그 오른쪽에 인증 번호 형식의 문자열이 있다.",
+      "uncertainties": [
+       "제품 안정성 인증 번호의 끝부분에 인쇄된 x의 정확한 개수는 이미지에서 명확히 판독하기 어렵다."
+      ]
+     },
+     {
+      "number": 8,
+      "question": "다음 기업의 생산 혁신 사례를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [3점]",
+      "context": "기업의 생산 혁신 사례\n\n▪ A, B 기업은 컴퓨터를 사용하여 제품 설계, 주문 접수, 제품 판매 등 공장 전체 업무를 통합하여 정보 시스템으로 일원화한 공장 자동화 시스템을 구축함.\n\n기업 | 로봇 활용 및 생산 혁신 활동\nA | ∙ 작업자가 로봇을 직접 조작하여 작업의 순서, 위치, 조건 등의 정보를 학습시켜 저장한 후 필요시 재생이 가능한 로봇 활용\nA | ∙ 재고 최소화를 위하여 도요타 생산 시스템(TPS) 도입\nB | ∙ 작업 환경의 변화에 적응하여 로봇 스스로 제어 기능을 변화시키는 능력을 가진 로봇 활용\nB | ∙ 낭비 요소 제거를 위하여 3정 5S 활동 전개\n\n<보기>\nㄱ. A, B 기업이 구축한 공장 자동화 시스템은 CIM이다.\nㄴ. A 기업의 로봇은 시퀀스 로봇, B 기업의 로봇은 플레이백 로봇에 해당한다.\nㄷ. A 기업이 재고 최소화를 위하여 도입한 생산 시스템은 린(Lean) 생산 시스템을 연구하여 후속으로 개발된 것이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 9,
+      "question": "다음 기사에 나타난 방호 장치와 동일한 유형의 방호 장치를 활용한 사례로 가장 적절한 것은? [3점]",
+      "context": "△△공장에서 선반 작업 중 차축 샤프트를 무리하게 가공하다가 깎여 나간 조각이 작업자를 강타하였다. 이에 △△공장에서는 가공 중인 공작물 조각이 작업자에게 날아가는 것을 방지하는 방호 장치를 설치하였다.\n- ○○신문, 2025년 3월 4일 자 -",
+      "options": [
+       "밀링 작업 중 파손된 공구 파편의 비래를 막아 주는 덮개",
+       "로봇의 가동 범위 내 작업자의 접근을 방지하는 방호 울타리",
+       "움직이는 프레스의 금형 사이에 손이 감지되면 작동을 멈추는 장치",
+       "동작 중인 교반기 내부로 신체 부위가 접근할 때 기계적 작용에 의해 밀어내는 장치",
+       "회전 중인 드럼 롤의 위험 범위 내로 공구가 들어오면 정지하면서 경보를 울리는 장치"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 10,
+      "question": "다음 ○○기업 자동화 사례 보고서를 통해 알 수 있는 내용으로 적절한 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "○○기업 자동화 사례 보고서\n\n▪ 생산품: 스마트 공기 청정기(제품 수명 주기: 성장기)\n▪ 상반기 자동화 현황\n\n자동화 내용 | 효과\n생산 현장의 모든 정보를 통합 관리하기 위하여 현장의 실시간 모니터링, 불량 관리, 물류 및 작업 내역 관리 등을 위한 생산 정보 시스템 도입 | 생산성 향상\nRFID 시스템을 통한 물류 창고 자동화 | 리드타임 감소\n태양광 에너지를 이용한 자동화 냉ㆍ난방 시스템 도입 | 관리비 절감\n\n<보기>\nㄱ. 도입한 생산 정보 시스템은 MES이다.\nㄴ. 냉ㆍ난방 시스템에 이용한 에너지는 신에너지이다.\nㄷ. 생산품의 제품 수명 주기에 적합한 마케팅 전략에는 시장 점유율 확대 전략이 있다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 8016,
+     "completion_tokens": 2159,
+     "total_tokens": 10175
+    },
+    "elapsed_seconds": 73.39,
+    "raw_response": {
+     "id": "chatcmpl-fa7d58a6-a75f-468e-bc17-7745d536aae6",
+     "object": "chat.completion",
+     "created": 1790087218,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[],\"questions\":[{\"number\":5,\"question\":\"다음 기사에 나타난 신소재를 활용한 사례로 가장 적절한 것은?\",\"context\":\"국내의 한 연구팀이 미세 주름 구조의 고성능 복합체 섬유를 개발하였다. 이 섬유에 활용된 신소재는 탄소 원자 6개로 이루어진 육각형이 서로 연결되어 있는 평면 판을 관 모양으로 말아 놓은 구조를 가지며, 미세 주름 구조로 인한 신축성과 높은 에너지 저장 능력을 활용하여 배터리 발열 제어, 데이터 센터 냉각 등에 응용될 수 있다.\\n- ○○신문, 2025년 2월 21일 자 -\",\"options\":[\"압전 세라믹스를 활용한 스피커\",\"탄소 나노 튜브를 활용한 투명 히터\",\"초전도체를 활용한 전력 송전 케이블\",\"광섬유를 활용한 구조물 변위 측정 센서\",\"형상 기억 합금을 활용한 자동차 엔진 밸브\"],\"has_visual\":true,\"visual_description\":\"기사 상자 오른쪽에 관처럼 굽은 섬유 구조가 여러 가닥 얽혀 있는 그림이 있다. 원형 확대 표시 안에는 작은 육각형들이 연결되어 말린 관 모양의 격자 구조가 보인다.\",\"uncertainties\":[]},{\"number\":6,\"question\":\"다음은 ○○기업의 제품 개발 점검 회의록의 일부이다. 이를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?\",\"context\":\"제품 개발 점검 회의록\\n\\n일자: 2025년 5월 22일\\n작성자: ○○기업 A 사원\\n\\n총괄이사: 채소ㆍ과일 착즙기의 개발 진행 상황을 말씀해 주세요.\\n설계팀장: 제품 설계는 관련된 전 부서를 참여시켜 지속적 토의를 통해 개발에 필요한 모든 요소를 반영하여 동시에 설계하는 방법으로 진행 중입니다.\\n영업팀장: 적층형 3D 프린터로 제작한 착즙기 시제품에 대한 고객의 반응을 조사한 결과 긍정적이었습니다.\\n생산팀장: 향후 최종 제품이 결정되면 생산 계획을 수립하고 그에 따라 완제품의 자재 명세서(BOM)를 확정할 예정입니다.\\n\\n<보기>\\nㄱ. 순차 설계 방법으로 제품 설계를 진행 중이다.\\nㄴ. 시제품 제작에 활용된 프린팅 방식은 재료를 겹겹이 쌓아 입체 형상으로 제작하는 방식이다.\\nㄷ. 생산 계획 수립 후 완제품을 구성하는 모든 부품과 조립품의 종류와 수량 등을 나타내는 목록을 확정할 예정이다.\",\"options\":[\"ㄱ\",\"ㄴ\",\"ㄱ, ㄷ\",\"ㄴ, ㄷ\",\"ㄱ, ㄴ, ㄷ\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":7,\"question\":\"다음 ○○기업 신규 제품 출시 계획서를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?\",\"context\":\"○○기업 신규 제품 출시 계획서\\n\\n제품 설명: 스마트폰 앱을 통해 스위치의 ON/OFF를 제어할 수 있는 제품\\n제품 안정성: △-C-2XK-Sxxxxxxxxx\\n기술 인증: 국내에서 최초로 개발된 신기술을 적용한 신제품으로 인정되어 정부가 부여하는 인증 획득\\n생산 관리: 필요한 때 필요한 것을 필요한 만큼 생산하는 시스템 적용\\n\\n<보기>\\nㄱ. 획득한 기술 인증은 NEP 인증이다.\\nㄴ. 생산 관리에 적용한 시스템은 적시 생산 시스템(JIT)이다.\\nㄷ. 제품 안정성에 대한 인증은 보건, 환경, 안전, 품질 등 분야별 인증을 단일화한 국가 통합 인증이다.\",\"options\":[\"ㄱ\",\"ㄴ\",\"ㄱ, ㄷ\",\"ㄴ, ㄷ\",\"ㄱ, ㄴ, ㄷ\"],\"has_visual\":true,\"visual_description\":\"제품 설명 칸에는 왼쪽부터 손에 든 스마트폰 그림, 오른쪽을 향한 화살표 위의 블루투스 기호, 벽면 스위치 그림이 연결되어 있다. 스마트폰 그림에는 ‘스마트폰’, 화살표 아래에는 ‘블루투스 (최대 반경 50 m)’, 스위치 그림에는 ‘ON/OFF 제어’라고 표시되어 있다. 제품 안정성 칸에는 국가 통합 인증을 나타내는 형태의 검은 선 로고와 그 오른쪽에 인증 번호 형식의 문자열이 있다.\",\"uncertainties\":[\"제품 안정성 인증 번호의 끝부분에 인쇄된 x의 정확한 개수는 이미지에서 명확히 판독하기 어렵다.\"]},{\"number\":8,\"question\":\"다음 기업의 생산 혁신 사례를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [3점]\",\"context\":\"기업의 생산 혁신 사례\\n\\n▪ A, B 기업은 컴퓨터를 사용하여 제품 설계, 주문 접수, 제품 판매 등 공장 전체 업무를 통합하여 정보 시스템으로 일원화한 공장 자동화 시스템을 구축함.\\n\\n기업 | 로봇 활용 및 생산 혁신 활동\\nA | ∙ 작업자가 로봇을 직접 조작하여 작업의 순서, 위치, 조건 등의 정보를 학습시켜 저장한 후 필요시 재생이 가능한 로봇 활용\\nA | ∙ 재고 최소화를 위하여 도요타 생산 시스템(TPS) 도입\\nB | ∙ 작업 환경의 변화에 적응하여 로봇 스스로 제어 기능을 변화시키는 능력을 가진 로봇 활용\\nB | ∙ 낭비 요소 제거를 위하여 3정 5S 활동 전개\\n\\n<보기>\\nㄱ. A, B 기업이 구축한 공장 자동화 시스템은 CIM이다.\\nㄴ. A 기업의 로봇은 시퀀스 로봇, B 기업의 로봇은 플레이백 로봇에 해당한다.\\nㄷ. A 기업이 재고 최소화를 위하여 도입한 생산 시스템은 린(Lean) 생산 시스템을 연구하여 후속으로 개발된 것이다.\",\"options\":[\"ㄱ\",\"ㄴ\",\"ㄱ, ㄷ\",\"ㄴ, ㄷ\",\"ㄱ, ㄴ, ㄷ\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":9,\"question\":\"다음 기사에 나타난 방호 장치와 동일한 유형의 방호 장치를 활용한 사례로 가장 적절한 것은? [3점]\",\"context\":\"△△공장에서 선반 작업 중 차축 샤프트를 무리하게 가공하다가 깎여 나간 조각이 작업자를 강타하였다. 이에 △△공장에서는 가공 중인 공작물 조각이 작업자에게 날아가는 것을 방지하는 방호 장치를 설치하였다.\\n- ○○신문, 2025년 3월 4일 자 -\",\"options\":[\"밀링 작업 중 파손된 공구 파편의 비래를 막아 주는 덮개\",\"로봇의 가동 범위 내 작업자의 접근을 방지하는 방호 울타리\",\"움직이는 프레스의 금형 사이에 손이 감지되면 작동을 멈추는 장치\",\"동작 중인 교반기 내부로 신체 부위가 접근할 때 기계적 작용에 의해 밀어내는 장치\",\"회전 중인 드럼 롤의 위험 범위 내로 공구가 들어오면 정지하면서 경보를 울리는 장치\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":10,\"question\":\"다음 ○○기업 자동화 사례 보고서를 통해 알 수 있는 내용으로 적절한 것만을 <보기>에서 있는 대로 고른 것은?\",\"context\":\"○○기업 자동화 사례 보고서\\n\\n▪ 생산품: 스마트 공기 청정기(제품 수명 주기: 성장기)\\n▪ 상반기 자동화 현황\\n\\n자동화 내용 | 효과\\n생산 현장의 모든 정보를 통합 관리하기 위하여 현장의 실시간 모니터링, 불량 관리, 물류 및 작업 내역 관리 등을 위한 생산 정보 시스템 도입 | 생산성 향상\\nRFID 시스템을 통한 물류 창고 자동화 | 리드타임 감소\\n태양광 에너지를 이용한 자동화 냉ㆍ난방 시스템 도입 | 관리비 절감\\n\\n<보기>\\nㄱ. 도입한 생산 정보 시스템은 MES이다.\\nㄴ. 냉ㆍ난방 시스템에 이용한 에너지는 신에너지이다.\\nㄷ. 생산품의 제품 수명 주기에 적합한 마케팅 전략에는 시장 점유율 확대 전략이 있다.\",\"options\":[\"ㄱ\",\"ㄴ\",\"ㄱ, ㄷ\",\"ㄴ, ㄷ\",\"ㄱ, ㄴ, ㄷ\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 8016,
+      "completion_tokens": 2159,
+      "total_tokens": 10175
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/all_subjects/call-traces/2c1f91d5-ab57-4349-bf48-82d4432d4aa5.json"
+   },
+   "review": {
+    "issues": [
+     {
+      "number": 7,
+      "field": "visual_description",
+      "problem": "제품 안정성 칸의 핵심 시각 정보인 ‘KC’ 형태의 인증 로고가 정확히 전사되지 않았고, 대신 ‘국가 통합 인증을 나타내는’이라는 해석적 설명으로 대체되었다. 해당 로고의 식별은 <보기>의 인증 관련 진술 판단에 영향을 줄 수 있다."
+     }
+    ],
+    "checked_numbers": [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 9862,
+     "completion_tokens": 901,
+     "total_tokens": 10763
+    },
+    "elapsed_seconds": 17.93,
+    "raw_response": {
+     "id": "chatcmpl-423c819c-c8d2-4f90-a3bc-053fbc2efc8d",
+     "object": "chat.completion",
+     "created": 1790087236,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[{\"number\":7,\"field\":\"visual_description\",\"problem\":\"제품 안정성 칸의 핵심 시각 정보인 ‘KC’ 형태의 인증 로고가 정확히 전사되지 않았고, 대신 ‘국가 통합 인증을 나타내는’이라는 해석적 설명으로 대체되었다. 해당 로고의 식별은 <보기>의 인증 관련 진술 판단에 영향을 줄 수 있다.\"}],\"checked_numbers\":[5,6,7,8,9,10]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 9862,
+      "completion_tokens": 901,
+      "total_tokens": 10763
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/all_subjects/call-traces/16e190d3-65a3-4c10-9fbb-01ec7d208a9a.json"
+   }
+  },
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 5,
+      "question": "다음 기사에 나타난 신소재를 활용한 사례로 가장 적절한 것은?",
+      "context": "국내의 한 연구팀이 미세 주름 구조의 고성능 복합체 섬유를 개발하였다. 이 섬유에 활용된 신소재는 탄소 원자 6개로 이루어진 육각형이 서로 연결되어 있는 평면 판을 관 모양으로 말아 놓은 구조를 가지며, 미세 주름 구조로 인한 신축성과 높은 에너지 저장 능력을 활용하여 배터리 발열 제어, 데이터 센터 냉각 등에 응용될 수 있다.\n- ○○신문, 2025년 2월 21일 자 -",
+      "options": [
+       "압전 세라믹스를 활용한 스피커",
+       "탄소 나노 튜브를 활용한 투명 히터",
+       "초전도체를 활용한 전력 송전 케이블",
+       "광섬유를 활용한 구조물 변위 측정 센서",
+       "형상 기억 합금을 활용한 자동차 엔진 밸브"
+      ],
+      "has_visual": true,
+      "visual_description": "기사 상자 오른쪽에 관처럼 굽은 섬유 구조가 여러 가닥 얽혀 있는 그림이 있다. 원형 확대 표시 안에는 작은 육각형들이 연결되어 말린 관 모양의 격자 구조가 보인다.",
+      "uncertainties": []
+     },
+     {
+      "number": 6,
+      "question": "다음은 ○○기업의 제품 개발 점검 회의록의 일부이다. 이를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "제품 개발 점검 회의록\n\n일자: 2025년 5월 22일\n작성자: ○○기업 A 사원\n\n총괄이사: 채소ㆍ과일 착즙기의 개발 진행 상황을 말씀해 주세요.\n설계팀장: 제품 설계는 관련된 전 부서를 참여시켜 지속적 토의를 통해 개발에 필요한 모든 요소를 반영하여 동시에 설계하는 방법으로 진행 중입니다.\n영업팀장: 적층형 3D 프린터로 제작한 착즙기 시제품에 대한 고객의 반응을 조사한 결과 긍정적이었습니다.\n생산팀장: 향후 최종 제품이 결정되면 생산 계획을 수립하고 그에 따라 완제품의 자재 명세서(BOM)를 확정할 예정입니다.\n\n<보기>\nㄱ. 순차 설계 방법으로 제품 설계를 진행 중이다.\nㄴ. 시제품 제작에 활용된 프린팅 방식은 재료를 겹겹이 쌓아 입체 형상으로 제작하는 방식이다.\nㄷ. 생산 계획 수립 후 완제품을 구성하는 모든 부품과 조립품의 종류와 수량 등을 나타내는 목록을 확정할 예정이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 7,
+      "question": "다음 ○○기업 신규 제품 출시 계획서를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "○○기업 신규 제품 출시 계획서\n\n제품 설명: 스마트폰 앱을 통해 스위치의 ON/OFF를 제어할 수 있는 제품\n제품 안정성: △-C-2XK-Sxxxxxxxxx\n기술 인증: 국내에서 최초로 개발된 신기술을 적용한 신제품으로 인정되어 정부가 부여하는 인증 획득\n생산 관리: 필요한 때 필요한 것을 필요한 만큼 생산하는 시스템 적용\n\n<보기>\nㄱ. 획득한 기술 인증은 NEP 인증이다.\nㄴ. 생산 관리에 적용한 시스템은 적시 생산 시스템(JIT)이다.\nㄷ. 제품 안정성에 대한 인증은 보건, 환경, 안전, 품질 등 분야별 인증을 단일화한 국가 통합 인증이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": true,
+      "visual_description": "제품 설명 칸에는 왼쪽부터 손에 든 스마트폰 그림, 오른쪽을 향한 화살표 위의 블루투스 기호, 벽면 스위치 그림이 연결되어 있다. 스마트폰 그림에는 ‘스마트폰’, 화살표 아래에는 ‘블루투스 (최대 반경 50 m)’, 스위치 그림에는 ‘ON/OFF 제어’라고 표시되어 있다. 제품 안정성 칸에는 검은색 ‘KC’ 형태의 인증 로고와 그 오른쪽에 ‘△-C-2XK-Sxxxxxxxxx’가 표시되어 있다.",
+      "uncertainties": []
+     },
+     {
+      "number": 8,
+      "question": "다음 기업의 생산 혁신 사례를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [3점]",
+      "context": "기업의 생산 혁신 사례\n\n▪ A, B 기업은 컴퓨터를 사용하여 제품 설계, 주문 접수, 제품 판매 등 공장 전체 업무를 통합하여 정보 시스템으로 일원화한 공장 자동화 시스템을 구축함.\n\n기업 | 로봇 활용 및 생산 혁신 활동\nA | ∙ 작업자가 로봇을 직접 조작하여 작업의 순서, 위치, 조건 등의 정보를 학습시켜 저장한 후 필요시 재생이 가능한 로봇 활용\nA | ∙ 재고 최소화를 위하여 도요타 생산 시스템(TPS) 도입\nB | ∙ 작업 환경의 변화에 적응하여 로봇 스스로 제어 기능을 변화시키는 능력을 가진 로봇 활용\nB | ∙ 낭비 요소 제거를 위하여 3정 5S 활동 전개\n\n<보기>\nㄱ. A, B 기업이 구축한 공장 자동화 시스템은 CIM이다.\nㄴ. A 기업의 로봇은 시퀀스 로봇, B 기업의 로봇은 플레이백 로봇에 해당한다.\nㄷ. A 기업이 재고 최소화를 위하여 도입한 생산 시스템은 린(Lean) 생산 시스템을 연구하여 후속으로 개발된 것이다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 9,
+      "question": "다음 기사에 나타난 방호 장치와 동일한 유형의 방호 장치를 활용한 사례로 가장 적절한 것은? [3점]",
+      "context": "△△공장에서 선반 작업 중 차축 샤프트를 무리하게 가공하다가 깎여 나간 조각이 작업자를 강타하였다. 이에 △△공장에서는 가공 중인 공작물 조각이 작업자에게 날아가는 것을 방지하는 방호 장치를 설치하였다.\n- ○○신문, 2025년 3월 4일 자 -",
+      "options": [
+       "밀링 작업 중 파손된 공구 파편의 비래를 막아 주는 덮개",
+       "로봇의 가동 범위 내 작업자의 접근을 방지하는 방호 울타리",
+       "움직이는 프레스의 금형 사이에 손이 감지되면 작동을 멈추는 장치",
+       "동작 중인 교반기 내부로 신체 부위가 접근할 때 기계적 작용에 의해 밀어내는 장치",
+       "회전 중인 드럼 롤의 위험 범위 내로 공구가 들어오면 정지하면서 경보를 울리는 장치"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 10,
+      "question": "다음 ○○기업 자동화 사례 보고서를 통해 알 수 있는 내용으로 적절한 것만을 <보기>에서 있는 대로 고른 것은?",
+      "context": "○○기업 자동화 사례 보고서\n\n▪ 생산품: 스마트 공기 청정기(제품 수명 주기: 성장기)\n▪ 상반기 자동화 현황\n\n자동화 내용 | 효과\n생산 현장의 모든 정보를 통합 관리하기 위하여 현장의 실시간 모니터링, 불량 관리, 물류 및 작업 내역 관리 등을 위한 생산 정보 시스템 도입 | 생산성 향상\nRFID 시스템을 통한 물류 창고 자동화 | 리드타임 감소\n태양광 에너지를 이용한 자동화 냉ㆍ난방 시스템 도입 | 관리비 절감\n\n<보기>\nㄱ. 도입한 생산 정보 시스템은 MES이다.\nㄴ. 냉ㆍ난방 시스템에 이용한 에너지는 신에너지이다.\nㄷ. 생산품의 제품 수명 주기에 적합한 마케팅 전략에는 시장 점유율 확대 전략이 있다.",
+      "options": [
+       "ㄱ",
+       "ㄴ",
+       "ㄱ, ㄷ",
+       "ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 10024,
+     "completion_tokens": 274,
+     "total_tokens": 10298
+    },
+    "elapsed_seconds": 10.56,
+    "raw_response": {
+     "id": "chatcmpl-a899f238-36d2-479c-999f-ea0ac86a7c2e",
+     "object": "chat.completion",
+     "created": 1790087247,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"patches\":[{\"numbers\":[7],\"field\":\"visual_description\",\"old\":\"제품 안정성 칸에는 국가 통합 인증을 나타내는 형태의 검은 선 로고와 그 오른쪽에 인증 번호 형식의 문자열이 있다.\",\"new\":\"제품 안정성 칸에는 검은색 ‘KC’ 형태의 인증 로고와 그 오른쪽에 ‘△-C-2XK-Sxxxxxxxxx’가 표시되어 있다.\"}],\"uncertainty_updates\":[{\"number\":7,\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 10024,
+      "completion_tokens": 274,
+      "total_tokens": 10298
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/all_subjects/call-traces/e5b98d2e-ac7d-4146-aec1-8d8be27ad77b.json",
+    "source_patches": {
+     "patches": [
+      {
+       "numbers": [
+        7
+       ],
+       "field": "visual_description",
+       "old": "제품 안정성 칸에는 국가 통합 인증을 나타내는 형태의 검은 선 로고와 그 오른쪽에 인증 번호 형식의 문자열이 있다.",
+       "new": "제품 안정성 칸에는 검은색 ‘KC’ 형태의 인증 로고와 그 오른쪽에 ‘△-C-2XK-Sxxxxxxxxx’가 표시되어 있다."
+      }
+     ],
+     "uncertainty_updates": [
+      {
+       "number": 7,
+       "uncertainties": []
+      }
+     ]
+    }
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 9835,
+     "completion_tokens": 489,
+     "total_tokens": 10324
+    },
+    "elapsed_seconds": 12.06,
+    "raw_response": {
+     "id": "chatcmpl-6fcaa5c3-6cf5-4533-ad6c-d9c004613646",
+     "object": "chat.completion",
+     "created": 1790087259,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[5,6,7,8,9,10]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 9835,
+      "completion_tokens": 489,
+      "total_tokens": 10324
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/all_subjects/call-traces/cd51de68-c879-4075-835a-95386ffb8c8c.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 5,
+   "question": "다음 기사에 나타난 신소재를 활용한 사례로 가장 적절한 것은?",
+   "context": "국내의 한 연구팀이 미세 주름 구조의 고성능 복합체 섬유를 개발하였다. 이 섬유에 활용된 신소재는 탄소 원자 6개로 이루어진 육각형이 서로 연결되어 있는 평면 판을 관 모양으로 말아 놓은 구조를 가지며, 미세 주름 구조로 인한 신축성과 높은 에너지 저장 능력을 활용하여 배터리 발열 제어, 데이터 센터 냉각 등에 응용될 수 있다.\n- ○○신문, 2025년 2월 21일 자 -",
+   "options": [
+    "압전 세라믹스를 활용한 스피커",
+    "탄소 나노 튜브를 활용한 투명 히터",
+    "초전도체를 활용한 전력 송전 케이블",
+    "광섬유를 활용한 구조물 변위 측정 센서",
+    "형상 기억 합금을 활용한 자동차 엔진 밸브"
+   ],
+   "has_visual": true,
+   "visual_description": "기사 상자 오른쪽에 관처럼 굽은 섬유 구조가 여러 가닥 얽혀 있는 그림이 있다. 원형 확대 표시 안에는 작은 육각형들이 연결되어 말린 관 모양의 격자 구조가 보인다.",
+   "uncertainties": []
+  },
+  {
+   "number": 6,
+   "question": "다음은 ○○기업의 제품 개발 점검 회의록의 일부이다. 이를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+   "context": "제품 개발 점검 회의록\n\n일자: 2025년 5월 22일\n작성자: ○○기업 A 사원\n\n총괄이사: 채소ㆍ과일 착즙기의 개발 진행 상황을 말씀해 주세요.\n설계팀장: 제품 설계는 관련된 전 부서를 참여시켜 지속적 토의를 통해 개발에 필요한 모든 요소를 반영하여 동시에 설계하는 방법으로 진행 중입니다.\n영업팀장: 적층형 3D 프린터로 제작한 착즙기 시제품에 대한 고객의 반응을 조사한 결과 긍정적이었습니다.\n생산팀장: 향후 최종 제품이 결정되면 생산 계획을 수립하고 그에 따라 완제품의 자재 명세서(BOM)를 확정할 예정입니다.\n\n<보기>\nㄱ. 순차 설계 방법으로 제품 설계를 진행 중이다.\nㄴ. 시제품 제작에 활용된 프린팅 방식은 재료를 겹겹이 쌓아 입체 형상으로 제작하는 방식이다.\nㄷ. 생산 계획 수립 후 완제품을 구성하는 모든 부품과 조립품의 종류와 수량 등을 나타내는 목록을 확정할 예정이다.",
+   "options": [
+    "ㄱ",
+    "ㄴ",
+    "ㄱ, ㄷ",
+    "ㄴ, ㄷ",
+    "ㄱ, ㄴ, ㄷ"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 7,
+   "question": "다음 ○○기업 신규 제품 출시 계획서를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은?",
+   "context": "○○기업 신규 제품 출시 계획서\n\n제품 설명: 스마트폰 앱을 통해 스위치의 ON/OFF를 제어할 수 있는 제품\n제품 안정성: △-C-2XK-Sxxxxxxxxx\n기술 인증: 국내에서 최초로 개발된 신기술을 적용한 신제품으로 인정되어 정부가 부여하는 인증 획득\n생산 관리: 필요한 때 필요한 것을 필요한 만큼 생산하는 시스템 적용\n\n<보기>\nㄱ. 획득한 기술 인증은 NEP 인증이다.\nㄴ. 생산 관리에 적용한 시스템은 적시 생산 시스템(JIT)이다.\nㄷ. 제품 안정성에 대한 인증은 보건, 환경, 안전, 품질 등 분야별 인증을 단일화한 국가 통합 인증이다.",
+   "options": [
+    "ㄱ",
+    "ㄴ",
+    "ㄱ, ㄷ",
+    "ㄴ, ㄷ",
+    "ㄱ, ㄴ, ㄷ"
+   ],
+   "has_visual": true,
+   "visual_description": "제품 설명 칸에는 왼쪽부터 손에 든 스마트폰 그림, 오른쪽을 향한 화살표 위의 블루투스 기호, 벽면 스위치 그림이 연결되어 있다. 스마트폰 그림에는 ‘스마트폰’, 화살표 아래에는 ‘블루투스 (최대 반경 50 m)’, 스위치 그림에는 ‘ON/OFF 제어’라고 표시되어 있다. 제품 안정성 칸에는 검은색 ‘KC’ 형태의 인증 로고와 그 오른쪽에 ‘△-C-2XK-Sxxxxxxxxx’가 표시되어 있다.",
+   "uncertainties": []
+  },
+  {
+   "number": 8,
+   "question": "다음 기업의 생산 혁신 사례를 통해 알 수 있는 내용으로 옳은 것만을 <보기>에서 있는 대로 고른 것은? [3점]",
+   "context": "기업의 생산 혁신 사례\n\n▪ A, B 기업은 컴퓨터를 사용하여 제품 설계, 주문 접수, 제품 판매 등 공장 전체 업무를 통합하여 정보 시스템으로 일원화한 공장 자동화 시스템을 구축함.\n\n기업 | 로봇 활용 및 생산 혁신 활동\nA | ∙ 작업자가 로봇을 직접 조작하여 작업의 순서, 위치, 조건 등의 정보를 학습시켜 저장한 후 필요시 재생이 가능한 로봇 활용\nA | ∙ 재고 최소화를 위하여 도요타 생산 시스템(TPS) 도입\nB | ∙ 작업 환경의 변화에 적응하여 로봇 스스로 제어 기능을 변화시키는 능력을 가진 로봇 활용\nB | ∙ 낭비 요소 제거를 위하여 3정 5S 활동 전개\n\n<보기>\nㄱ. A, B 기업이 구축한 공장 자동화 시스템은 CIM이다.\nㄴ. A 기업의 로봇은 시퀀스 로봇, B 기업의 로봇은 플레이백 로봇에 해당한다.\nㄷ. A 기업이 재고 최소화를 위하여 도입한 생산 시스템은 린(Lean) 생산 시스템을 연구하여 후속으로 개발된 것이다.",
+   "options": [
+    "ㄱ",
+    "ㄴ",
+    "ㄱ, ㄷ",
+    "ㄴ, ㄷ",
+    "ㄱ, ㄴ, ㄷ"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 9,
+   "question": "다음 기사에 나타난 방호 장치와 동일한 유형의 방호 장치를 활용한 사례로 가장 적절한 것은? [3점]",
+   "context": "△△공장에서 선반 작업 중 차축 샤프트를 무리하게 가공하다가 깎여 나간 조각이 작업자를 강타하였다. 이에 △△공장에서는 가공 중인 공작물 조각이 작업자에게 날아가는 것을 방지하는 방호 장치를 설치하였다.\n- ○○신문, 2025년 3월 4일 자 -",
+   "options": [
+    "밀링 작업 중 파손된 공구 파편의 비래를 막아 주는 덮개",
+    "로봇의 가동 범위 내 작업자의 접근을 방지하는 방호 울타리",
+    "움직이는 프레스의 금형 사이에 손이 감지되면 작동을 멈추는 장치",
+    "동작 중인 교반기 내부로 신체 부위가 접근할 때 기계적 작용에 의해 밀어내는 장치",
+    "회전 중인 드럼 롤의 위험 범위 내로 공구가 들어오면 정지하면서 경보를 울리는 장치"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 10,
+   "question": "다음 ○○기업 자동화 사례 보고서를 통해 알 수 있는 내용으로 적절한 것만을 <보기>에서 있는 대로 고른 것은?",
+   "context": "○○기업 자동화 사례 보고서\n\n▪ 생산품: 스마트 공기 청정기(제품 수명 주기: 성장기)\n▪ 상반기 자동화 현황\n\n자동화 내용 | 효과\n생산 현장의 모든 정보를 통합 관리하기 위하여 현장의 실시간 모니터링, 불량 관리, 물류 및 작업 내역 관리 등을 위한 생산 정보 시스템 도입 | 생산성 향상\nRFID 시스템을 통한 물류 창고 자동화 | 리드타임 감소\n태양광 에너지를 이용한 자동화 냉ㆍ난방 시스템 도입 | 관리비 절감\n\n<보기>\nㄱ. 도입한 생산 정보 시스템은 MES이다.\nㄴ. 냉ㆍ난방 시스템에 이용한 에너지는 신에너지이다.\nㄷ. 생산품의 제품 수명 주기에 적합한 마케팅 전략에는 시장 점유율 확대 전략이 있다.",
+   "options": [
+    "ㄱ",
+    "ㄴ",
+    "ㄱ, ㄷ",
+    "ㄴ, ㄷ",
+    "ㄱ, ㄴ, ㄷ"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}

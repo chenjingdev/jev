@@ -13,6 +13,7 @@ Jev 같은 모델이 어떻게 만들어지는지 조사한 자료 모음. 실�
 | `replicas-detail.md` | 읽은 6개 상세. 특징·속도·성능 표와 후기(커뮤니티 반응, 내 평가) |
 | `vision.md` | 시각 입력 전용 Jev 같은 것. openvons.vision(인코더 + 2.5만 파라미터 head), jev-visual(MLX VLM) |
 | `jevable.md` | jevable.com 갤러리 조사(2026-09-21, 194개). 체스 3건(코드 있는 것 1개), 가장 흔한 실전 패턴인 라우팅 계열, 우리가 안 해 본 자리, 오픈소스 도구 `jevcal`·`jevals`. 그날 목록은 `jevable-projects.json` |
+| `pattern-review.md` | 기사의 chunking을 AI 코드 검수에 옮기는 조사. 저장소 관용 패턴 사전 + Jev가 hunk를 익숙함/변형/낯섦으로 분류. 근거 논문과 첫 실험 3개 |
 
 ## 공식 자료
 

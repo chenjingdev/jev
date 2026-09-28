@@ -1,0 +1,226 @@
+{
+ "task": {
+  "subject": "english",
+  "name": "영어",
+  "section": "english",
+  "page": 5,
+  "targets": [
+   29,
+   30,
+   31,
+   32
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/images/english/page-05.jpg",
+   "sha256": "abcfa0bbd905da7f3eac3bf06b9149ba080dc6ac843e2c5d1302074d0e91c7ef"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.\nDo not assign unknown labels (가), (나), A, B, etc. to named regions, entities or solved values. Preserve unknown correspondences. Transcribe the printed prompt, including any question instructions shared across adjacent questions.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 29,
+      "question": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+      "context": "Think of yourself. When you decide to get up and get a drink of water, for example, you don’t consciously organize or consider the host of steps involved. Imagine if we ① <u>had</u> to consider every single muscle that needed to be contracted or relaxed just to stand up and walk. It would be tiresome and very slow ― as patients recovering from a brain injury affecting the motor system ② <u>knows</u>. The autopilot parts of our brain do it for us automatically, ③ <u>freeing</u> up our conscious mind for more important jobs. It is the older parts of our brain ④ <u>that</u> support these automatic processes that allow us to move, hear, see, and use many of our social skills. More recently evolved abilities like talking, reading, and writing are far less automated. So, most of the time, ⑤ <u>what</u> you are perceiving, feeling, or thinking is based on a very crude and fast analysis that happens completely without your awareness.\n\n* crude: 투박한",
+      "options": [
+       "had",
+       "knows",
+       "freeing",
+       "that",
+       "what"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 30,
+      "question": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은? [3점]",
+      "context": "Studies in psychology have reported cases in which competitive incentives resulted in lower task effort, and their focus was on the psychological underpinnings of the reduction in motivation. For example, competition presents an inevitable conflict between the motivation to achieve one’s personal goal and the ① <u>desire</u> to maintain good relationships with others. When the maintenance of interpersonal relationships is important, with their counterparts in particular or with others generally, competitors experience an ② <u>internal</u> conflict that can harm their desire to achieve their goal and taint the good feeling brought about by winning. Exline and Lobel found that the perception of oneself as a target for upward social comparison often makes people ③ <u>uncomfortable</u>. When they believe that others are making envious comparisons with them, people feel uneasiness, distress, or sorrow. Feelings of guilt, an emotion generally associated with high motivation for goal-achievement, lead to ④ <u>stronger</u> motivation and performance in the pursuit of competitive goals. Consequences of this emotional state include lower task motivation in a competition and preferences for more cooperative and altruistic outcomes, such as ⑤ <u>diminishing</u> the significance of the outcome or sharing the winner’s reward.\n\n* taint: 더럽히다  ** altruistic: 이타주의의",
+      "options": [
+       "desire",
+       "internal",
+       "uncomfortable",
+       "stronger",
+       "diminishing"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 31,
+      "question": "Literature can be helpful in the language learning process because of the ____________________ it fosters in readers.",
+      "context": "[31～34] 다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.\n\nCore language teaching materials must concentrate on how a language operates both as a rule-based system and as a sociosemantic system. Very often, the process of learning is essentially analytic, piecemeal, and, at the level of the personality, fairly superficial. Engaging imaginatively with literature enables learners to shift the focus of their attention beyond the more mechanical aspects of the foreign language system. When a novel, play or short story is explored over a period of time, the result is that the reader begins to ‘inhabit’ the text. He or she is drawn into the book. Pinpointing what individual words or phrases may mean becomes less important than pursuing the development of the story. The reader is eager to find out what happens as events unfold; he or she feels close to certain characters and shares their emotional responses. The language becomes ‘transparent’ ― the fiction draws the whole person into its own world.\n\n* sociosemantic: 사회의미론적인  ** transparent: 투명한",
+      "options": [
+       "linguistic insight",
+       "artistic imagination",
+       "literary sensibility",
+       "alternative perspective",
+       "personal involvement"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 32,
+      "question": "Education, at its best, teaches more than just knowledge.",
+      "context": "[31～34] 다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.\n\nIt teaches critical thinking: the ability to stop and think before acting, to avoid succumbing to emotional pressures. This is not thought control. It is the very reverse: mental liberation. Even the most advanced intellectual will be imperfect at this skill. But even imperfect possession of it ____________________ of being ‘stimulus-driven’, constantly reacting to the immediate environment, the brightest colours or loudest sounds. Being driven by heuristic responses, living by instinct and emotion all the time, is a very easy way to live, in many ways: thought is effortful, especially for the inexperienced. But emotions are also exhausting, and short-term reactions may not, in the long term, be the most beneficial for health and survival. Just as we reach for burgers for the sake of convenience, storing up the arterial fat which may one day kill us, so our reliance on feelings can do us great harm.\n\n* succumb: 굴복하다  ** arterial: 동맥의",
+      "options": [
+       "intensifies people’s danger",
+       "enhances our understanding",
+       "frees a person from the burden",
+       "allows us to accept the inevitability",
+       "requires one to have the experience"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 15920,
+     "completion_tokens": 1296,
+     "total_tokens": 17216
+    },
+    "elapsed_seconds": 43.5,
+    "raw_response": {
+     "id": "chatcmpl-095b6a77-c4f4-4d05-9ce9-be5ac00799d5",
+     "object": "chat.completion",
+     "created": 1790091148,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[{\"question_numbers\":[31,32],\"text\":\"[31～34] 다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.\"}],\"questions\":[{\"number\":29,\"question\":\"다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?\",\"context\":\"Think of yourself. When you decide to get up and get a drink of water, for example, you don’t consciously organize or consider the host of steps involved. Imagine if we ① <u>had</u> to consider every single muscle that needed to be contracted or relaxed just to stand up and walk. It would be tiresome and very slow ― as patients recovering from a brain injury affecting the motor system ② <u>knows</u>. The autopilot parts of our brain do it for us automatically, ③ <u>freeing</u> up our conscious mind for more important jobs. It is the older parts of our brain ④ <u>that</u> support these automatic processes that allow us to move, hear, see, and use many of our social skills. More recently evolved abilities like talking, reading, and writing are far less automated. So, most of the time, ⑤ <u>what</u> you are perceiving, feeling, or thinking is based on a very crude and fast analysis that happens completely without your awareness.\\n\\n* crude: 투박한\",\"options\":[\"had\",\"knows\",\"freeing\",\"that\",\"what\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":30,\"question\":\"다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은? [3점]\",\"context\":\"Studies in psychology have reported cases in which competitive incentives resulted in lower task effort, and their focus was on the psychological underpinnings of the reduction in motivation. For example, competition presents an inevitable conflict between the motivation to achieve one’s personal goal and the ① <u>desire</u> to maintain good relationships with others. When the maintenance of interpersonal relationships is important, with their counterparts in particular or with others generally, competitors experience an ② <u>internal</u> conflict that can harm their desire to achieve their goal and taint the good feeling brought about by winning. Exline and Lobel found that the perception of oneself as a target for upward social comparison often makes people ③ <u>uncomfortable</u>. When they believe that others are making envious comparisons with them, people feel uneasiness, distress, or sorrow. Feelings of guilt, an emotion generally associated with high motivation for goal-achievement, lead to ④ <u>stronger</u> motivation and performance in the pursuit of competitive goals. Consequences of this emotional state include lower task motivation in a competition and preferences for more cooperative and altruistic outcomes, such as ⑤ <u>diminishing</u> the significance of the outcome or sharing the winner’s reward.\\n\\n* taint: 더럽히다  ** altruistic: 이타주의의\",\"options\":[\"desire\",\"internal\",\"uncomfortable\",\"stronger\",\"diminishing\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":31,\"question\":\"Literature can be helpful in the language learning process because of the ____________________ it fosters in readers.\",\"context\":\"Core language teaching materials must concentrate on how a language operates both as a rule-based system and as a sociosemantic system. Very often, the process of learning is essentially analytic, piecemeal, and, at the level of the personality, fairly superficial. Engaging imaginatively with literature enables learners to shift the focus of their attention beyond the more mechanical aspects of the foreign language system. When a novel, play or short story is explored over a period of time, the result is that the reader begins to ‘inhabit’ the text. He or she is drawn into the book. Pinpointing what individual words or phrases may mean becomes less important than pursuing the development of the story. The reader is eager to find out what happens as events unfold; he or she feels close to certain characters and shares their emotional responses. The language becomes ‘transparent’ ― the fiction draws the whole person into its own world.\\n\\n* sociosemantic: 사회의미론적인  ** transparent: 투명한\",\"options\":[\"linguistic insight\",\"artistic imagination\",\"literary sensibility\",\"alternative perspective\",\"personal involvement\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":32,\"question\":\"Education, at its best, teaches more than just knowledge.\",\"context\":\"It teaches critical thinking: the ability to stop and think before acting, to avoid succumbing to emotional pressures. This is not thought control. It is the very reverse: mental liberation. Even the most advanced intellectual will be imperfect at this skill. But even imperfect possession of it ____________________ of being ‘stimulus-driven’, constantly reacting to the immediate environment, the brightest colours or loudest sounds. Being driven by heuristic responses, living by instinct and emotion all the time, is a very easy way to live, in many ways: thought is effortful, especially for the inexperienced. But emotions are also exhausting, and short-term reactions may not, in the long term, be the most beneficial for health and survival. Just as we reach for burgers for the sake of convenience, storing up the arterial fat which may one day kill us, so our reliance on feelings can do us great harm.\\n\\n* succumb: 굴복하다  ** arterial: 동맥의\",\"options\":[\"intensifies people’s danger\",\"enhances our understanding\",\"frees a person from the burden\",\"allows us to accept the inevitability\",\"requires one to have the experience\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 15920,
+      "completion_tokens": 1296,
+      "total_tokens": 17216
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/4e6ee152-868a-4ecf-8cb7-3c819f7c603e.json"
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     29,
+     30,
+     31,
+     32
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 16894,
+     "completion_tokens": 186,
+     "total_tokens": 17080
+    },
+    "elapsed_seconds": 5.73,
+    "raw_response": {
+     "id": "chatcmpl-c0abcda4-370b-45c6-9b7d-32410693aa0c",
+     "object": "chat.completion",
+     "created": 1790091154,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[29,30,31,32]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 16894,
+      "completion_tokens": 186,
+      "total_tokens": 17080
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/0da6af71-c41a-434f-a087-280fd39dc618.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 29,
+   "question": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+   "context": "Think of yourself. When you decide to get up and get a drink of water, for example, you don’t consciously organize or consider the host of steps involved. Imagine if we ① <u>had</u> to consider every single muscle that needed to be contracted or relaxed just to stand up and walk. It would be tiresome and very slow ― as patients recovering from a brain injury affecting the motor system ② <u>knows</u>. The autopilot parts of our brain do it for us automatically, ③ <u>freeing</u> up our conscious mind for more important jobs. It is the older parts of our brain ④ <u>that</u> support these automatic processes that allow us to move, hear, see, and use many of our social skills. More recently evolved abilities like talking, reading, and writing are far less automated. So, most of the time, ⑤ <u>what</u> you are perceiving, feeling, or thinking is based on a very crude and fast analysis that happens completely without your awareness.\n\n* crude: 투박한",
+   "options": [
+    "had",
+    "knows",
+    "freeing",
+    "that",
+    "what"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 30,
+   "question": "다음 글의 밑줄 친 부분 중, 문맥상 낱말의 쓰임이 적절하지 않은 것은? [3점]",
+   "context": "Studies in psychology have reported cases in which competitive incentives resulted in lower task effort, and their focus was on the psychological underpinnings of the reduction in motivation. For example, competition presents an inevitable conflict between the motivation to achieve one’s personal goal and the ① <u>desire</u> to maintain good relationships with others. When the maintenance of interpersonal relationships is important, with their counterparts in particular or with others generally, competitors experience an ② <u>internal</u> conflict that can harm their desire to achieve their goal and taint the good feeling brought about by winning. Exline and Lobel found that the perception of oneself as a target for upward social comparison often makes people ③ <u>uncomfortable</u>. When they believe that others are making envious comparisons with them, people feel uneasiness, distress, or sorrow. Feelings of guilt, an emotion generally associated with high motivation for goal-achievement, lead to ④ <u>stronger</u> motivation and performance in the pursuit of competitive goals. Consequences of this emotional state include lower task motivation in a competition and preferences for more cooperative and altruistic outcomes, such as ⑤ <u>diminishing</u> the significance of the outcome or sharing the winner’s reward.\n\n* taint: 더럽히다  ** altruistic: 이타주의의",
+   "options": [
+    "desire",
+    "internal",
+    "uncomfortable",
+    "stronger",
+    "diminishing"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 31,
+   "question": "Literature can be helpful in the language learning process because of the ____________________ it fosters in readers.",
+   "context": "[31～34] 다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.\n\nCore language teaching materials must concentrate on how a language operates both as a rule-based system and as a sociosemantic system. Very often, the process of learning is essentially analytic, piecemeal, and, at the level of the personality, fairly superficial. Engaging imaginatively with literature enables learners to shift the focus of their attention beyond the more mechanical aspects of the foreign language system. When a novel, play or short story is explored over a period of time, the result is that the reader begins to ‘inhabit’ the text. He or she is drawn into the book. Pinpointing what individual words or phrases may mean becomes less important than pursuing the development of the story. The reader is eager to find out what happens as events unfold; he or she feels close to certain characters and shares their emotional responses. The language becomes ‘transparent’ ― the fiction draws the whole person into its own world.\n\n* sociosemantic: 사회의미론적인  ** transparent: 투명한",
+   "options": [
+    "linguistic insight",
+    "artistic imagination",
+    "literary sensibility",
+    "alternative perspective",
+    "personal involvement"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 32,
+   "question": "Education, at its best, teaches more than just knowledge.",
+   "context": "[31～34] 다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.\n\nIt teaches critical thinking: the ability to stop and think before acting, to avoid succumbing to emotional pressures. This is not thought control. It is the very reverse: mental liberation. Even the most advanced intellectual will be imperfect at this skill. But even imperfect possession of it ____________________ of being ‘stimulus-driven’, constantly reacting to the immediate environment, the brightest colours or loudest sounds. Being driven by heuristic responses, living by instinct and emotion all the time, is a very easy way to live, in many ways: thought is effortful, especially for the inexperienced. But emotions are also exhausting, and short-term reactions may not, in the long term, be the most beneficial for health and survival. Just as we reach for burgers for the sake of convenience, storing up the arterial fat which may one day kill us, so our reliance on feelings can do us great harm.\n\n* succumb: 굴복하다  ** arterial: 동맥의",
+   "options": [
+    "intensifies people’s danger",
+    "enhances our understanding",
+    "frees a person from the burden",
+    "allows us to accept the inevitability",
+    "requires one to have the experience"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}

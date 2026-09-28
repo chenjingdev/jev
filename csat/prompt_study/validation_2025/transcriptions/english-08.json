@@ -1,0 +1,258 @@
+{
+ "task": {
+  "subject": "english",
+  "name": "영어",
+  "section": "english",
+  "page": 8,
+  "targets": [
+   41,
+   42,
+   43,
+   44,
+   45
+  ]
+ },
+ "source_images": [
+  {
+   "path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/images/english/page-08.jpg",
+   "sha256": "5f5ab33a995068e61502e88068f4fc33ba9a071664ef4729ea557904125f4b8c"
+  }
+ ],
+ "transcription_instructions": "You are transcribing an exam page for a text-only accessibility edition.\nProduce faithful question inputs, not solutions. Copy all original words, symbols,\nnumbers, choices, and relevant shared passages. Preserve negation, underlined span\nboundaries with <u> tags, blank positions, labelled statements and question-specific\ntables. Convert formulas to unambiguous LaTeX, preserving powers, fractions,\nsubscripts, roots, integrals, domains, units and geometric marks. Describe visual\ndata literally: visible objects, printed labels, axes, ticks, curves, relative\npositions and connections. Do not name an unlabelled historical object or person,\ndeduce quantities, calculate, translate foreign-language text, fix exam mistakes,\nidentify a correct choice, or add a hint. For picture choices provide neutral visual\ndescriptions of each picture in the options. Include every observation needed to\ndistinguish the choices. Keep all relevant shared passage text, not a summary.\nEach question must be self-contained; include the complete relevant passage from\nthe current/adjacent images or section text, plus <보기> or dialogue when applicable.\nQuestion numbering in the target list is metadata; do not include year, exam name,\nanswer keys or other questions in the question/context. Native text is a fallible\nreading aid: images govern layout, mathematics, marks and all visual content.\nTo avoid duplicating long shared passages, copy each shared passage ONCE in\nshared_passages with the target question_numbers it applies to. In each question's\ncontext keep only its own additional material (e.g. <보기>). The pipeline will join\nthe shared passage and the question-specific context before testing.\nReturn only JSON: {\"shared_passages\":[{\"question_numbers\":[integers],\"text\":string}],\n\"questions\":[{\"number\":integer,\"question\":string,\n\"context\":string,\"options\":[five strings in original 1-5 order],\n\"has_visual\":boolean,\"visual_description\":string,\"uncertainties\":[strings]}]}.\nReturn exactly the requested target questions. If a symbol or data cannot be read,\nrecord the problem in uncertainties, rather than guessing.\nDo not assign unknown labels (가), (나), A, B, etc. to named regions, entities or solved values. Preserve unknown correspondences. Transcribe the printed prompt, including any question instructions shared across adjacent questions.",
+ "review_instructions": "Check source fidelity of this text-only exam transcription, without solving\nany question or looking up an answer. Compare every target question with the source\nimages/native text: complete shared passages, prompt polarity, all five choices in\ntheir original order, underlined spans, mathematical symbols, units, table cells,\ndiagram relationships, blanks, pronoun references and foreign-script diacritics.\nDo not require identical whitespace. Figure descriptions must report visible facts,\nnot derived values or answer hints. Identify missing or changed information that\ncould change an answer. Return only JSON {\"issues\":[{\"number\":integer,\n\"field\":string,\"problem\":string}],\"checked_numbers\":[integers]}. Return an empty\nissues list only if no consequential source-fidelity problem is found. Do not\nprovide or discuss correct answers.",
+ "attempts": [
+  {
+   "transcription": {
+    "questions": [
+     {
+      "number": 41,
+      "question": "윗글의 제목으로 가장 적절한 것은?",
+      "context": "[41～42] 다음 글을 읽고, 물음에 답하시오.\n\nImagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) <u>efficient</u> opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) <u>displacements</u> of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) <u>possible</u>. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn’t have become a keystone of human technology and subsistence (d) <u>without</u> hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who’s ever attempted to make a spear tip or arrowhead from a rock knows that it (e) <u>excludes</u> strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.\n\n* primate: 영장류  ** anatomy: 해부학  *** subsistence: 생계",
+      "options": [
+       "Anatomical Distance Between Humans and Other Primates",
+       "Human Hands: A Decisive Leap in the Evolutionary Path",
+       "Our Hands: An Unexpected Outcome of Evolution",
+       "Human Grip: The Dilemma of Human Survival",
+       "Hidden Power of the Daily Use of Tools"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 42,
+      "question": "밑줄 친 (a)～(e) 중에서 문맥상 낱말의 쓰임이 <u>적절하지 않은</u> 것은? [3점]",
+      "context": "[41～42] 다음 글을 읽고, 물음에 답하시오.\n\nImagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) <u>efficient</u> opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) <u>displacements</u> of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) <u>possible</u>. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn’t have become a keystone of human technology and subsistence (d) <u>without</u> hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who’s ever attempted to make a spear tip or arrowhead from a rock knows that it (e) <u>excludes</u> strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.\n\n* primate: 영장류  ** anatomy: 해부학  *** subsistence: 생계",
+      "options": [
+       "(a)",
+       "(b)",
+       "(c)",
+       "(d)",
+       "(e)"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 43,
+      "question": "주어진 글 (A)에 이어질 내용을 순서에 맞게 배열한 것으로 가장 적절한 것은?",
+      "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+      "options": [
+       "(B) － (D) － (C)",
+       "(C) － (B) － (D)",
+       "(C) － (D) － (B)",
+       "(D) － (B) － (C)",
+       "(D) － (C) － (B)"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 44,
+      "question": "밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 <u>다른</u> 것은?",
+      "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+      "options": [
+       "(a)",
+       "(b)",
+       "(c)",
+       "(d)",
+       "(e)"
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     },
+     {
+      "number": 45,
+      "question": "윗글에 관한 내용으로 적절하지 <u>않은</u> 것은?",
+      "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+      "options": [
+       "Grace는 Ethan과 Sean의 관계를 부러워했다고 말했다.",
+       "Grace는 Ethan에게 Sean과 둘이서 하이킹할 것을 권했다.",
+       "Sean의 선글라스가 서랍장 안에 있었다.",
+       "Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+       "Sean은 하이킹하는 도중 돌에 걸려 넘어졌다."
+      ],
+      "has_visual": false,
+      "visual_description": "",
+      "uncertainties": []
+     }
+    ]
+   },
+   "trace": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 15923,
+     "completion_tokens": 1639,
+     "total_tokens": 17562
+    },
+    "elapsed_seconds": 55.15,
+    "raw_response": {
+     "id": "chatcmpl-3c1a8fbe-f897-43ce-9551-5eb79580a563",
+     "object": "chat.completion",
+     "created": 1790090312,
+     "model": "gpt-5.6-sol",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"shared_passages\":[{\"question_numbers\":[41,42],\"text\":\"[41～42] 다음 글을 읽고, 물음에 답하시오.\\n\\nImagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) <u>efficient</u> opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) <u>displacements</u> of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) <u>possible</u>. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\\n\\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn’t have become a keystone of human technology and subsistence (d) <u>without</u> hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who’s ever attempted to make a spear tip or arrowhead from a rock knows that it (e) <u>excludes</u> strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.\\n\\n* primate: 영장류  ** anatomy: 해부학  *** subsistence: 생계\"},{\"question_numbers\":[43,44,45],\"text\":\"[43～45] 다음 글을 읽고, 물음에 답하시오.\\n\\n(A)\\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\\n\\n(B)\\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\\n\\n(C)\\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\\n\\n(D)\\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”\"}],\"questions\":[{\"number\":41,\"question\":\"윗글의 제목으로 가장 적절한 것은?\",\"context\":\"\",\"options\":[\"Anatomical Distance Between Humans and Other Primates\",\"Human Hands: A Decisive Leap in the Evolutionary Path\",\"Our Hands: An Unexpected Outcome of Evolution\",\"Human Grip: The Dilemma of Human Survival\",\"Hidden Power of the Daily Use of Tools\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":42,\"question\":\"밑줄 친 (a)～(e) 중에서 문맥상 낱말의 쓰임이 <u>적절하지 않은</u> 것은? [3점]\",\"context\":\"\",\"options\":[\"(a)\",\"(b)\",\"(c)\",\"(d)\",\"(e)\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":43,\"question\":\"주어진 글 (A)에 이어질 내용을 순서에 맞게 배열한 것으로 가장 적절한 것은?\",\"context\":\"\",\"options\":[\"(B) － (D) － (C)\",\"(C) － (B) － (D)\",\"(C) － (D) － (B)\",\"(D) － (B) － (C)\",\"(D) － (C) － (B)\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":44,\"question\":\"밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 <u>다른</u> 것은?\",\"context\":\"\",\"options\":[\"(a)\",\"(b)\",\"(c)\",\"(d)\",\"(e)\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]},{\"number\":45,\"question\":\"윗글에 관한 내용으로 적절하지 <u>않은</u> 것은?\",\"context\":\"\",\"options\":[\"Grace는 Ethan과 Sean의 관계를 부러워했다고 말했다.\",\"Grace는 Ethan에게 Sean과 둘이서 하이킹할 것을 권했다.\",\"Sean의 선글라스가 서랍장 안에 있었다.\",\"Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.\",\"Sean은 하이킹하는 도중 돌에 걸려 넘어졌다.\"],\"has_visual\":false,\"visual_description\":\"\",\"uncertainties\":[]}]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 15923,
+      "completion_tokens": 1639,
+      "total_tokens": 17562
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/5a655a9f-0d6b-4b6a-a64a-84eee4be54ff.json"
+   },
+   "review": {
+    "issues": [],
+    "checked_numbers": [
+     41,
+     42,
+     43,
+     44,
+     45
+    ]
+   },
+   "review_trace": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low",
+    "usage": {
+     "prompt_tokens": 18580,
+     "completion_tokens": 539,
+     "total_tokens": 19119
+    },
+    "elapsed_seconds": 11.73,
+    "raw_response": {
+     "id": "chatcmpl-3976d534-b966-4428-8028-ac4b55509833",
+     "object": "chat.completion",
+     "created": 1790090324,
+     "model": "gpt-5.6-terra",
+     "choices": [
+      {
+       "index": 0,
+       "message": {
+        "role": "assistant",
+        "content": "{\"issues\":[],\"checked_numbers\":[41,42,43,44,45]}"
+       },
+       "finish_reason": "stop"
+      }
+     ],
+     "usage": {
+      "prompt_tokens": 18580,
+      "completion_tokens": 539,
+      "total_tokens": 19119
+     }
+    },
+    "trace_path": "/Users/chenjing/dev/jev/csat/prompt_study/validation_2025/call-traces/12b2e78d-4642-4ebb-9df3-654a868a879e.json"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "number": 41,
+   "question": "윗글의 제목으로 가장 적절한 것은?",
+   "context": "[41～42] 다음 글을 읽고, 물음에 답하시오.\n\nImagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) <u>efficient</u> opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) <u>displacements</u> of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) <u>possible</u>. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn’t have become a keystone of human technology and subsistence (d) <u>without</u> hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who’s ever attempted to make a spear tip or arrowhead from a rock knows that it (e) <u>excludes</u> strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.\n\n* primate: 영장류  ** anatomy: 해부학  *** subsistence: 생계",
+   "options": [
+    "Anatomical Distance Between Humans and Other Primates",
+    "Human Hands: A Decisive Leap in the Evolutionary Path",
+    "Our Hands: An Unexpected Outcome of Evolution",
+    "Human Grip: The Dilemma of Human Survival",
+    "Hidden Power of the Daily Use of Tools"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 42,
+   "question": "밑줄 친 (a)～(e) 중에서 문맥상 낱말의 쓰임이 <u>적절하지 않은</u> 것은? [3점]",
+   "context": "[41～42] 다음 글을 읽고, 물음에 답하시오.\n\nImagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) <u>efficient</u> opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) <u>displacements</u> of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) <u>possible</u>. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn’t have become a keystone of human technology and subsistence (d) <u>without</u> hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who’s ever attempted to make a spear tip or arrowhead from a rock knows that it (e) <u>excludes</u> strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.\n\n* primate: 영장류  ** anatomy: 해부학  *** subsistence: 생계",
+   "options": [
+    "(a)",
+    "(b)",
+    "(c)",
+    "(d)",
+    "(e)"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 43,
+   "question": "주어진 글 (A)에 이어질 내용을 순서에 맞게 배열한 것으로 가장 적절한 것은?",
+   "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+   "options": [
+    "(B) － (D) － (C)",
+    "(C) － (B) － (D)",
+    "(C) － (D) － (B)",
+    "(D) － (B) － (C)",
+    "(D) － (C) － (B)"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 44,
+   "question": "밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 <u>다른</u> 것은?",
+   "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+   "options": [
+    "(a)",
+    "(b)",
+    "(c)",
+    "(d)",
+    "(e)"
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  },
+  {
+   "number": 45,
+   "question": "윗글에 관한 내용으로 적절하지 <u>않은</u> 것은?",
+   "context": "[43～45] 다음 글을 읽고, 물음에 답하시오.\n\n(A)\n“Do you remember when Sean used to tell me that I was the best dad in the world?” Ethan asked his wife, Grace. “Yes, I do. I always envied your relationship with Sean,” she replied. Ethan then shared how things had changed since (a) <u>his</u> son started middle school. Grace had noticed Ethan often pushing Sean to study harder. “Maybe he isn’t that into school right now. How about going hiking, just the two of you?” she suggested. He agreed, and realizing that both his and Sean’s hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, “Sean, let’s go hiking this Saturday, just the two of us.” Though Sean thanked (b) <u>him</u> for the suggestion, he said he had to go to the library. Grace stepped in, “You know, the weather this weekend will be the best of the year. Why not enjoy it?” After a moment’s hesitation, (c) <u>he</u> agreed.\n\n(C)\n“When did you bring the jackets in?” the clerk at the laundry asked. “Maybe two weeks ago,” Ethan replied. Then, Grace quickly reminded (d) <u>him</u>, “Honey, we actually left them here a month ago.” The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, “I am sorry, but please collect your items earlier next time. Our storage is too full.” Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn’t walk, Ethan carried his son down on his back. He felt Sean’s heartbeat, something he hadn’t felt since Sean was a baby. Suddenly, Sean said, “Dad, I’m sorry. At some point, I started to become afraid of disappointing (e) <u>you</u>. But you are still the best dad.” Energized, he felt no weight on his back and replied, “You are the best son, no matter what.”",
+   "options": [
+    "Grace는 Ethan과 Sean의 관계를 부러워했다고 말했다.",
+    "Grace는 Ethan에게 Sean과 둘이서 하이킹할 것을 권했다.",
+    "Sean의 선글라스가 서랍장 안에 있었다.",
+    "Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+    "Sean은 하이킹하는 도중 돌에 걸려 넘어졌다."
+   ],
+   "has_visual": false,
+   "visual_description": "",
+   "uncertainties": []
+  }
+ ],
+ "status": "reviewed"
+}

@@ -25,7 +25,12 @@ def pair_job(index, opening, directory, args):
     cmd = [sys.executable, str(HERE / 'jev_engine_match.py'), '--output', str(path),
            '--seed', str(args.seed + index * 10000), '--selector', args.selector, '--base', 'weak',
            '--depth', str(args.depth), '--opponent-depth', str(args.opponent_depth),
-           '--margin', str(args.margin), '--max-plies', str(args.max_plies), '--opening', *opening['uci']]
+           '--margin', str(args.margin), '--max-plies', str(args.max_plies),
+           *(['--min-confidence', str(args.min_confidence)] if args.min_confidence is not None else []),
+           *(['--noise', str(args.noise)] if args.noise else []),
+           *(['--opponent-noise', str(args.opponent_noise)] if args.opponent_noise is not None else []),
+           *(['--random-intervention-probability', str(args.random_intervention_probability)] if args.random_intervention_probability is not None else []),
+           '--opening', *opening['uci']]
     with path.with_suffix('.log').open('w') as log:
         code = subprocess.run(cmd, stdout=log, stderr=subprocess.STDOUT).returncode
     return index, opening, path, code
@@ -84,23 +89,39 @@ def main():
     p.add_argument('--max-plies', type=int, default=400)
     p.add_argument('--workers', type=int, default=10)
     p.add_argument('--seed', type=int, default=73419)
+    p.add_argument('--min-confidence', type=float, default=None)
+    p.add_argument('--pairs', type=int, default=None, help='use only the first N openings (2N games) as a pilot')
+    p.add_argument('--noise', type=int, default=0, help='seeded evaluation noise for the hybrid side (and the opponent unless --opponent-noise)')
+    p.add_argument('--opponent-noise', type=int, default=None)
+    p.add_argument('--random-intervention-probability', type=float, default=None)
     args = p.parse_args()
+    if args.random_intervention_probability is not None and not (args.selector == 'random' and 0 <= args.random_intervention_probability <= 1):
+        p.error('--random-intervention-probability requires --selector random and a value in [0, 1]')
     if args.opponent_depth is None:
         args.opponent_depth = args.depth
     if Path(args.name).name != args.name:
         raise ValueError('Invalid name')
     openings = json.loads(args.openings.read_text())['openings']
+    if args.pairs is not None:
+        if args.pairs < 1: raise ValueError('pairs must be >= 1')
+        openings = openings[:args.pairs]
     directory = HERE / 'matches' / args.name
     directory.mkdir(exist_ok=False)
     destination = directory.with_suffix('.json')
-    hybrid = hybrid_name_for('weak', args.selector).replace('Weak', f'Weak{args.depth}')
+    hybrid = hybrid_name_for('weak', args.selector, args.min_confidence, args.random_intervention_probability).replace('Weak', f'Weak{args.depth}')
     opponent = f'Weak{args.opponent_depth}'
     payload = {'status': 'running', 'created_at': datetime.now(timezone.utc).isoformat(),
                'design': (f'{len(openings)} fixed openings from {args.openings.name}, color-swapped pairs, one subprocess per pair, '
                           f'{args.workers} in parallel. Hybrid: depth-{args.depth} weak engine + selector={args.selector}, '
-                          f'top-3 within {args.margin} units. Opponent: plain depth-{args.opponent_depth} weak engine. '
+                          f'top-3 within {args.margin} units'
+                          + (f', Jev pick played only when confidence >= {args.min_confidence}, otherwise the base #1' if args.min_confidence is not None else '')
+                          + (f', top-3 candidate noise: hybrid ±{args.noise}, opponent ±{args.noise if args.opponent_noise is None else args.opponent_noise}' if args.noise or args.opponent_noise else '')
+                          + (f', sparse random change probability {args.random_intervention_probability} per eligible turn (uniform non-base alternative)' if args.random_intervention_probability is not None else '')
+                          + f'. Opponent: plain depth-{args.opponent_depth} weak engine. '
                           'Deterministic engines; Jev adds API time.'),
                'selector': args.selector, 'base_engine': 'weak', 'depth': args.depth, 'opponent_depth': args.opponent_depth,
+               'min_confidence': args.min_confidence, 'noise': args.noise, 'opponent_noise': args.opponent_noise,
+               'random_intervention_probability': args.random_intervention_probability,
                'margin': args.margin, 'openings_file': args.openings.name,
                'engine_a': {'name': hybrid}, 'engine_b': {'name': opponent}, 'workers': args.workers,
                'games': [], 'failures': []}
