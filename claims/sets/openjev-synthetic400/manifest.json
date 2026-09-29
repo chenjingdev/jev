@@ -1,0 +1,77 @@
+{
+ "set": "openjev-synthetic400",
+ "builder": "claims/build.py",
+ "source": {
+  "path": "/Users/chenjing/dev/jev-likes/open-jev/data/synthetic/test.jsonl",
+  "sha256": "98f6022c052b4c7d423215b22971517a753d16ea409426f7e9c43017fbf721ab",
+  "repo_commit": "6cb37c3cee9d8477d49d8ac0c99056e48ccc292c",
+  "origin": "jevlike-data synthetic (open-jev/README.md:243)"
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/open-jev",
+  "code": [
+   "openjev/cli.py"
+  ]
+ },
+ "items": 400,
+ "sha256": {
+  "items.jsonl": "5bd0a30e4ad638689e14ac1e95dc39d9bcdc3306f293ccdbb6c0b68fb72968f0",
+  "gold.json": "059bfe1f5c76f5e6adbf34f891be9c41508758fa3fbdc14d2f40a8019ea61502"
+ },
+ "type_counts": {
+  "choice": 400
+ },
+ "stats": {
+  "items": 400,
+  "stage_counts": {
+   "synthetic": 400
+  },
+  "state_types": {
+   "str": 400
+  },
+  "option_count_histogram": {
+   "2": 56,
+   "3": 73,
+   "4": 50,
+   "5": 56,
+   "6": 49,
+   "7": 61,
+   "8": 55
+  },
+  "max_options": 8,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 400,
+  "label_named_state_fields": {},
+  "answer_position_histogram": {
+   "1": 107,
+   "2": 101,
+   "3": 64,
+   "4": 42,
+   "5": 42,
+   "6": 25,
+   "7": 17,
+   "8": 2
+  },
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "max_option_tokens": 2,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "row['context'] (string)",
+  "question": "'' (open-jev eval sends no question text)",
+  "options": "row['options'] in order",
+  "answer": "row['label'] + 1",
+  "id": "openjev-synthetic400:<0-based line number>",
+  "stage": "synthetic"
+ },
+ "notes": [
+  "open-jev eval (open-jev/openjev/cli.py:66-80, cmd_eval) scores row[\"options\"] as continuations of row[\"context\"] (:78); the task instruction (\"Choose the exact badge ...\") is inside the context. It has no question field, so question is the empty string. The only other string is the --sep separator (cli.py:24, default \"\"; README.md:244 uses \"\\nChoice: \" for the published run), which sits between context and option rather than acting as a question.",
+  "Rows have no id; the 0-based line number is used."
+ ]
+}

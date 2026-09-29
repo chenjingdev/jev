@@ -1,0 +1,77 @@
+{
+ "set": "laya-emotion400",
+ "count": 400,
+ "stages": {
+  "emotion": 400
+ },
+ "options": {
+  "min": 6,
+  "max": 6,
+  "histogram": {
+   "6": 400
+  },
+  "items_over_20": 0,
+  "items_over_26_runner_limit": 0,
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "longest_option_tokens": 1,
+  "token_counter": "tokenizers tokenizer.json from SupersonicLabs/Julia-1 snapshot (mmBERT), sha256 609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f, \" \" + option, no special tokens. Nothing truncated."
+ },
+ "sha256": {
+  "items.jsonl": "d433baa7fb661064177fa890c39a9b8a046402533defc053e547cfae9c0aa575",
+  "gold.json": "e3727dee89adfb6d3b53778bd968b6ae68c5124e4798f02e5394dc93292e0893"
+ },
+ "builder": "claims/build_ext.py laya-emotion400",
+ "maker": "NandhaKishorM/laya research/scripts/bench_apps.py (BENCHMARKS.md \"On the public datasets where Jev numbers exist\")",
+ "maker_code": {
+  "repo": "https://github.com/NandhaKishorM/laya",
+  "commit": "4066d5d5fbf08b66c6757ddeedbd797bd7655bc0",
+  "files": [
+   "research/scripts/bench_apps.py",
+   "laya/common.py"
+  ]
+ },
+ "source": {
+  "dataset": "dair-ai/emotion",
+  "config": "split",
+  "split": "test",
+  "rows_in_split": 2000,
+  "files": [
+   {
+    "repo": "dair-ai/emotion",
+    "revision": "cab853a1dbdf4c42c2b3ef2173804746df8825fe",
+    "path": "split/test-00000-of-00001.parquet",
+    "url": "https://huggingface.co/datasets/dair-ai/emotion/blob/cab853a1dbdf4c42c2b3ef2173804746df8825fe/split/test-00000-of-00001.parquet",
+    "sha256": "6f8407fa1ca9c310f55781f082ed73812f6551e8dda2c61973123a121869245b"
+   }
+  ]
+ },
+ "selection": {
+  "method": "first 400 rows",
+  "seed_used": null
+ },
+ "references": {
+  "laya": {
+   "laya": 0.595,
+   "laya-multilingual": 0.53,
+   "laya-typed-decisions": 0.6,
+   "benchmarks_md_line": 146,
+   "n": 400,
+   "source": "laya research/results/app_benchmark_results.json suites.jev.emotion"
+  },
+  "jev": {
+   "accuracy": 0.48,
+   "n": 100,
+   "measured_on": "jevbench-emotion100",
+   "source": "laya bench_apps.py:44-50 citing jev-benchmarks v0.1.0; NOT measured on this set"
+  }
+ },
+ "notes": [
+  "Mirrors laya research/scripts/bench_apps.py:92-106 (commit 4066d5d). Selection is the first 400 rows of the HF test split in file order (`list(d)[:N]`, N from bench_apps.py:41). SEED=13 (bench_apps.py:40, BENCHMARKS.md:9 \"seed 13\") is never used by this suite: rng only touches the phishing/toxic-chat/MS MARCO/routing suites.",
+  "Laya calls load_dataset(\"dair-ai/emotion\", \"split\", split=\"test\") with no revision. Pinned here to dair-ai/emotion@cab853a1dbdf4c42c2b3ef2173804746df8825fe (last modified 2024-08-08, before Laya's 2026-09-19 run), file split/test-00000-of-00001.parquet; the build fails if its sha256 changes. The datasets library reads this single parquet file in file order, so pyarrow reproduces its row order.",
+  "state = {\"text\": text} (a dict, as Laya sends it); question = the Laya instructions string verbatim.",
+  "Not the same benchmark as the jevbench-* sets of item 1: different source (raw HF dataset vs BTZSC fef2a2a), different selection (first 400 rows vs class-balanced seeded 100), different state key, instructions and option texts. Hence a separate set.",
+  "Laya compares these runs with Jev 0.48 (bench_apps.py:44-50, \"AbdelStark/jev-benchmarks v0.1.0\", n=100). That number was measured on jevbench-emotion100 (item 1), not on these 400 items; BENCHMARKS.md:3 says Jev was never run by Laya.",
+  "criteria are {name: None} (bench_apps.py:101). With no description Laya renders the key itself as the option text (laya/common.py:79-80), and CLM embeds the key when the description is empty (CLM README API table), so options = the six emotion names in dair-ai label order (label ints 0-5, bench_apps.py:95, 102)."
+ ]
+}

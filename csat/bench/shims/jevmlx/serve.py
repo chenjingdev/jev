@@ -27,6 +27,7 @@ Start:
 """
 import argparse
 import json
+import os
 import subprocess
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -148,6 +149,10 @@ def main():
     ap.add_argument('--port', type=int, default=8802)
     ap.add_argument('--model', default=DEFAULT_MODEL, help='jevmlx alias or HF id (default: quality)')
     a = ap.parse_args()
+    import mlx.core as mx
+    # Bound MLX's buffer cache (it grows with every new input shape and pushed the Mac into memory
+    # pressure on the claims run). Memory housekeeping only; scores are unchanged.
+    mx.set_cache_limit(int(float(os.environ.get('MLX_CACHE_GB', '2')) * 2**30))
     chooser = JevmlxChooser(a.model)
     health = {
         'name': 'jevmlx',

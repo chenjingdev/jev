@@ -1,0 +1,81 @@
+{
+ "set": "laya-banking77-400",
+ "count": 400,
+ "stages": {
+  "banking77": 400
+ },
+ "options": {
+  "min": 77,
+  "max": 77,
+  "histogram": {
+   "77": 400
+  },
+  "items_over_20": 400,
+  "items_over_26_runner_limit": 400,
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "longest_option_tokens": 8,
+  "token_counter": "tokenizers tokenizer.json from SupersonicLabs/Julia-1 snapshot (mmBERT), sha256 609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f, \" \" + option, no special tokens. Nothing truncated."
+ },
+ "sha256": {
+  "items.jsonl": "fe5932afcd17c69d3c599fc2b62fff31375fe1ebbef4c92ae3d4f5ffb755a268",
+  "gold.json": "c577634760a1de5746cc7ed8943c45d0e63281a02185fd3cfcd3101d4ef06e7f"
+ },
+ "builder": "claims/build_ext.py laya-banking77-400",
+ "maker": "NandhaKishorM/laya research/scripts/bench_apps.py (BENCHMARKS.md \"On the public datasets where Jev numbers exist\")",
+ "maker_code": {
+  "repo": "https://github.com/NandhaKishorM/laya",
+  "commit": "4066d5d5fbf08b66c6757ddeedbd797bd7655bc0",
+  "files": [
+   "research/scripts/bench_apps.py",
+   "laya/common.py"
+  ]
+ },
+ "source": {
+  "dataset": "mteb/banking77",
+  "config": "default",
+  "split": "test",
+  "rows_in_split": 3076,
+  "files": [
+   {
+    "repo": "mteb/banking77",
+    "revision": "18072d2685ea682290f7b8924d94c62acc19c0b2",
+    "path": "data/test-00000-of-00001.parquet",
+    "url": "https://huggingface.co/datasets/mteb/banking77/blob/18072d2685ea682290f7b8924d94c62acc19c0b2/data/test-00000-of-00001.parquet",
+    "sha256": "9575f636fdeae0c94a0f3f2d926ca8f9a2833b998cf94108936dfd5d72322bf9"
+   }
+  ]
+ },
+ "selection": {
+  "method": "first 400 rows",
+  "seed_used": null,
+  "n_labels": 77
+ },
+ "references": {
+  "laya": {
+   "laya": 0.425,
+   "laya-multilingual": 0.425,
+   "laya-typed-decisions": 0.4925,
+   "benchmarks_md_line": 147,
+   "n": 400,
+   "source": "laya research/results/app_benchmark_results.json suites.jev.banking77_full"
+  },
+  "jev": {
+   "accuracy": 0.87,
+   "n": 100,
+   "measured_on": "jevbench-banking77-100",
+   "source": "laya bench_apps.py:44-50 citing jev-benchmarks v0.1.0; NOT measured on this set"
+  }
+ },
+ "notes": [
+  "Mirrors laya research/scripts/bench_apps.py:108-122 (commit 4066d5d). Selection is the first 400 rows of the HF test split in file order (`list(d)[:N]`, N from bench_apps.py:41). SEED=13 (bench_apps.py:40, BENCHMARKS.md:9 \"seed 13\") is never used by this suite: rng only touches the phishing/toxic-chat/MS MARCO/routing suites.",
+  "Laya calls load_dataset(\"mteb/banking77\", split=\"test\") with no revision. Pinned here to mteb/banking77@18072d2685ea682290f7b8924d94c62acc19c0b2 (last modified 2025-07-06, before Laya's 2026-09-19 run), file data/test-00000-of-00001.parquet; the build fails if its sha256 changes. The datasets library reads this single parquet file in file order, so pyarrow reproduces its row order.",
+  "state = {\"message\": text} (a dict, as Laya sends it); question = the Laya instructions string verbatim.",
+  "Not the same benchmark as the jevbench-* sets of item 1: different source (raw HF dataset vs BTZSC fef2a2a), different selection (first 400 rows vs class-balanced seeded 100), different state key, instructions and option texts. Hence a separate set.",
+  "Laya compares these runs with Jev 0.87 (bench_apps.py:44-50, \"AbdelStark/jev-benchmarks v0.1.0\", n=100). That number was measured on jevbench-banking77-100 (item 1), not on these 400 items; BENCHMARKS.md:3 says Jev was never run by Laya.",
+  "mteb/banking77 test is ordered by label, so the first 400 rows cover only 10 of the 77 intents (40 rows each). That is what Laya ran (bench_apps.py:113 `list(d)[:N]`); not a class-balanced sample.",
+  "labels = sorted(set(test label_text)) with \"_\" -> \" \" (bench_apps.py:111, 115-116); criteria are {key: None}, so options = those keys (laya/common.py:79-80). 77 labels, unlike BTZSC's 72.",
+  "Laya's BENCHMARKS.md:147-149 compares its 77-label 400-item accuracy with Jev's 72-label 100-item BTZSC 0.870.",
+  "RUNNER LIMIT: every item has 77 options > 26. gamebench/run.py:32 dict(zip(KEYS, order)) silently drops options 27-77 instead of failing. Do not run this set through gamebench/run.py as is."
+ ]
+}

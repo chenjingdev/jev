@@ -17,7 +17,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from laya import Router
 from laya.common import build_sequence, encode_text, render_options, serialize_state
 
-MODEL = 'multilingual'          # Router name -> convaiinnovations/laya, subfolder "multilingual" (mmBERT-base)
+MODEL = os.environ.get('LAYA_MODEL', 'multilingual')  # Router name -> convaiinnovations/laya, subfolder "multilingual" (mmBERT-base)
+# LAYA_MODEL=typed-decisions (claims/ only): the checkpoint Laya fine-tuned on typed-decisions and cites for 0.766.
+# It is served as system 'laya-typed' with its own native budgets (cfg max_len 1024, head_max_len 256).
 MAX_LEN = 8192                  # README: laya-multilingual reads up to 8,192 tokens with max_len=8192 (native cfg 1024)
 HEAD_MAX_LEN = 512              # documented per-call override (native cfg 256) so the fixed instructions are never cut
 OPTION_CAP = 48                 # hard-coded in laya.common.build_sequence: truncation=True, max_length=48 per option
@@ -26,6 +28,9 @@ REPO = os.path.expanduser('~/dev/jev-likes/laya/repo')
 router = Router(device=os.environ.get('LAYA_DEVICE', 'mps'))
 agent = router.load(MODEL)
 tok = agent.tok
+NAME = 'laya' if MODEL == 'multilingual' else 'laya-typed'
+if MODEL != 'multilingual':
+    MAX_LEN, HEAD_MAX_LEN = agent.cfg['max_len'], agent.cfg['head_max_len']
 LOCK = threading.Lock()
 
 
@@ -37,12 +42,13 @@ def _commit():
 
 
 HEALTH = {
-    'name': 'laya',
+    'name': NAME,
     'returns_probabilities': True,
     'max_input_tokens': MAX_LEN,
     'detail': {
         'commit': _commit(),
-        'checkpoint': 'convaiinnovations/laya subfolder=multilingual (laya-multilingual, mmBERT-base)',
+        'checkpoint': ('convaiinnovations/laya subfolder=multilingual (laya-multilingual, mmBERT-base)'
+                       if MODEL == 'multilingual' else 'convaiinnovations/laya-typed-decisions (ModernBERT-large)'),
         'checkpoint_revision': getattr(agent, 'revision', None),
         'device': str(agent.device),
         'max_len': MAX_LEN, 'head_max_len': HEAD_MAX_LEN, 'option_token_cap': OPTION_CAP,

@@ -1,0 +1,74 @@
+{
+ "set": "semif-wanli256",
+ "builder": "claims/build.py",
+ "source": {
+  "url": "https://huggingface.co/datasets/alisawuffles/WANLI/resolve/61c95318fd71c55b6ba355d76253254615f387ec/test.jsonl",
+  "repo": "alisawuffles/WANLI",
+  "revision": "61c95318fd71c55b6ba355d76253254615f387ec",
+  "file": "test.jsonl",
+  "sha256": "4276e0af7fcdf657d1ab7beb54eaf025fda592a76c9ee86b63b7871953fc74fd",
+  "selection": "/Users/chenjing/dev/jev-likes/semif/src/benchmarks/manifests/source-selection.jsonl",
+  "selection_sha256": "81d98a4195971e1fe046673928730b7112a6a7677baf046505761f2504b424c7",
+  "semif_commit": "23cf1f39fc9534fe81437200959b6dfc7106e45a",
+  "semif_rows_sha256": "40b795d82c8e53c0dbae132f5fc87c33bf0517340c69169474049e784f311c0f"
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/semif/src",
+  "code": [
+   "benchmarks/build_wanli.py",
+   "src/semif_phase1/core.py"
+  ]
+ },
+ "items": 256,
+ "sha256": {
+  "items.jsonl": "764df82edb8bdf1c6e3cab0a267dbd79d46e707c5143239618b99bb7ab4256c7",
+  "gold.json": "ac374e7260775ecc1237eb8b4633825dc5c0fa70d980add5f56a19ffa347c500"
+ },
+ "type_counts": {
+  "choice": 256
+ },
+ "stats": {
+  "items": 256,
+  "stage_counts": {
+   "evidence_interpretation": 256
+  },
+  "state_types": {
+   "str": 256
+  },
+  "option_count_histogram": {
+   "3": 256
+  },
+  "max_options": 3,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 0,
+  "label_named_state_fields": {},
+  "answer_position_histogram": {
+   "1": 65,
+   "2": 90,
+   "3": 101
+  },
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "max_option_tokens": 6,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "WANLI premise (string)",
+  "question": "'Assess the claim using only the supplied evidence: ' + hypothesis",
+  "options": "SemIf's three descriptions in the per-row option_ids order of source-selection.jsonl",
+  "answer": "option_ids.index(LABELS[gold]) + 1",
+  "id": "semif-wanli256:<selection id>",
+  "stage": "selection family"
+ },
+ "notes": [
+  "Rows rebuilt with semif/src/benchmarks/build_wanli.py:10-59 logic (DESCRIPTIONS :10-14, LABELS :15, state = premise :40, question = \"Assess the claim using only the supplied evidence: \" + hypothesis :41, options in selection option_ids order :42, label :43) from the selection manifest (benchmarks/manifests/source-selection.jsonl, source == \"wanli\") and WANLI test.jsonl at the pinned revision (semif/src/benchmarks/fetch_sources.py:12-16). No randomness: the selection is fixed by id.",
+  "The rebuilt SemIf-format file hashes to 40b795d82c8e53c0dbae132f5fc87c33bf0517340c69169474049e784f311c0f, the wanli256.jsonl sha256 that Kev recorded for the rows it sent to live Jev (kev/src/evals/external/wanli-v1/manifest.json).",
+  "Item rendering as SemIf sends rows to its model: semif/src/src/semif_phase1/core.py:43-56 (evidence = state, criterion = question, options = descriptions). Kev's Jev run used the same state, instructions and descriptions (kev/src/scripts/freeze_semif_external.py:34-38).",
+  "gold-wanli256.jsonl named in semif/src/results/raw/calibration/wanli256.json:3 is not in the repo; it is the output of build_wanli.py, reproduced here."
+ ]
+}

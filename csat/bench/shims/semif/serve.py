@@ -53,6 +53,12 @@ class Server:
                                   'mlx_lm_source': self.metadata['mlx_lm_source']}}
 
     def choose(self, req):
+        if not isinstance(req.get('instructions'), str) or not req['instructions']:
+            # SemIf's row contract (core.py) rejects an empty question; that is an input SemIf cannot take, not an error.
+            return 413, {'error': 'unsupported', 'reason': 'empty question; SemIf requires a nonempty question'}
+        if not 2 <= len(req.get('criteria') or {}) <= 16:
+            # SemIf's row contract: "options must contain 2-16 entries" (Banking77 in claims/ has 72/77).
+            return 413, {'error': 'unsupported', 'reason': f"{len(req.get('criteria') or {})} options; SemIf accepts 2-16"}
         row = to_row(req)
         with self.lock:
             # Count tokens exactly as the scorer does, without its limit, so only the length case becomes 413.

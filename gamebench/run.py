@@ -25,11 +25,23 @@ def shifts(n):
     return sorted({round(k * n / r) % n for k in range(r)})
 
 
+def keys(n):
+    """보기 키. 26개까지는 A~Z(기존과 같다), 넘으면 A~Z, AA, AB, ... (claims/의 Banking77 72·77개)."""
+    out = list(KEYS[:n])
+    for a in KEYS:
+        for b in KEYS:
+            if len(out) >= n:
+                return out
+            out.append(a + b)
+    return out
+
+
 def make_request(item, shift):
     n = len(item['options'])
     order = list(range(1, n + 1))
     order = order[shift:] + order[:shift]
-    mapping = dict(zip(KEYS, order))
+    mapping = dict(zip(keys(n), order))
+    assert len(mapping) == n, (item['id'], n)
     return mapping, {'state': item['state'], 'instructions': item['question'],
                      'criteria': {k: item['options'][i - 1] for k, i in mapping.items()}}
 

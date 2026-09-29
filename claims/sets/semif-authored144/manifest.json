@@ -1,0 +1,69 @@
+{
+ "set": "semif-authored144",
+ "builder": "claims/build.py",
+ "source": {
+  "path": "/Users/chenjing/dev/jev-likes/semif/src/benchmarks/data/authored144.jsonl",
+  "sha256": "8162d1c73f925af64453f1ec05ef36d583b3815bf698e60f0d454bd11537e079",
+  "repo_commit": "23cf1f39fc9534fe81437200959b6dfc7106e45a"
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/semif/src",
+  "code": [
+   "src/semif_phase1/core.py"
+  ]
+ },
+ "items": 144,
+ "sha256": {
+  "items.jsonl": "dcd783340acd294f2ae524a35c27a795e1ca59854b1c8b09b62d4814abdbeb55",
+  "gold.json": "260d545a223cb53f759cc783883c60f3b05d099f574d5fa7676756fbab390646"
+ },
+ "type_counts": {
+  "choice": 144
+ },
+ "stats": {
+  "items": 144,
+  "stage_counts": {
+   "candidate_selection": 48,
+   "evidence_interpretation": 48,
+   "rule_application": 48
+  },
+  "state_types": {
+   "str": 144
+  },
+  "option_count_histogram": {
+   "3": 144
+  },
+  "max_options": 3,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 0,
+  "label_named_state_fields": {},
+  "answer_position_histogram": {
+   "1": 55,
+   "2": 44,
+   "3": 45
+  },
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "max_option_tokens": 12,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "row['state'] (string, unchanged)",
+  "question": "row['question']",
+  "options": "[option['description'] for option in row['options']] in source order",
+  "answer": "row['label'] + 1",
+  "id": "semif-authored144:<row id>",
+  "stage": "row['family']"
+ },
+ "notes": [
+  "SemIf's own request: semif/src/src/semif_phase1/core.py:43-56 direct_messages -> {\"evidence\": row[\"state\"], \"criterion\": row[\"question\"], \"options\": [{\"letter\", \"description\"}]}; option ids are not shown to the model, only letters and descriptions. Mirrored as state / question / options.",
+  "SemIf never ran live Jev (semif/src/README.md:154). The published Jev number on these 144 is Kev's run (kev/src/scripts/freeze_semif_external.py:34-51 -> evals/external/semif-v1): string state, instructions = row[\"question\"], criteria {option id: description}. Same content as here.",
+  "Dropped from items: label, target_distribution, group_id, split and provenance (provenance carries rationale and evidence_span, which give the answer away).",
+  "Source sha256 equals kev/src/evals/external/semif-v1/manifest.json external.files[\"authored144.jsonl\"]."
+ ]
+}

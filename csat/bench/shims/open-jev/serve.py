@@ -23,6 +23,7 @@ import os
 from pathlib import Path
 import subprocess
 import threading
+from typing import Union
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -37,7 +38,7 @@ NAME = 'open-jev'
 
 
 class ChooseRequest(BaseModel):
-    state: dict
+    state: Union[str, dict, list]
     instructions: str
     criteria: dict[str, str]
 
@@ -106,7 +107,11 @@ def main():
     ap.add_argument('--port', type=int, default=8801)
     a = ap.parse_args()
     from openjev import OptionScorer
+    import mlx.core as mx
     import uvicorn
+    # Bound MLX's buffer cache (it grows with every new input shape and pushed the Mac into memory
+    # pressure on the claims run). Memory housekeeping only; scores are unchanged.
+    mx.set_cache_limit(int(float(os.environ.get('MLX_CACHE_GB', '2')) * 2**30))
     scorer = OptionScorer(str(MODEL_DIR))  # native defaults: batch_size 8, backend auto (MLX here)
     scorer.score('warm up', ['a', 'b'])  # same warm-up as openjev.server
     uvicorn.run(create_app(scorer, model_meta(MODEL_DIR)), host=a.host, port=a.port, workers=1)

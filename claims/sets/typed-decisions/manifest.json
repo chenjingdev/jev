@@ -1,0 +1,75 @@
+{
+ "set": "typed-decisions",
+ "builder": "claims/build.py",
+ "source": {
+  "url": "https://huggingface.co/datasets/LocalLLaMA/typed-decisions/resolve/c76749ec58bd8c3d2ea706b31c333a9059c38f90/all/test-00000-of-00001.parquet",
+  "repo": "LocalLLaMA/typed-decisions",
+  "revision": "c76749ec58bd8c3d2ea706b31c333a9059c38f90",
+  "file": "all/test-00000-of-00001.parquet",
+  "sha256": "4f294f218ea1da27f3efef936359389c62ea4d3973a41457732990f1d31b647c",
+  "cases": 400
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/julia/repo",
+  "script": "scripts/reproduce_typed.py"
+ },
+ "items": 2000,
+ "sha256": {
+  "items.jsonl": "e80c3c9fedd5f2f5573146c0d7b36f54bfc1dbb8478eff2713c8a3dd9c734e01",
+  "gold.json": "68f2fe4ddfa9fce835fec93f7d9599cde2a972b11c61e6dc0190060c448e3ff1"
+ },
+ "type_counts": {
+  "choice": 600,
+  "noul": 600,
+  "score": 800
+ },
+ "stats": {
+  "items": 2000,
+  "stage_counts": {
+   "choice": 600,
+   "noul": 600,
+   "score": 800
+  },
+  "state_types": {
+   "dict": 2000
+  },
+  "option_count_histogram": {
+   "2": 600,
+   "4": 1100,
+   "5": 300
+  },
+  "max_options": 5,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 0,
+  "label_named_state_fields": {},
+  "answer_position_histogram": {
+   "1": 538,
+   "2": 585,
+   "3": 493,
+   "4": 330,
+   "5": 54
+  },
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "max_option_tokens": 15,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "json.loads(case['state']) (dict), shared by the case's questions",
+  "question": "question['instructions']",
+  "options": "noul: [criteria['false'], criteria['true']]; choice: criteria values in key order; score: rubric list in order (keys '0'..'n-1')",
+  "answer": "keys.index(str(gold[qid]['label'])) + 1",
+  "id": "typed-decisions:<case id>:<question id> (Julia's metadata id, reproduce_typed.py:67)",
+  "stage": "question type (choice / score / noul)"
+ },
+ "notes": [
+  "Mirrors julia/repo/scripts/reproduce_typed.py:52-68: state = json.loads(case[\"state\"]) (:53); noul with no criteria -> {\"false\": \"false\", \"true\": \"true\"} (:58-59); score rubric list -> keys \"0\"..\"n-1\" (:60-61); keys = [\"false\", \"true\"] for noul else list(criteria) (:64); options = [criteria[key] for key in keys] and question = instructions (:65-66); gold = str(gold[qid][\"label\"]) (:68), mapped to keys.index(...) + 1.",
+  "Option keys (choice names such as \"continue\") are dropped, as in the maker conversion: Julia's engine sees only the descriptions (:66).",
+  "Case/type count assertion copied from reproduce_typed.py:70 (400 cases; 600 choice, 800 score, 600 noul)."
+ ]
+}

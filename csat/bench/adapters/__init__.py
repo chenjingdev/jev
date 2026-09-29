@@ -28,6 +28,11 @@ class Adapter(Protocol):
         ...
 
 
+def as_state(state):
+    """state는 객체 그대로 보낸다. 제작자 벤치마크(claims/)처럼 원본 state가 문자열이나 목록이면 그대로 보낸다."""
+    return state if isinstance(state, (str, list)) else dict(state)
+
+
 def check(probs, criteria):
     if set(probs) != set(criteria):
         raise ValueError(f'Response options do not match request: {sorted(probs)}')
@@ -44,7 +49,7 @@ class JevAdapter:
     def choose(self, state, instructions, criteria):
         from typesafe_sdk import Choice, TypeSafeClient
         with TypeSafeClient(timeout=self.timeout) as client:
-            r = client.system_one(model=self.name, state=dict(state),
+            r = client.system_one(model=self.name, state=as_state(state),
                                   questions={'answer': Choice(instructions=instructions, criteria=dict(criteria))})
         return check(dict(r.answers['answer'].probabilities), criteria)
 
@@ -63,7 +68,7 @@ class ShimAdapter:
         return info
 
     def choose(self, state, instructions, criteria):
-        body = json.dumps({'state': dict(state), 'instructions': instructions, 'criteria': dict(criteria)},
+        body = json.dumps({'state': as_state(state), 'instructions': instructions, 'criteria': dict(criteria)},
                           ensure_ascii=False).encode()
         req = urllib.request.Request(self.url + '/choose', body, {'Content-Type': 'application/json'})
         try:
@@ -83,6 +88,11 @@ SHIMS = {
     'kev': 8804,
     'laya': 8805,
     'clm': 8806,  # amd(Windows) 원격 실행. Mac에서는 ssh -L 8806:127.0.0.1:8806 amd 터널로 부른다
+    'julia': 8807,
+    'laya-typed': 8808,  # claims/ 전용: Laya가 typed-decisions로 추가 학습한 체크포인트
+    'jeff-0.8b': 8809,
+    'jeff-2b': 8810,
+    'jeff-gemma4-e2b': 8811,
 }
 
 

@@ -5,7 +5,7 @@
 set -u
 REPO=/Users/chenjing/dev/jev
 DATASET=$1; TAG=$2; shift 2
-if (( $# )); then SYSTEMS=("$@"); else SYSTEMS=(laya kev open-jev semif jevmlx); fi
+if (( $# )); then SYSTEMS=("$@"); else SYSTEMS=(laya kev open-jev semif jevmlx julia); fi
 JL=$HOME/dev/jev-likes
 export HF_HUB_OFFLINE=1   # 가중치는 모두 캐시에 있다. 실행 중 원격 revision이 바뀌지 않게 한다
 cd $REPO
@@ -18,8 +18,12 @@ wait_health() {
 start() {
   case $1 in
     laya)     $JL/laya/.venv/bin/python csat/bench/shims/laya/serve.py > $LOG/laya.shim.log 2>&1 & ;;
+    laya-typed) LAYA_MODEL=typed-decisions $JL/laya/.venv/bin/python csat/bench/shims/laya/serve.py --port 8808 > $LOG/laya-typed.shim.log 2>&1 & ;;
     open-jev) (cd $JL/open-jev && .venv/bin/python $REPO/csat/bench/shims/open-jev/serve.py) > $LOG/open-jev.shim.log 2>&1 & ;;
     semif)    $JL/semif/.venv/bin/python csat/bench/shims/semif/serve.py > $LOG/semif.shim.log 2>&1 & ;;
+    julia)    JULIA_CPU_THREADS=8 $JL/julia/.venv/bin/python csat/bench/shims/julia/serve.py > $LOG/julia.shim.log 2>&1 & ;;
+    jeff-0.8b) $JL/jeff/.venv/bin/python csat/bench/shims/jeff/serve.py --model jeff-0.8b --port 8809 > $LOG/jeff-0.8b.shim.log 2>&1 & ;;
+    jeff-2b)   $JL/jeff/.venv/bin/python csat/bench/shims/jeff/serve.py --model jeff-2b --port 8810 > $LOG/jeff-2b.shim.log 2>&1 & ;;
     jevmlx)   $JL/jevmlx/repo/.venv/bin/python csat/bench/shims/jevmlx/serve.py --port 8802 > $LOG/jevmlx.shim.log 2>&1 & ;;
     kev)
       (cd $JL/kev && src/.venv/bin/python -m kev.serve --run jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c \
@@ -38,7 +42,7 @@ else
   LOG=$REPO/csat/bench/results/$TAG/logs; RUN=(csat/bench/run.py --dataset $DATASET)
 fi
 mkdir -p $LOG
-typeset -A PORT; PORT=(laya 8805 kev 8804 open-jev 8801 semif 8803 jevmlx 8802)
+typeset -A PORT; PORT=(laya 8805 kev 8804 open-jev 8801 semif 8803 jevmlx 8802 julia 8807 laya-typed 8808 jeff-0.8b 8809 jeff-2b 8810)
 for s in $SYSTEMS; do
   echo "$(date '+%F %T') start $s" | tee -a $LOG/run_all.log
   KEV_SERVE=""; start $s

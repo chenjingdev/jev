@@ -18,7 +18,7 @@ from report import mcnemar_p  # noqa: E402
 from run import make_request, request_hash, shifts  # noqa: E402
 from score import load, score_system, summarize  # noqa: E402
 
-SYSTEMS = ['jev-1.13.0', 'kev', 'semif', 'open-jev', 'jevmlx', 'laya', 'clm']
+SYSTEMS = ['jev-1.13.0', 'kev', 'semif', 'open-jev', 'jevmlx', 'laya', 'clm', 'julia']
 REF = 'jev-1.13.0'
 
 

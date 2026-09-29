@@ -1,0 +1,88 @@
+{
+ "set": "jevbench-emotion100",
+ "count": 100,
+ "stages": {
+  "emotiondair": 100
+ },
+ "options": {
+  "min": 6,
+  "max": 6,
+  "histogram": {
+   "6": 100
+  },
+  "items_over_20": 0,
+  "items_over_26_runner_limit": 0,
+  "options_over_48_tokens": 0,
+  "items_with_option_over_48_tokens": 0,
+  "longest_option_tokens": 8,
+  "token_counter": "tokenizers tokenizer.json from SupersonicLabs/Julia-1 snapshot (mmBERT), sha256 609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f, \" \" + option, no special tokens. Nothing truncated."
+ },
+ "sha256": {
+  "items.jsonl": "4266633d0dad523f995db790f80d56c0421f3c614a3924e816556e1b5637662d",
+  "gold.json": "4ca0f38b5c81ebee29428024d0ee8d6875cd62d128f71f6901d35f36bf45d916"
+ },
+ "builder": "claims/build_ext.py jevbench-emotion100",
+ "maker": "AbdelStark/jev-benchmarks BTZSC pilot v1 (cited by SupersonicLabs/Julia-1 README.md:42)",
+ "maker_code": {
+  "repo": "https://github.com/AbdelStark/jev-benchmarks",
+  "commit": "0d610cc53e79bcbec691312b0c4adb4a0e371642",
+  "clone": "~/dev/jev-likes/jev-benchmarks",
+  "files": [
+   "configs/pilot-v1.yaml",
+   "src/jev_benchmarks/data.py",
+   "src/jev_benchmarks/adapters/jev.py",
+   "src/jev_benchmarks/io.py"
+  ]
+ },
+ "citing_maker": {
+  "repo": "https://huggingface.co/SupersonicLabs/Julia-1",
+  "snapshot": "a85b127321d580d65176c89ced8273f305745d85",
+  "readme_sha256": "bc46a6785ddbae32b769591841954393510b073f148aa9f7e4fced5a1bba9a81"
+ },
+ "source": {
+  "dataset": "btzsc/btzsc",
+  "config": "emotiondair",
+  "split": "test",
+  "files": [
+   {
+    "repo": "btzsc/btzsc",
+    "revision": "fef2a2ac62b69c58670047dddf045c53d7c3cb5e",
+    "path": "emotiondair/test-00000-of-00001.parquet",
+    "url": "https://huggingface.co/datasets/btzsc/btzsc/blob/fef2a2ac62b69c58670047dddf045c53d7c3cb5e/emotiondair/test-00000-of-00001.parquet",
+    "sha256": "779970bb63817275a9d4004e4114ed00f2d86dc7670c36e13b4d018f85dc18ae"
+   }
+  ]
+ },
+ "selection": {
+  "rows": 12000,
+  "n_classes": 6,
+  "samples": 2000,
+  "samples_without_single_positive_excluded": 0,
+  "seed": 20260918,
+  "method": "data.py _balanced_indices",
+  "maker_manifest_sha256": "ec064c52b149de458344cd4b4a44c158460f30b3bbb7fe8b2e7ec72d0abf3ba5"
+ },
+ "references": {
+  "jev": {
+   "accuracy": 0.48,
+   "macro_f1": 0.479,
+   "line": 21,
+   "model": "jev-1.13.0 (resolved from jev-latest)",
+   "n": 100,
+   "source": "jev-benchmarks results/reports/btzsc-pilot-v1.md:21; results/reports/btzsc-pilot-v1.json results.jev.emotiondair"
+  },
+  "julia-1": {
+   "correct": 86,
+   "total": 100,
+   "readme_line": 29,
+   "source": "Julia-1 README.md:26-30, metrics/accuracy-20260924.json benchmarks.emotiondair; Jev column there = the numbers above"
+  }
+ },
+ "notes": [
+  "Selection mirrors jev_benchmarks/data.py:41-94 (load_examples): BTZSC rows come in blocks of n_classes (one row per hypothesis, same text), class count inferred from the first text change (data.py:13-18), samples without exactly one positive are dropped (data.py:66-73), then _balanced_indices(targets, 100, seed=20260917+dataset_offset) (data.py:21-38, 74-78). Offsets follow configs/pilot-v1.yaml:8-14 order (agnews 0, emotiondair 1, banking77 2).",
+  "Reproduction proof: the 300-example selection serialised as jev_benchmarks/io.py:21-27 write_jsonl hashes to ec064c52b149de458344cd4b4a44c158460f30b3bbb7fe8b2e7ec72d0abf3ba5, equal to artifacts.manifest_sha256 in results/reports/btzsc-pilot-v1.json. The build fails if this ever differs.",
+  "Request mirrors jev_benchmarks/adapters/jev.py:19-20 and :30-33: state={\"text\": text} (a dict, kept as is), one Choice with instructions = configs/pilot-v1.yaml:23 and criteria {\"label_000\": hypothesis_0, ...}. options = the hypothesis strings in BTZSC column order (data.py:65); the label_NNN keys are replaced by the runner's A-Z keys (gamebench/run.py:28-34). No wording added.",
+  "Julia-1 README.md:42 says its classification pilots follow this pinned protocol; the Julia repo ships no rendering code of its own, so the jev-benchmarks request is the one mirrored.",
+  "ids: \"<set>:<example_id>\" with example_id = \"<dataset>:<sample_index>\" from data.py:87."
+ ]
+}

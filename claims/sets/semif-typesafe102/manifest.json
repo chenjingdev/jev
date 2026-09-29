@@ -1,0 +1,112 @@
+{
+ "set": "semif-typesafe102",
+ "builder": "claims/build.py",
+ "source": {
+  "url": "https://evals.typesafe.ai/",
+  "snapshots": {
+   "agent_trace_observability": {
+    "url": "https://evals.typesafe.ai/agent_trace_observability-cases.js",
+    "raw_sha256": "4a3821a24366dc9830e12b481a23c96d0ab70e3c473b59551b88e8d0c4b615b3",
+    "parsed_sha256": "78b431fb4e76f11a91767211d0984028a0b8f6fd08efedd8311f7d298baa99af"
+   },
+   "customer_service": {
+    "url": "https://evals.typesafe.ai/customer_service-cases.js",
+    "raw_sha256": "066f789bcc17ae906a17fc37ad4fd2f2bb1e881245aeb76b524715bc962a2493",
+    "parsed_sha256": "45183cdb34fbb74c3168daa7a5616816aa9a7a9976bd4d33623c61b1a9190313"
+   },
+   "invoice_processing": {
+    "url": "https://evals.typesafe.ai/invoice_processing-cases.js",
+    "raw_sha256": "8c2f886978a30e637d577cd0713b3cf12bb622ef7210fcc9a4be47540a6df27f",
+    "parsed_sha256": "2235cec10a6b542f366eed79fe32aa23206c36175b046b6f41444d03d66b2e7c"
+   },
+   "security_incidents": {
+    "url": "https://evals.typesafe.ai/security_incidents-cases.js",
+    "raw_sha256": "6c96b19f192d07004613afc281a31712aa7d04bd75e31a3afe2322174ade0645",
+    "parsed_sha256": "9ac20dd4c2d293b296ae76e8b9c5ea69b3b80a3f267530f741a667a8fb5fad61"
+   }
+  },
+  "selection": "/Users/chenjing/dev/jev-likes/semif/src/benchmarks/manifests/source-selection.jsonl",
+  "selection_sha256": "81d98a4195971e1fe046673928730b7112a6a7677baf046505761f2504b424c7",
+  "semif_commit": "23cf1f39fc9534fe81437200959b6dfc7106e45a",
+  "semif_rows_sha256": "3eabe11c02e90308d03e857bc614874e7369b390d15f0e456a6049bbc932ba17"
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/semif/src",
+  "code": [
+   "benchmarks/build_typesafe.py"
+  ],
+  "jev_request": "/Users/chenjing/dev/jev-likes/kev/src/scripts/freeze_semif_external.py"
+ },
+ "items": 102,
+ "sha256": {
+  "items.jsonl": "b12cab036e3c5441b275165a22528779a7e969b7024b801c9adb83715061bd02",
+  "gold.json": "9aedb1b297d735bf4a92665cda2edf808854f4a9e5856e8f3632c89cce78b258"
+ },
+ "type_counts": {
+  "choice": 36,
+  "noul": 66
+ },
+ "case_count": 20,
+ "noul_with_filled_criteria": 14,
+ "stats": {
+  "items": 102,
+  "stage_counts": {
+   "typesafe_agent_trace_observability": 28,
+   "typesafe_customer_service": 24,
+   "typesafe_invoice_processing": 29,
+   "typesafe_security_incidents": 21
+  },
+  "state_types": {
+   "dict": 102
+  },
+  "option_count_histogram": {
+   "2": 68,
+   "3": 3,
+   "4": 8,
+   "5": 13,
+   "6": 6,
+   "8": 4
+  },
+  "max_options": 8,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 0,
+  "label_named_state_fields": {
+   ".state.invoice.fields.adjustments[].label": 7
+  },
+  "answer_position_histogram": {
+   "1": 39,
+   "2": 53,
+   "3": 3,
+   "4": 4,
+   "5": 1,
+   "6": 2
+  },
+  "options_over_48_tokens": 65,
+  "items_with_option_over_48_tokens": 16,
+  "max_option_tokens": 450,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "the TypeSafe document object (json.loads of SemIf's state string), as Jev received it",
+  "question": "TypeSafe question['instructions']",
+  "options": "option descriptions without SemIf's \"<id>: \" prefix, in selection option_ids order; noul = [true description, false description], \"The proposition is <key>.\" where SemIf filled a missing criterion",
+  "answer": "argmax of the mean reference distribution (unique by construction) + 1",
+  "id": "semif-typesafe102:<selection id>",
+  "stage": "selection family (typesafe_<workflow>)"
+ },
+ "notes": [
+  "Rows rebuilt with semif/src/benchmarks/build_typesafe.py:12-130 logic from the four public evals.typesafe.ai <workflow>-cases.js payloads; each parsed payload matches the snapshot_sha256 in source-selection.jsonl (:67-70). Noul options [\"true\", \"false\"] with \"The proposition is <key>.\" fill (:77-81); choice options in criteria order (:82-83); every description prefixed \"<id>: \" (:86-87); state = json.dumps(document, indent=2) (:119); question = instructions (:120); label = unique reference argmax (:91-96, :122).",
+  "The rebuilt SemIf-format file hashes to 3eabe11c02e90308d03e857bc614874e7369b390d15f0e456a6049bbc932ba17, the typesafe102.jsonl sha256 Kev recorded (kev/src/evals/external/typesafe-v1/manifest.json). Matching it needs left-to-right float sums (builtin sum() before Python 3.12); with 3.12+ compensated sum() only the last digits of target_distribution / published_models change, never state, question, options or label.",
+  "Item rendering = the Jev-shaped request Kev sent to live Jev (kev/src/scripts/freeze_semif_external.py:36 description.removeprefix(id + \": \"), :47 state = json.loads(row[\"state\"])): state is the parsed document object and option text has no \"<id>: \" prefix. Principle: every system gets the same Jev-shaped request and each shim does its own native rendering. Kev sent noul rows as noul; the runner sends them as a two-option choice in SemIf's [\"true\", \"false\"] order.",
+  "Not SemIf's own rendering: SemIf fed its model a string state json.dumps(document, indent=2) (build_typesafe.py:119) and \"<id>: <description>\" options (:86-87) through core.py:43-56. SemIf's published 0.845 modal agreement (direct Qwen3.5-4B, semif/src/README.md:146) was measured on that rendering, not on these items. TypeSafe's published Jev 0.883 comes from Jev's native requests.",
+  "The documents of 7 items have invoice.fields.adjustments[].label (e.g. \"Freight and handling\"): document content, not the gold; STATE_KEY_ALLOW exempts that path from the leak scan.",
+  "14 noul rows had no (or partial) criteria in the TypeSafe question; their \"The proposition is true./false.\" text is SemIf's fill (build_typesafe.py:79), which Kev also sent to Jev as criteria.",
+  "Scoring differs from the makers: SemIf reports equal-case modal agreement and total-variation distance to the reference distribution (semif/src/benchmarks/evaluate_external.py:44-79); gold.json here has only the reference argmax, so gamebench accuracy is comparable to agreement, not to distance.",
+  "Build needs network (or --typesafe-dir with the four typesafe-<workflow>-cases.js files)."
+ ]
+}

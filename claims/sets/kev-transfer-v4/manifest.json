@@ -1,0 +1,109 @@
+{
+ "set": "kev-transfer-v4",
+ "builder": "claims/build.py",
+ "source": {
+  "path": "/Users/chenjing/dev/jev-likes/kev/src/evals/v4/transfer-v4/test.jsonl",
+  "sha256": "c30a91274f9b483aac9e4f02ada5dea953b3f1a2829456e0bc07806c4e73b517",
+  "repo_commit": "5920c5fe4ca8e0970ed4209ac2c9b8e18bea5109",
+  "split": "test",
+  "suite_manifest": "kev/src/evals/v4/transfer-v4/manifest.json (files.test.jsonl.sha256)"
+ },
+ "maker": {
+  "repo": "/Users/chenjing/dev/jev-likes/kev/src",
+  "code": [
+   "kev/api.py",
+   "kev/benchmark.py",
+   "kev/data.py"
+  ]
+ },
+ "items": 764,
+ "sha256": {
+  "items.jsonl": "130f78178c54e001f6864b4ffd1cf963b9ac855e543a17ef6c4edc8c83b34c0b",
+  "gold.json": "26d4a9feba9618a10ca54efa25a6aab6d7d73316169b8a7c5f7acb836f288a71"
+ },
+ "type_counts": {
+  "choice": 444,
+  "noul": 280,
+  "score": 40
+ },
+ "variant_counts": {
+  "clean": 656,
+  "none_absent": 36,
+  "none_present": 36,
+  "permuted": 36
+ },
+ "noul_without_criteria": 120,
+ "stats": {
+  "items": 764,
+  "stage_counts": {
+   "choice/composition_final_combination": 32,
+   "choice/composition_final_exception": 32,
+   "choice/composition_final_negation": 32,
+   "choice/emotion": 80,
+   "choice/emotion/none": 24,
+   "choice/emotion/permuted": 12,
+   "choice/mmlu": 80,
+   "choice/mmlu/none": 24,
+   "choice/mmlu/permuted": 12,
+   "choice/sciq": 80,
+   "choice/sciq/none": 24,
+   "choice/sciq/permuted": 12,
+   "noul/contrastive_authorization": 40,
+   "noul/paws": 80,
+   "noul/qnli": 80,
+   "noul/tweet_offensive": 80,
+   "score/contrastive_deadline": 40
+  },
+  "state_types": {
+   "dict": 439,
+   "list": 11,
+   "str": 314
+  },
+  "option_count_histogram": {
+   "2": 376,
+   "3": 40,
+   "4": 208,
+   "5": 24,
+   "6": 104,
+   "7": 12
+  },
+  "max_options": 7,
+  "items_over_20_options": 0,
+  "items_with_duplicate_option_text": 0,
+  "items_with_empty_question": 0,
+  "label_named_state_fields": {},
+  "answer_position_histogram": {
+   "1": 287,
+   "2": 284,
+   "3": 74,
+   "4": 90,
+   "5": 23,
+   "6": 5,
+   "7": 1
+  },
+  "options_over_48_tokens": 3,
+  "items_with_option_over_48_tokens": 1,
+  "max_option_tokens": 97,
+  "option_tokenizer": {
+   "path": "/Users/chenjing/dev/jev-likes/julia/repo/tokenizer/tokenizer.json",
+   "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+   "rule": "len(encode(' ' + option, add_special_tokens=False)) > 48 (julia/repo/julia/data.py:83-85)"
+  }
+ },
+ "rendering": {
+  "state": "record['state'] as stored (dict, string or list): what kev.data.api_request sends to Jev",
+  "question": "question['instructions']",
+  "options": "choice: criteria in key order, the description, or the key name when the description is null/empty; noul: [false, true] descriptions, \"no\"/\"yes\" when absent; score: criteria list",
+  "answer": "choice keys.index(label) + 1; noul int(bool label) + 1; score int(label) + 1",
+  "id": "kev-transfer-v4:<_meta.id>",
+  "stage": "<type>/<task src>, plus /permuted or /none for Kev's variant rows ('none' merges none_present and none_absent so the stage does not reveal the answer)"
+ },
+ "notes": [
+  "Label -> option index mirrors kev/src/kev/benchmark.py:30-33 (labels): keys = question_keys(type, criteria) and label index = keys.index(label) for choice, int(label) otherwise; question_keys at kev/src/kev/api.py:94-99 gives list(criteria) for choice, [\"false\", \"true\"] for noul and \"0\"..\"n-1\" for score. kev/src/kev/data.py:402 states the same: noul labels are bools, score labels level indices.",
+  "What Jev receives: kev/src/kev/data.py:389-394 api_request -> {state, questions: {type, instructions, criteria}} (JevPredictor, kev/src/kev/predictors.py:210). State and instructions are copied unchanged.",
+  "Option text: the description; when it is null or \"\" the key name, as kev/src/kev/api.py:58-59 option_text falls back to the name (emotion rows have criteria {\"sadness\": null, ...}). Kev's own model sees \"name: description\" (api.py:59,112); the name prefix is not added here because the runner re-keys options to A, B, ... and Julia's typed conversion also sends descriptions only.",
+  "Noul without criteria (120 rows): options \"no\"/\"yes\", the text Kev's own model scores (kev/src/kev/api.py:110, option_text(\"no\", None) / option_text(\"yes\", None)). Jev itself receives a criteria-less noul.",
+  "Test split only (the brief). kev.jev runs Jev on the development split (kev/src/kev/jev.py:43); Kev's headline metrics use variant == clean rows only (kev/src/kev/benchmark.py:76): filter stages without a /permuted or /none suffix to match them.",
+  "The 11 list states are kept as lists (maker data); csat/bench/adapters.as_state currently passes only str or dict."
+ ]
+}
